@@ -11,29 +11,39 @@ const contentMap = {
   "Unidad IV": ["Métodos de cadenas", "Arrays", "Math", "Date"],
   "Unidad V": ["Console", "Depuración"],
   "Unidad VI": ["DOM", "Eventos", "Creación de elementos"],
+  "Unidad VII": [
+    "DOM avanzado",
+    "Modo oscuro",
+    "LocalStorage",
+    "Fetch API",
+    "Async / Await",
+    "Mini app integradora",
+  ],
+  "Ejercicios prácticos": ["Unidad I a VII", "Desafíos extra"],
 };
 
 const menu = document.getElementById("menu");
 
-// === Renderiza el menú lateral ===
+// Renderiza el menú lateral
 function renderMenu() {
   const ul = document.createElement("ul");
-
   Object.keys(contentMap).forEach((unidad, i) => {
     const li = document.createElement("li");
     const btn = document.createElement("button");
     btn.textContent = unidad;
-    btn.dataset.path = `secciones/unidad${i + 1}.html`; // guardamos la ruta
+    if (unidad === "Ejercicios prácticos") {
+      btn.dataset.path = "secciones/ejercicios.html";
+    } else {
+      btn.dataset.path = `secciones/unidad${i + 1}.html`;
+    }
     li.appendChild(btn);
     ul.appendChild(li);
   });
-
   menu.appendChild(ul);
 }
-
 renderMenu();
 
-// === Carga dinámica del contenido ===
+// Carga dinámica de contenido
 async function loadContent(path) {
   const content = document.getElementById("content");
   try {
@@ -46,19 +56,19 @@ async function loadContent(path) {
   }
 }
 
-// === Delegación de eventos: mantiene los botones activos siempre ===
+// Delegación de eventos
 menu.addEventListener("click", (e) => {
   const btn = e.target.closest("button");
   if (!btn || !btn.dataset.path) return;
   loadContent(btn.dataset.path);
 });
 
-// === Botón "Comenzar curso" del Hero ===
+// Botón "Comenzar curso"
 document.getElementById("start-btn").addEventListener("click", () => {
-  document.querySelector(".container").scrollIntoView({ behavior: "smooth" });
+  document.querySelector(".layout").scrollIntoView({ behavior: "smooth" });
 });
 
-// === Efecto sticky estilo MDN ===
+// === Efecto sticky tipo MDN ===
 const sidebar = document.querySelector("aside");
 const header = document.querySelector("header");
 
@@ -66,7 +76,31 @@ const observer = new IntersectionObserver(
   ([entry]) => {
     sidebar.classList.toggle("is-sticky", !entry.isIntersecting);
   },
-  { threshold: 0, rootMargin: "-80px 0px 0px 0px" }
+  { threshold: 0, rootMargin: "-90px 0px 0px 0px" }
 );
 
 observer.observe(header);
+
+// === Simulación de sticky con JS (sin tocar CSS) ===
+const aside = document.querySelector("aside");
+const footer = document.querySelector("footer");
+
+let startOffset = aside.offsetTop; // punto inicial
+let maxScroll = document.body.scrollHeight - window.innerHeight;
+
+window.addEventListener("scroll", () => {
+  const scrollY = window.scrollY;
+
+  // Evita que el aside se meta debajo del footer
+  const footerTop = footer.offsetTop;
+  const asideHeight = aside.offsetHeight;
+  const limit = footerTop - asideHeight - 40; // margen de seguridad
+
+  // Calcula nueva posición
+  let newTop = Math.min(
+    Math.max(scrollY - startOffset + 90, 0),
+    limit - startOffset
+  );
+
+  aside.style.transform = `translateY(${newTop}px)`;
+});

@@ -1,0 +1,139 @@
+<h2>Unidad V — Console y depuración</h2>
+
+<section>
+  <h3>1. La consola del navegador</h3>
+  <p>
+    La consola es una herramienta esencial para
+    <strong>entender qué está pasando</strong> en nuestro código. Permite ver
+    mensajes, errores y valores en tiempo real sin interrumpir la ejecución.
+  </p>
+
+  <figure class="img-center">
+    <img
+      src="../recursos/imagenes/console-panel.png"
+      alt="Consola de Chrome DevTools"
+    />
+    <figcaption>Panel de consola en las DevTools de Chrome.</figcaption>
+  </figure>
+
+  <blockquote>
+    💡 Para abrir la consola: presioná <kbd>F12</kbd> o
+    <kbd>Ctrl + Shift + I</kbd> (Windows) / <kbd>Cmd + Option + I</kbd> (Mac) y
+    elegí la pestaña <strong>Console</strong>.
+  </blockquote>
+</section>
+
+<section>
+  <h3>2. Métodos de <code>console</code></h3>
+  <p>JavaScript tiene varios métodos para mostrar información en la consola:</p>
+
+  <pre><code>// Mensajes básicos
+console.log("Hola mundo!");
+console.info("Esto es solo un dato informativo");
+console.warn("Atención: algo podría no funcionar");
+console.error("Error: no se pudo cargar el archivo");
+
+// Mostrar valores y objetos
+let usuario = { nombre: "Sebastián", curso: "JS" };
+console.table(usuario);
+
+// Agrupar mensajes
+console.group("Procesando datos");
+console.log("Paso 1 completado");
+console.log("Paso 2 completado");
+console.groupEnd();
+
+// Medir tiempo
+console.time("loop");
+for (let i = 0; i < 100000; i++) {}
+console.timeEnd("loop");
+</code></pre>
+
+  <blockquote>
+    🧠 Tip: <code>console.table()</code> es excelente para ver arrays u objetos
+    complejos en forma de tabla.
+  </blockquote>
+</section>
+
+<section>
+  <h3>3. Depuración paso a paso</h3>
+  <p>
+    Las DevTools también permiten pausar la ejecución y revisar el valor de las
+    variables línea por línea.
+  </p>
+
+  <ol>
+    <li>Abrí las DevTools (<kbd>F12</kbd> o <kbd>Ctrl+Shift+I</kbd>).</li>
+    <li>Seleccioná la pestaña <strong>Sources</strong>.</li>
+    <li>
+      Colocá un “punto de interrupción” (breakpoint) haciendo clic en el número
+      de línea.
+    </li>
+    <li>Recargá la página y observá cómo se detiene el programa.</li>
+    <li>Inspeccioná las variables desde el panel derecho.</li>
+  </ol>
+
+  <pre><code>function calcularPromedio(notas) {
+  debugger; // Pausa manual
+  let suma = notas.reduce((acc, n) => acc + n, 0);
+  return suma / notas.length;
+}
+
+let resultado = calcularPromedio([8, 9, 10]);
+console.log("Promedio:", resultado);
+</code></pre>
+
+  <blockquote>
+    🪄 La palabra clave <code>debugger</code> pausa la ejecución en ese punto,
+    igual que un breakpoint.
+  </blockquote>
+</section>
+
+<section>
+  <h3>4. Errores comunes y buenas prácticas</h3>
+
+  <ul>
+    <li>
+      Usá <code>console.log()</code> para verificar valores, no para dejarlo en
+      producción.
+    </li>
+    <li>Comprobá siempre que las variables tengan el tipo correcto.</li>
+    <li>
+      Si algo no funciona, leé el mensaje de error completo: muchas veces indica
+      la línea exacta.
+    </li>
+    <li>
+      Usá comentarios para explicar por qué existe un <code>debugger</code> o
+      log temporal.
+    </li>
+  </ul>
+
+  <blockquote>
+    💬 <strong>Consejo pro:</strong> aprendé a leer los “stack traces” de los
+    errores: te muestran el orden de llamadas que llevaron al fallo.
+  </blockquote>
+</section>
+
+<section>
+  <h3>🧩 Ejercicio final</h3>
+  <p>
+    Escribí una función que reciba un array de números y devuelva el máximo. Usá
+    <code>console.time()</code> para medir el tiempo que tarda y
+    <code>console.table()</code> para mostrar el resultado.
+  </p>
+
+  <blockquote>
+    💡 Probá también colocar un <code>debugger</code> dentro del bucle para ver
+    cómo cambia el valor máximo.
+  </blockquote>
+</section>
+
+<section>
+  <h3>🎯 Objetivos de aprendizaje</h3>
+  <ul>
+    <li>Usar los principales métodos de <code>console</code>.</li>
+    <li>Aprender a depurar código paso a paso.</li>
+    <li>Interpretar errores y advertencias en DevTools.</li>
+    <li>Aplicar buenas prácticas de diagnóstico y análisis.</li>
+  </ul>
+</section>

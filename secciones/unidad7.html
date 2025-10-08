@@ -1,0 +1,197 @@
+<h2>Unidad VII — DOM avanzado y APIs</h2>
+
+<section>
+  <h3>1. Manipulación avanzada del DOM</h3>
+  <p>
+    Ya sabés cómo crear y modificar elementos. Ahora veremos algunas técnicas
+    más potentes para controlar el DOM de forma eficiente.
+  </p>
+
+  <ul>
+    <li>
+      <code>classList.add()</code>, <code>remove()</code>,
+      <code>toggle()</code> — manejan clases CSS fácilmente.
+    </li>
+    <li>
+      <code>dataset</code> — permite guardar información personalizada en los
+      elementos.
+    </li>
+    <li>
+      <strong>Delegación de eventos</strong> — en lugar de asignar eventos a
+      cada hijo, se los asignamos al padre.
+    </li>
+  </ul>
+
+  <pre><code>// Cambiar estilos con classList
+boton.addEventListener("click", () => {
+  document.body.classList.toggle("modo-oscuro");
+});
+
+// dataset: atributos personalizados
+const item = document.querySelector(".tarjeta");
+console.log(item.dataset.id); // lee data-id="123"
+
+// Delegación de eventos
+document.querySelector("ul").addEventListener("click", (e) => {
+  if (e.target.tagName === "LI") {
+    e.target.classList.toggle("seleccionado");
+  }
+});
+</code></pre>
+
+  <blockquote>
+    💡 La delegación de eventos mejora el rendimiento cuando se crean elementos
+    dinámicamente.
+  </blockquote>
+</section>
+
+<section>
+  <h3>2. Modo claro / oscuro con CSS dinámico</h3>
+  <p>
+    Podemos alternar entre temas de color con una simple clase en el
+    <code>&lt;body&gt;</code>. Esto combina perfectamente con variables CSS.
+  </p>
+
+  <pre><code>/* En tu CSS */
+:root {
+  --fondo: #ffffff;
+  --texto: #1e1e1e;
+}
+body.modo-oscuro {
+  --fondo: #1e1e1e;
+  --texto: #f5f5f5;
+}
+body {
+  background: var(--fondo);
+  color: var(--texto);
+}</code></pre>
+
+  <pre><code>// En tu JavaScript
+const btnTema = document.createElement("button");
+btnTema.textContent = "🌓 Cambiar tema";
+document.body.prepend(btnTema);
+
+btnTema.addEventListener("click", () => {
+  document.body.classList.toggle("modo-oscuro");
+});
+</code></pre>
+
+  <blockquote>
+    🎨 Combinar JS y variables CSS permite temas visuales modernos con muy poco
+    código.
+  </blockquote>
+</section>
+
+<section>
+  <h3>3. Almacenamiento en el navegador</h3>
+  <p>
+    Con <code>localStorage</code> podemos guardar información que persiste
+    incluso al cerrar la página.
+  </p>
+
+  <pre><code>// Guardar datos
+localStorage.setItem("nombre", "Sebastián");
+
+// Leer datos
+const usuario = localStorage.getItem("nombre");
+console.log(usuario); // Sebastián
+
+// Eliminar
+localStorage.removeItem("nombre");
+
+// Borrar todo
+localStorage.clear();
+</code></pre>
+
+  <blockquote>
+    💾 Ideal para guardar configuraciones, listas o el estado del tema.
+  </blockquote>
+</section>
+
+<section>
+  <h3>4. Peticiones a APIs con Fetch</h3>
+  <p>
+    JavaScript puede conectarse a servicios externos usando
+    <code>fetch()</code>. Es una forma sencilla de traer datos desde Internet.
+  </p>
+
+  <pre><code>fetch("https://api.github.com/users/octocat")
+  .then((res) => res.json())
+  .then((data) => {
+    console.log(data);
+    document.body.innerHTML += `&lt;p&gt;Usuario: ${data.login}&lt;/p&gt;`;
+  })
+  .catch((err) => console.error("Error:", err));
+</code></pre>
+
+  <blockquote>
+    🌐 <strong>API</strong> significa “Interfaz de Programación de
+    Aplicaciones”. Permite que tu sitio obtenga información real de otros
+    servicios.
+  </blockquote>
+</section>
+
+<section>
+  <h3>5. Async / Await</h3>
+  <p>Es una forma moderna y más legible de trabajar con código asíncrono.</p>
+
+  <pre><code>async function obtenerDatos() {
+  try {
+    const respuesta = await fetch("https://api.github.com/users/octocat");
+    const datos = await respuesta.json();
+    console.log(datos.login);
+  } catch (error) {
+    console.error("Error al obtener datos:", error);
+  }
+}
+obtenerDatos();
+</code></pre>
+
+  <blockquote>
+    🚀 <code>await</code> pausa la ejecución hasta que la promesa se resuelve,
+    facilitando la lectura del código.
+  </blockquote>
+</section>
+
+<section>
+  <h3>6. Proyecto integrador — Mini App de Usuarios</h3>
+  <p>
+    Construí una mini aplicación que consulte la API de GitHub y muestre
+    información básica de un usuario:
+  </p>
+
+  <ul>
+    <li>Un campo de texto para escribir el nombre del usuario</li>
+    <li>Un botón “Buscar”</li>
+    <li>Mostrar su foto, nombre y cantidad de repositorios</li>
+  </ul>
+
+  <pre><code>async function buscarUsuario() {
+  const nombre = document.querySelector("#nombre").value;
+  const res = await fetch(`https://api.github.com/users/${nombre}`);
+  const datos = await res.json();
+
+  const resultado = document.querySelector("#resultado");
+  resultado.innerHTML = `
+    &lt;img src="${datos.avatar_url}" width="80"&gt;
+    &lt;p&gt;Nombre: ${datos.name}&lt;/p&gt;
+    &lt;p&gt;Repositorios: ${datos.public_repos}&lt;/p&gt;
+  `;
+}
+</code></pre>
+
+  <blockquote>
+    💡 Con esto los alumnos practican DOM, eventos, fetch, manejo de errores y
+    manipulación visual.
+  </blockquote>
+</section>
+
+<section>
+  <h3>🎯 Objetivos de aprendizaje</h3>
+  <ul>
+    <li>Comprender técnicas avanzadas del DOM.</li>
+    <li>Usar almacenamiento local para recordar configuraciones.</li>
+    <li>Consumir datos reales desde una API externa.</li>
+    <li>Integrar todos los conocimientos en una mini app completa.</li>
+  </ul>
+</section>

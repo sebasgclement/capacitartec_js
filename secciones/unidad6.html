@@ -1,0 +1,169 @@
+<h2>Unidad VI — DOM y Eventos</h2>
+
+<section>
+  <h3>1. ¿Qué es el DOM?</h3>
+  <p>
+    El <strong>DOM (Document Object Model)</strong> es una representación en
+    forma de árbol de todos los elementos HTML de una página web. Gracias a él,
+    JavaScript puede <em>acceder, modificar y crear</em> elementos en tiempo
+    real.
+  </p>
+
+  <figure class="img-center">
+    <img
+      src="../recursos/imagenes/dom-tree.png"
+      alt="Estructura de árbol del DOM"
+    />
+    <figcaption>
+      Estructura de árbol del DOM: cada nodo representa una etiqueta HTML.
+    </figcaption>
+  </figure>
+
+  <blockquote>
+    💡 Cuando el navegador carga una página, convierte el HTML en este árbol.
+    Desde JavaScript podés recorrerlo, cambiar estilos o agregar nuevos nodos.
+  </blockquote>
+</section>
+
+<section>
+  <h3>2. Seleccionar elementos del DOM</h3>
+  <p>
+    Podemos acceder a los elementos de la página usando distintos métodos del
+    objeto
+    <code>document</code>:
+  </p>
+
+  <pre><code>// Por ID
+const titulo = document.getElementById("titulo");
+
+// Por clase
+const botones = document.getElementsByClassName("btn");
+
+// Por etiqueta
+const parrafos = document.getElementsByTagName("p");
+
+// Moderno y más flexible
+const caja = document.querySelector(".contenedor");
+const todos = document.querySelectorAll("p, h2");
+</code></pre>
+
+  <blockquote>
+    🧠 Tip: <code>querySelector()</code> devuelve un solo elemento, mientras que
+    <code>querySelectorAll()</code> devuelve una lista de nodos.
+  </blockquote>
+</section>
+
+<section>
+  <h3>3. Modificar contenido y estilos</h3>
+  <p>
+    Una vez que tenemos un elemento, podemos cambiar su contenido o su aspecto:
+  </p>
+
+  <pre><code>// Cambiar texto
+titulo.textContent = "Nuevo título desde JS";
+
+// Cambiar HTML interno
+caja.innerHTML = "&lt;strong&gt;Texto con formato&lt;/strong&gt;";
+
+// Cambiar estilo
+caja.style.backgroundColor = "yellow";
+caja.style.padding = "10px";
+</code></pre>
+
+  <blockquote>
+    ⚠️ Evitá usar <code>innerHTML</code> con contenido no confiable, ya que
+    puede abrir vulnerabilidades (inyección de código).
+  </blockquote>
+</section>
+
+<section>
+  <h3>4. Crear y eliminar elementos</h3>
+  <p>Podemos generar nodos nuevos y agregarlos al DOM de forma dinámica:</p>
+
+  <pre><code>// Crear un nuevo párrafo
+const nuevoParrafo = document.createElement("p");
+nuevoParrafo.textContent = "Soy un nuevo elemento creado desde JS.";
+
+// Insertarlo en la página
+document.body.appendChild(nuevoParrafo);
+
+// Eliminar un elemento
+document.body.removeChild(nuevoParrafo);
+</code></pre>
+
+  <blockquote>
+    🪄 También podés usar <code>element.remove()</code> para borrar un nodo
+    directamente.
+  </blockquote>
+</section>
+
+<section>
+  <h3>5. Eventos y escuchadores</h3>
+  <p>
+    Los <strong>eventos</strong> permiten que la página reaccione a acciones del
+    usuario (clics, teclas, scroll, etc.).
+  </p>
+
+  <pre><code>// Opción 1: atributo en HTML
+&lt;button onclick="saludar()"&gt;Saludar&lt;/button&gt;
+
+// Opción 2: usando addEventListener (recomendada)
+const boton = document.querySelector("button");
+
+boton.addEventListener("click", () => {
+  alert("¡Hola desde el evento!");
+});
+</code></pre>
+
+  <blockquote>
+    💬 <code>addEventListener()</code> es la forma moderna de registrar
+    múltiples eventos sin sobrescribir otros manejadores.
+  </blockquote>
+</section>
+
+<section>
+  <h3>6. Crear elementos con interacción</h3>
+  <p>Podemos combinar creación y eventos para construir contenido dinámico:</p>
+
+  <pre><code>const lista = document.createElement("ul");
+
+for (let i = 1; i &lt;= 3; i++) {
+  const item = document.createElement("li");
+  item.textContent = "Elemento " + i;
+  item.addEventListener("click", () =&gt; {
+    item.style.color = "red";
+  });
+  lista.appendChild(item);
+}
+
+document.body.appendChild(lista);
+</code></pre>
+
+  <blockquote>
+    🧩 Cada vez que hagas clic en un elemento, cambiará su color. Esto demuestra
+    cómo se combinan **DOM + Eventos**.
+  </blockquote>
+</section>
+
+<section>
+  <h3>🧠 Ejercicio final</h3>
+  <p>
+    Creá una lista dinámica de tareas con un campo de texto y un botón
+    “Agregar”. Cada tarea debe aparecer con un botón para eliminarla.
+  </p>
+
+  <blockquote>
+    💡 Usá <code>createElement</code>, <code>appendChild</code> y
+    <code>addEventListener</code>.
+  </blockquote>
+</section>
+
+<section>
+  <h3>🎯 Objetivos de aprendizaje</h3>
+  <ul>
+    <li>Comprender el modelo DOM y cómo acceder a sus elementos.</li>
+    <li>Modificar texto, atributos y estilos desde JavaScript.</li>
+    <li>Crear y eliminar nodos dinámicamente.</li>
+    <li>Manejar eventos e interacciones del usuario.</li>
+  </ul>
+</section>

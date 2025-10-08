@@ -1,0 +1,226 @@
+<h2>Unidad III — Programación Orientada a Objetos (POO)</h2>
+
+<section>
+  <h3>1. ¿Qué es la Programación Orientada a Objetos?</h3>
+  <p>
+    La <strong>Programación Orientada a Objetos</strong> (POO) es un paradigma
+    que organiza el código en <strong>objetos</strong> que combinan datos y
+    comportamientos. Es la base de la mayoría de los lenguajes modernos,
+    incluido JavaScript.
+  </p>
+
+  <blockquote>
+    💡 En lugar de pensar en funciones sueltas, la POO nos invita a pensar en
+    <em>entidades</em> que representan cosas del mundo real: una persona, un
+    producto, un alumno, etc.
+  </blockquote>
+</section>
+
+<section class="diagrama-poo">
+  <h3>📊 Diagrama de jerarquía de clases</h3>
+  <p>
+    Este diagrama muestra cómo una clase base puede tener varias clases hijas
+    que heredan y redefinen comportamientos.
+  </p>
+
+  <figure>
+    <img
+      src="../recursos/imagenes/diagrama--poo.png"
+      alt="Jerarquía de clases en JavaScript: Figura, Cuadrado y Círculo"
+    />
+    <figcaption>
+      Jerarquía de clases: Figura (base), Cuadrado y Círculo (heredadas).
+    </figcaption>
+  </figure>
+</section>
+
+<section>
+  <h3>2. Clases y Objetos</h3>
+  <p>
+    Una <strong>clase</strong> es una plantilla o modelo para crear objetos. Un
+    <strong>objeto</strong> es una instancia concreta de esa clase.
+  </p>
+
+  <pre><code>// Definición de una clase
+class Persona {
+  constructor(nombre, edad) {
+    this.nombre = nombre;
+    this.edad = edad;
+  }
+
+  saludar() {
+    console.log(`Hola, soy ${this.nombre} y tengo ${this.edad} años.`);
+  }
+}
+
+// Crear objetos
+const persona1 = new Persona("Lucía", 25);
+const persona2 = new Persona("Martín", 30);
+
+persona1.saludar();
+persona2.saludar();
+</code></pre>
+
+  <blockquote>
+    📘 Cada objeto creado a partir de una clase tiene sus propios valores, pero
+    comparte los mismos métodos definidos en la clase.
+  </blockquote>
+</section>
+
+<section>
+  <h3>3. Propiedades y métodos</h3>
+  <p>
+    Las <strong>propiedades</strong> son las características del objeto, y los
+    <strong>métodos</strong> son las acciones que puede realizar.
+  </p>
+
+  <pre><code>class Auto {
+  constructor(marca, modelo) {
+    this.marca = marca;
+    this.modelo = modelo;
+  }
+
+  encender() {
+    console.log(`${this.marca} ${this.modelo} está encendido.`);
+  }
+}
+
+const miAuto = new Auto("Toyota", "Corolla");
+miAuto.encender();
+</code></pre>
+</section>
+
+<section>
+  <h3>4. Herencia</h3>
+  <p>
+    La <strong>herencia</strong> permite que una clase hija reutilice las
+    propiedades y métodos de otra clase (la clase padre), agregando o
+    modificando lo necesario.
+  </p>
+
+  <pre><code>class Animal {
+  constructor(nombre) {
+    this.nombre = nombre;
+  }
+
+  hablar() {
+    console.log(`${this.nombre} hace un sonido.`);
+  }
+}
+
+class Perro extends Animal {
+  hablar() {
+    console.log(`${this.nombre} dice: ¡Guau!`);
+  }
+}
+
+const perro1 = new Perro("Firulais");
+perro1.hablar();
+</code></pre>
+
+  <blockquote>
+    🧠 La herencia evita repetir código y permite crear jerarquías más lógicas y
+    mantenibles.
+  </blockquote>
+</section>
+
+<section>
+  <h3>5. Encapsulación</h3>
+  <p>
+    La <strong>encapsulación</strong> protege los datos internos del objeto,
+    evitando que se modifiquen directamente desde fuera de la clase.
+  </p>
+
+  <pre><code>class CuentaBancaria {
+  #saldo = 0; // propiedad privada
+
+  depositar(monto) {
+    this.#saldo += monto;
+  }
+
+  verSaldo() {
+    console.log(`Tu saldo actual es $${this.#saldo}`);
+  }
+}
+
+const cuenta = new CuentaBancaria();
+cuenta.depositar(1000);
+cuenta.verSaldo(); // ✅
+console.log(cuenta.#saldo); // ❌ Error: propiedad privada
+</code></pre>
+
+  <blockquote>
+    💡 Las propiedades privadas (prefijo <code>#</code>) solo pueden usarse
+    dentro de la clase.
+  </blockquote>
+</section>
+
+<section>
+  <h3>6. Polimorfismo</h3>
+  <p>
+    El <strong>polimorfismo</strong> permite que distintos objetos respondan de
+    manera diferente al mismo método, según su tipo.
+  </p>
+
+  <pre><code>class Figura {
+  area() {
+    return 0;
+  }
+}
+
+class Cuadrado extends Figura {
+  constructor(lado) {
+    super();
+    this.lado = lado;
+  }
+
+  area() {
+    return this.lado * this.lado;
+  }
+}
+
+class Circulo extends Figura {
+  constructor(radio) {
+    super();
+    this.radio = radio;
+  }
+
+  area() {
+    return Math.PI * this.radio ** 2;
+  }
+}
+
+const figuras = [new Cuadrado(4), new Circulo(3)];
+
+figuras.forEach(f => {
+  console.log(`Área: ${f.area().toFixed(2)}`);
+});
+</code></pre>
+</section>
+
+<section>
+  <h3>🧩 Ejercicio final de la unidad</h3>
+  <p>
+    Crea una clase <code>Producto</code> con propiedades <code>nombre</code>,
+    <code>precio</code> y <code>stock</code>. Luego, derivá una clase
+    <code>ProductoDescuento</code> que herede de <code>Producto</code> y agregue
+    un método <code>aplicarDescuento(porcentaje)</code>
+    que devuelva el nuevo precio.
+  </p>
+
+  <blockquote>
+    💡 Mostrá en consola el precio antes y después del descuento.
+  </blockquote>
+</section>
+
+<section>
+  <h3>🎯 Objetivos de aprendizaje</h3>
+  <ul>
+    <li>Comprender los conceptos fundamentales de la POO.</li>
+    <li>Crear clases, objetos, propiedades y métodos.</li>
+    <li>Aplicar herencia, encapsulación y polimorfismo.</li>
+    <li>
+      Usar clases modernas de ES6 para escribir código más claro y modular.
+    </li>
+  </ul>
+</section>

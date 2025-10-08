@@ -1,0 +1,164 @@
+<h2>Unidad IV — Métodos de cadenas, arrays y el objeto Math</h2>
+
+<section>
+  <h3>1. Métodos de cadenas (Strings)</h3>
+  <p>
+    Los <strong>métodos de cadenas</strong> permiten manipular texto en
+    JavaScript. Una cadena (o <em>string</em>) es una secuencia de caracteres
+    encerrada entre comillas simples, dobles o <code>`backticks`</code>.
+  </p>
+
+  <pre><code>let texto = "JavaScript es genial";
+
+// Longitud de la cadena
+console.log(texto.length); // 20
+
+// Mayúsculas y minúsculas
+console.log(texto.toUpperCase()); // JAVASCRIPT ES GENIAL
+console.log(texto.toLowerCase()); // javascript es genial
+
+// Buscar dentro de una cadena
+console.log(texto.includes("genial")); // true
+console.log(texto.indexOf("Script")); // 4
+
+// Extraer partes
+console.log(texto.slice(0, 10)); // JavaScript
+console.log(texto.substring(0, 10)); // JavaScript
+
+// Reemplazar texto
+console.log(texto.replace("genial", "increíble"));
+</code></pre>
+
+  <blockquote>
+    💡 Recordá que las cadenas son inmutables: los métodos devuelven un nuevo
+    string, no modifican el original.
+  </blockquote>
+</section>
+
+<section>
+  <h3>2. Métodos de Arrays</h3>
+  <p>
+    Los <strong>arrays</strong> son listas que pueden contener varios valores.
+    JavaScript incluye muchos métodos para recorrerlos, modificarlos o
+    filtrarlos.
+  </p>
+
+  <pre><code>let frutas = ["🍎", "🍌", "🍇", "🍓"];
+
+// Acceso a elementos
+console.log(frutas[0]); // 🍎
+
+// Agregar y quitar
+frutas.push("🍍");   // agrega al final
+frutas.unshift("🍉"); // agrega al inicio
+frutas.pop();         // quita el último
+frutas.shift();       // quita el primero
+
+// Recorrer con forEach
+frutas.forEach(f => console.log(f));
+
+// Crear nuevo array con map
+let mayus = frutas.map(f => f.toUpperCase());
+
+// Filtrar elementos
+let conA = frutas.filter(f => f.includes("a"));
+
+// Buscar
+let existe = frutas.includes("🍌");
+</code></pre>
+
+  <blockquote>
+    🧠 Los métodos como <code>map()</code>, <code>filter()</code> y
+    <code>reduce()</code>
+    no modifican el array original: devuelven uno nuevo.
+  </blockquote>
+</section>
+
+<section>
+  <h3>3. Métodos de Arrays avanzados</h3>
+  <p>Veamos algunos métodos más potentes y modernos:</p>
+
+  <pre><code>let numeros = [1, 2, 3, 4, 5, 6];
+
+// reduce() → acumula resultados
+let suma = numeros.reduce((acc, n) => acc + n, 0);
+console.log(suma); // 21
+
+// find() → encuentra el primer valor que cumple la condición
+let mayorQue3 = numeros.find(n => n > 3);
+console.log(mayorQue3); // 4
+
+// some() → al menos uno cumple
+console.log(numeros.some(n => n > 5)); // true
+
+// every() → todos cumplen
+console.log(numeros.every(n => n > 0)); // true
+
+// sort() → ordena
+let desordenados = [3, 1, 5, 2];
+desordenados.sort((a, b) => a - b);
+console.log(desordenados); // [1,2,3,5]
+</code></pre>
+
+  <blockquote>
+    ⚙️ <code>reduce()</code> y <code>map()</code> son herramientas clave en la
+    programación funcional con JavaScript.
+  </blockquote>
+</section>
+
+<section>
+  <h3>4. El objeto Math</h3>
+  <p>
+    JavaScript tiene un objeto incorporado llamado <strong>Math</strong>, que
+    ofrece funciones y constantes matemáticas útiles.
+  </p>
+
+  <pre><code>// Constantes
+console.log(Math.PI); // 3.141592653589793
+
+// Redondeos
+console.log(Math.round(4.6)); // 5
+console.log(Math.floor(4.6)); // 4
+console.log(Math.ceil(4.2));  // 5
+
+// Aleatorios
+console.log(Math.random()); // número entre 0 y 1
+
+// Número aleatorio entre 1 y 10
+let num = Math.floor(Math.random() * 10) + 1;
+console.log(num);
+
+// Potencias y raíces
+console.log(Math.pow(2, 3)); // 8
+console.log(Math.sqrt(16));  // 4
+</code></pre>
+
+  <blockquote>
+    💡 <code>Math.random()</code> se usa mucho para juegos, sorteos o efectos
+    aleatorios.
+  </blockquote>
+</section>
+
+<section>
+  <h3>🧩 Ejercicio final de la unidad</h3>
+  <p>
+    Creá un programa que simule una <strong>ruleta de nombres</strong>: Pedile
+    al usuario varios nombres separados por comas y mostrale uno al azar en
+    consola usando <code>split()</code> y <code>Math.random()</code>.
+  </p>
+
+  <blockquote>
+    💡 Ejemplo: Entrada → <code>Ana, Lucas, Sofía, Pablo</code> Salida →
+    <code>La persona elegida es: Sofía 🎉</code>
+  </blockquote>
+</section>
+
+<section>
+  <h3>🎯 Objetivos de aprendizaje</h3>
+  <ul>
+    <li>Aprender los métodos principales de cadenas y arrays.</li>
+    <li>Aplicar funciones avanzadas como map(), filter() y reduce().</li>
+    <li>Usar el objeto Math para generar cálculos y valores aleatorios.</li>
+    <li>Combinar métodos para crear programas más potentes y expresivos.</li>
+  </ul>
+</section>

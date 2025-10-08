@@ -117,7 +117,7 @@ aside {
   border-radius: 12px;
   box-shadow: var(--shadow);
   padding: 1rem;
-  transition: box-shadow 0.3s ease, transform 0.3s ease;
+  transition: box-shadow 0.3s ease, transform 0.25s ease-out;
 }
 
 /* Efecto glow suave tipo MDN */
@@ -247,4 +247,110 @@ footer {
     max-height: none;
     margin-bottom: 1rem;
   }
+}
+
+/* === Diagrama de POO (Unidad III) === */
+.diagrama-poo {
+  text-align: center;
+}
+
+.diagrama-poo figure {
+  display: inline-block;
+  margin: 1.5rem auto;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  padding: 1rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.diagrama-poo figure:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.diagrama-poo img {
+  max-width: 600px;
+  width: 100%;
+  border-radius: 8px;
+}
+
+.diagrama-poo figcaption {
+  font-size: 0.9rem;
+  color: #555;
+  margin-top: 0.5rem;
+  font-style: italic;
+}
+
+/* === Imágenes en contenido (figuras) === */
+.img-center {
+  text-align: center; /* centra el caption */
+}
+
+.img-center figure {
+  display: inline-block;
+  margin: 1.5rem auto;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  padding: 1rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.img-center figure:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.img-center img {
+  display: block;
+  width: 100%;
+  max-width: 720px; /* límite de ancho en desktop */
+  max-height: 60vh; /* evita que sea demasiado alta */
+  height: auto;
+  object-fit: contain; /* que no se deforme */
+  border-radius: 8px;
+  margin: 0 auto;
+}
+
+.img-center figcaption {
+  font-size: 0.9rem;
+  color: #555;
+  margin-top: 0.5rem;
+  font-style: italic;
+}
+
+/* Responsive: en pantallas chicas ocupa todo el ancho disponible */
+@media (max-width: 768px) {
+  .img-center img {
+    max-width: 100%;
+    max-height: 50vh;
+  }
+}
+
+/* Centrado y control de imágenes dentro de las unidades */
+.img-center {
+  text-align: center;
+  margin: 2rem 0;
+}
+
+.img-center img {
+  max-width: 80%;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease;
+}
+
+.img-center img:hover {
+  transform: scale(1.02);
+}
+
+.img-center figcaption {
+  font-size: 0.9rem;
+  color: #444;
+  margin-top: 0.5rem;
+  font-style: italic;
 }
