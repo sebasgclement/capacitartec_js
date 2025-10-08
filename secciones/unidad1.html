@@ -1,0 +1,215 @@
+<h2>Unidad I — Introducción a JavaScript</h2>
+
+<section>
+  <h3>1. ¿Qué es JavaScript?</h3>
+  <p>
+    JavaScript es un
+    <strong>lenguaje de programación interpretado</strong> que permite dar vida
+    a las páginas web. Gracias a él, los sitios pueden <em>reaccionar</em> a las
+    acciones del usuario, validar formularios, mostrar animaciones, crear
+    juegos, manipular datos y mucho más.
+  </p>
+  <p>
+    Fue creado en 1995 por Brendan Eich y hoy es uno de los pilares de la web
+    moderna, junto con <strong>HTML</strong> y <strong>CSS</strong>.
+  </p>
+  <blockquote>
+    💡 En resumen: HTML estructura, CSS da estilo y JavaScript da
+    comportamiento.
+  </blockquote>
+</section>
+
+<section>
+  <h3>2. Usos de JavaScript</h3>
+  <ul>
+    <li>
+      Dar interactividad a los sitios web (botones, formularios, menús,
+      animaciones).
+    </li>
+    <li>Crear aplicaciones web completas (frontend y backend con Node.js).</li>
+    <li>Desarrollar apps móviles con React Native o Ionic.</li>
+    <li>Controlar hardware (IoT) o escribir scripts de automatización.</li>
+  </ul>
+</section>
+
+<section>
+  <h3>3. Cómo incluir JavaScript en una página</h3>
+  <p>Podemos escribir código JavaScript de tres maneras:</p>
+
+  <ul>
+    <li>
+      <strong>Interno:</strong> dentro de etiquetas
+      <code>&lt;script&gt;</code> en el HTML.
+    </li>
+    <li>
+      <strong>Externo:</strong> desde un archivo <code>.js</code> vinculado al
+      documento.
+    </li>
+    <li>
+      <strong>En línea:</strong> directamente dentro de un atributo HTML (no
+      recomendado).
+    </li>
+  </ul>
+
+  <pre><code>&lt;!-- Ejemplo interno --&gt;
+&lt;script&gt;
+  alert("Hola desde JavaScript!");
+&lt;/script&gt;
+
+&lt;!-- Ejemplo externo --&gt;
+&lt;script src="main.js"&gt;&lt;/script&gt;
+</code></pre>
+</section>
+
+<section>
+  <h3>4. Variables y tipos de datos</h3>
+  <p>
+    Las variables sirven para <strong>guardar información</strong> que el
+    programa usará más tarde. En JavaScript se declaran con <code>let</code>,
+    <code>const</code> o <code>var</code>:
+  </p>
+
+  <pre><code>// Ejemplos de variables
+let nombre = "Sebastián";   // texto (string)
+const edad = 30;            // número
+var activo = true;          // booleano
+</code></pre>
+
+  <blockquote>
+    💡 Usa <code>let</code> para valores que pueden cambiar y
+    <code>const</code> para los que no cambian.
+  </blockquote>
+
+  <p>Tipos básicos:</p>
+  <ul>
+    <li><code>string</code> → texto</li>
+    <li><code>number</code> → número (entero o decimal)</li>
+    <li><code>boolean</code> → verdadero o falso</li>
+    <li><code>null</code> → valor nulo</li>
+    <li><code>undefined</code> → valor no definido</li>
+  </ul>
+</section>
+
+<section>
+  <h3>5. Pedir datos al usuario</h3>
+  <p>
+    Para interactuar con el usuario podemos usar <code>prompt()</code> para
+    pedir información y <code>alert()</code> para mostrar mensajes.
+  </p>
+
+  <pre><code>let nombre = prompt("¿Cómo te llamás?");
+alert("Bienvenido/a, " + nombre + "!");</code></pre>
+</section>
+
+<section>
+  <h3>6. Operadores básicos</h3>
+  <p>
+    Los operadores permiten realizar cálculos y comparaciones. Algunos de los
+    más usados son:
+  </p>
+
+  <ul>
+    <li><code>+</code> suma o concatenación</li>
+    <li><code>-</code> resta</li>
+    <li><code>*</code> multiplicación</li>
+    <li><code>/</code> división</li>
+    <li><code>==</code> compara valores</li>
+    <li><code>===</code> compara valores y tipos</li>
+    <li><code>!=</code> distinto</li>
+    <li>
+      <code>&gt;</code>, <code>&lt;</code>, <code>&gt;=</code>,
+      <code>&lt;=</code>
+    </li>
+  </ul>
+
+  <pre><code>// Ejemplo práctico
+let a = 5;
+let b = 3;
+console.log(a + b); // 8
+console.log(a > b); // true</code></pre>
+</section>
+
+<section>
+  <h3>7. Concatenación y template strings</h3>
+  <p>Podemos unir textos de dos formas:</p>
+  <ul>
+    <li>
+      <strong>Concatenación clásica:</strong> usando el operador <code>+</code>.
+    </li>
+    <li>
+      <strong>Template strings:</strong> usando <code>`backticks`</code> y
+      <code>${}</code> para insertar variables.
+    </li>
+  </ul>
+
+  <pre><code>let nombre = "Sebastián";
+let edad = 30;
+
+// Concatenación clásica
+console.log("Hola, mi nombre es " + nombre + " y tengo " + edad + " años.");
+
+// Template string
+console.log(`Hola, mi nombre es ${nombre} y tengo ${edad} años.`);
+</code></pre>
+</section>
+
+<section>
+  <h3>8. Camel Case en JavaScript</h3>
+  <p>
+    En JavaScript los nombres de variables suelen escribirse en
+    <strong>camelCase</strong>: la primera palabra va en minúsculas y las
+    siguientes comienzan con mayúscula.
+  </p>
+
+  <pre><code>let nombreCompleto = "Juan Pérez";
+let numeroDeTelefono = "3492-555555";
+</code></pre>
+</section>
+
+<section>
+  <h3>9. Condicionales</h3>
+  <p>
+    Los condicionales permiten ejecutar código solo si se cumple una condición.
+    Se usan con <code>if</code>, <code>else if</code> y <code>else</code>.
+  </p>
+
+  <pre><code>let edad = prompt("¿Cuántos años tenés?");
+
+if (edad >= 18) {
+  alert("Podés ingresar 🎉");
+} else {
+  alert("Lo siento, sos menor de edad 🚫");
+}
+</code></pre>
+</section>
+
+<section>
+  <h3>🧠 Ejercicio final de la unidad</h3>
+  <p>
+    Pedile al usuario su nombre y su edad. Luego mostrá un mensaje personalizado
+    en la consola:
+  </p>
+
+  <blockquote>
+    💡 Ejemplo de salida:
+    <code>Hola, Ana. Tenés 25 años y ya podés conducir.</code>
+  </blockquote>
+
+  <p>
+    Usá variables, concatenación o template strings, y un condicional que
+    indique si puede conducir (edad >= 18).
+  </p>
+</section>
+
+<section>
+  <h3>🎯 Objetivos de aprendizaje</h3>
+  <ul>
+    <li>Comprender qué es JavaScript y para qué se utiliza.</li>
+    <li>Incluir scripts correctamente en un documento HTML.</li>
+    <li>Usar variables, operadores y condicionales.</li>
+    <li>
+      Interactuar con el usuario mediante <code>prompt()</code> y
+      <code>alert()</code>.
+    </li>
+  </ul>
+</section>

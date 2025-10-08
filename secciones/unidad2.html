@@ -1,0 +1,173 @@
+<h2>Unidad II — Arrays, Objetos, Bucles y Funciones</h2>
+
+<section>
+  <h3>1. Arrays (Arreglos)</h3>
+  <p>
+    Un <strong>array</strong> es una colección ordenada de elementos. Nos
+    permite guardar varios valores dentro de una misma variable, accediendo a
+    ellos por su índice (posición).
+  </p>
+
+  <pre><code>// Crear un array
+let frutas = ["manzana", "banana", "naranja"];
+
+// Acceder a un elemento
+console.log(frutas[0]); // "manzana"
+
+// Cambiar un valor
+frutas[1] = "pera";
+
+// Agregar y quitar elementos
+frutas.push("uva");    // agrega al final
+frutas.pop();          // quita el último
+frutas.unshift("kiwi"); // agrega al inicio
+frutas.shift();        // elimina el primero
+
+console.log(frutas);
+</code></pre>
+
+  <blockquote>
+    💡 Recordá que los índices comienzan en <code>0</code>, no en 1.
+  </blockquote>
+
+  <p>Algunos métodos muy usados:</p>
+  <ul>
+    <li><code>length</code> → cantidad de elementos</li>
+    <li><code>includes()</code> → verifica si un elemento existe</li>
+    <li><code>indexOf()</code> → devuelve la posición de un elemento</li>
+    <li><code>join()</code> → une los elementos en un texto</li>
+  </ul>
+</section>
+
+<section>
+  <h3>2. Objetos (Arrays asociativos)</h3>
+  <p>
+    Un <strong>objeto</strong> agrupa información relacionada mediante pares
+    <code>clave: valor</code>. Es ideal para representar entidades del mundo
+    real, como una persona o un producto.
+  </p>
+
+  <pre><code>// Crear un objeto
+let persona = {
+  nombre: "Sebastián",
+  edad: 30,
+  profesion: "Desarrollador"
+};
+
+// Acceder a propiedades
+console.log(persona.nombre);
+console.log(persona["edad"]);
+
+// Modificar y agregar propiedades
+persona.edad = 31;
+persona.ciudad = "Rafaela";
+
+console.log(persona);
+</code></pre>
+
+  <blockquote>
+    💡 Los objetos son como "cajas" que almacenan datos con nombres en lugar de
+    posiciones numéricas.
+  </blockquote>
+</section>
+
+<section>
+  <h3>3. Bucles e iteraciones</h3>
+  <p>
+    Los <strong>bucles</strong> nos permiten repetir un bloque de código varias
+    veces. En JavaScript existen varios tipos de bucles:
+  </p>
+
+  <h4><code>for</code></h4>
+  <pre><code>// Repite 5 veces
+for (let i = 0; i < 5; i++) {
+  console.log("Iteración número: " + i);
+}
+</code></pre>
+
+  <h4><code>while</code></h4>
+  <pre><code>let contador = 1;
+
+while (contador <= 3) {
+  console.log("Contando... " + contador);
+  contador++;
+}</code></pre>
+
+  <h4><code>for...of</code></h4>
+  <p>Permite recorrer los elementos de un array fácilmente:</p>
+  <pre><code>let colores = ["rojo", "verde", "azul"];
+
+for (let color of colores) {
+  console.log(color);
+}
+</code></pre>
+
+  <blockquote>
+    💡 Tip: si necesitás recorrer los índices, usá <code>for</code>; si solo
+    necesitás los valores, <code>for...of</code> es más limpio.
+  </blockquote>
+</section>
+
+<section>
+  <h3>4. Funciones</h3>
+  <p>
+    Una <strong>función</strong> es un bloque de código reutilizable que realiza
+    una tarea. Podemos invocarla (llamarla) tantas veces como necesitemos.
+  </p>
+
+  <h4>Declaración clásica</h4>
+  <pre><code>function saludar() {
+  console.log("¡Hola a todos!");
+}
+
+saludar(); // Llamamos la función
+</code></pre>
+
+  <h4>Con parámetros y retorno</h4>
+  <pre><code>function sumar(a, b) {
+  return a + b;
+}
+
+let resultado = sumar(5, 3);
+console.log("El resultado es " + resultado);
+</code></pre>
+
+  <h4>Funciones flecha (Arrow Functions)</h4>
+  <pre><code>const multiplicar = (x, y) => x * y;
+
+console.log(multiplicar(4, 2)); // 8
+</code></pre>
+
+  <blockquote>
+    💡 Las arrow functions son más breves y modernas, ideales para funciones
+    cortas.
+  </blockquote>
+</section>
+
+<section>
+  <h3>5. 🧠 Ejercicio integrador</h3>
+  <p>
+    Creá un array llamado <code>alumnos</code> con tres nombres. Luego, usá un
+    bucle para mostrar cada nombre en consola. Después, creá una función llamada
+    <code>buscarAlumno()</code> que reciba un nombre y te diga si ese alumno
+    está en el array o no.
+  </p>
+
+  <blockquote>
+    💡 Tip: podés usar el método <code>includes()</code> dentro de tu función
+    para simplificar la búsqueda.
+  </blockquote>
+</section>
+
+<section>
+  <h3>🎯 Objetivos de aprendizaje</h3>
+  <ul>
+    <li>Comprender qué son arrays y objetos y cuándo usarlos.</li>
+    <li>
+      Recorrer colecciones con bucles (<code>for</code>, <code>while</code>,
+      <code>for...of</code>).
+    </li>
+    <li>Definir y usar funciones con parámetros y retorno.</li>
+    <li>Aplicar funciones flecha para escribir código más limpio y moderno.</li>
+  </ul>
+</section>
