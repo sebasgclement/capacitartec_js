@@ -4,9 +4,9 @@
   <h3>1. ¿Qué es la Programación Orientada a Objetos?</h3>
   <p>
     La <strong>Programación Orientada a Objetos</strong> (POO) es un paradigma
-    que organiza el código en <strong>objetos</strong> que combinan datos y
-    comportamientos. Es la base de la mayoría de los lenguajes modernos,
-    incluido JavaScript.
+    que organiza el código en <strong>objetos</strong> que combinan datos
+    (<em>atributos</em>) y comportamientos (<em>métodos</em>). Es la base de la
+    mayoría de los lenguajes modernos, incluido JavaScript.
   </p>
 
   <blockquote>
@@ -14,6 +14,45 @@
     <em>entidades</em> que representan cosas del mundo real: una persona, un
     producto, un alumno, etc.
   </blockquote>
+</section>
+
+<section>
+  <h3>2. Conceptos clave</h3>
+  <ul>
+    <li>
+      <strong>Atributo:</strong> característica o propiedad que describe al
+      objeto. Por ejemplo, el nombre o la edad de una persona.
+    </li>
+    <li>
+      <strong>Método:</strong> acción o comportamiento que el objeto puede
+      realizar. Por ejemplo, saludar o calcular algo.
+    </li>
+    <li>
+      <strong>Constructor:</strong> función especial dentro de una clase que se
+      ejecuta automáticamente al crear un objeto. Sirve para inicializar sus
+      atributos.
+    </li>
+    <li>
+      <strong>Instanciación:</strong> proceso de crear un objeto a partir de una
+      clase usando la palabra clave <code>new</code>.
+    </li>
+    <li>
+      <strong>Abstracción:</strong> proceso de simplificar un problema
+      quedándose solo con los datos y comportamientos relevantes.
+    </li>
+    <li>
+      <strong>Modularidad:</strong> organizar el código en partes pequeñas y
+      reutilizables (clases, módulos, archivos). Facilita el mantenimiento.
+    </li>
+    <li>
+      <strong>Encapsulamiento:</strong> proteger los datos internos de un
+      objeto, evitando accesos o modificaciones directas desde fuera.
+    </li>
+    <li>
+      <strong>Polimorfismo:</strong> permite que diferentes clases respondan de
+      forma distinta al mismo método (por ejemplo, <code>area()</code>).
+    </li>
+  </ul>
 </section>
 
 <section class="diagrama-poo">
@@ -35,25 +74,25 @@
 </section>
 
 <section>
-  <h3>2. Clases y Objetos</h3>
+  <h3>3. Clases, objetos y constructor</h3>
   <p>
     Una <strong>clase</strong> es una plantilla o modelo para crear objetos. Un
-    <strong>objeto</strong> es una instancia concreta de esa clase.
+    <strong>objeto</strong> es una <em>instancia</em> de esa clase.
   </p>
 
   <pre><code>// Definición de una clase
 class Persona {
-  constructor(nombre, edad) {
-    this.nombre = nombre;
+  constructor(nombre, edad) { // Constructor
+    this.nombre = nombre;     // Atributos
     this.edad = edad;
   }
 
-  saludar() {
+  saludar() {                 // Método
     console.log(`Hola, soy ${this.nombre} y tengo ${this.edad} años.`);
   }
 }
 
-// Crear objetos
+// Instanciación (creación de objetos)
 const persona1 = new Persona("Lucía", 25);
 const persona2 = new Persona("Martín", 30);
 
@@ -62,32 +101,9 @@ persona2.saludar();
 </code></pre>
 
   <blockquote>
-    📘 Cada objeto creado a partir de una clase tiene sus propios valores, pero
-    comparte los mismos métodos definidos en la clase.
+    📘 Cada objeto tiene sus propios valores, pero comparte los métodos
+    definidos en la clase.
   </blockquote>
-</section>
-
-<section>
-  <h3>3. Propiedades y métodos</h3>
-  <p>
-    Las <strong>propiedades</strong> son las características del objeto, y los
-    <strong>métodos</strong> son las acciones que puede realizar.
-  </p>
-
-  <pre><code>class Auto {
-  constructor(marca, modelo) {
-    this.marca = marca;
-    this.modelo = modelo;
-  }
-
-  encender() {
-    console.log(`${this.marca} ${this.modelo} está encendido.`);
-  }
-}
-
-const miAuto = new Auto("Toyota", "Corolla");
-miAuto.encender();
-</code></pre>
 </section>
 
 <section>
@@ -125,7 +141,7 @@ perro1.hablar();
 </section>
 
 <section>
-  <h3>5. Encapsulación</h3>
+  <h3>5. Encapsulamiento</h3>
   <p>
     La <strong>encapsulación</strong> protege los datos internos del objeto,
     evitando que se modifiquen directamente desde fuera de la clase.
@@ -146,7 +162,7 @@ perro1.hablar();
 const cuenta = new CuentaBancaria();
 cuenta.depositar(1000);
 cuenta.verSaldo(); // ✅
-console.log(cuenta.#saldo); // ❌ Error: propiedad privada
+console.log(cuenta.#saldo); // ❌ Error
 </code></pre>
 
   <blockquote>
@@ -199,15 +215,14 @@ figuras.forEach(f => {
 </section>
 
 <section>
-  <h3>🧩 Ejercicio final de la unidad</h3>
+  <h3>🧩 Ejercicio final</h3>
   <p>
     Crea una clase <code>Producto</code> con propiedades <code>nombre</code>,
     <code>precio</code> y <code>stock</code>. Luego, derivá una clase
     <code>ProductoDescuento</code> que herede de <code>Producto</code> y agregue
-    un método <code>aplicarDescuento(porcentaje)</code>
-    que devuelva el nuevo precio.
+    un método <code>aplicarDescuento(porcentaje)</code> que devuelva el nuevo
+    precio.
   </p>
-
   <blockquote>
     💡 Mostrá en consola el precio antes y después del descuento.
   </blockquote>
@@ -217,10 +232,8 @@ figuras.forEach(f => {
   <h3>🎯 Objetivos de aprendizaje</h3>
   <ul>
     <li>Comprender los conceptos fundamentales de la POO.</li>
-    <li>Crear clases, objetos, propiedades y métodos.</li>
+    <li>Distinguir entre atributos, métodos y constructores.</li>
     <li>Aplicar herencia, encapsulación y polimorfismo.</li>
-    <li>
-      Usar clases modernas de ES6 para escribir código más claro y modular.
-    </li>
+    <li>Valorar la abstracción y modularidad en el diseño del código.</li>
   </ul>
 </section>
