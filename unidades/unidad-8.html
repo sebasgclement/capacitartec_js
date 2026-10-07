@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Unidad 8 · Asincronía y APIs | Curso de JavaScript</title>
+    <link rel="icon" href="../recursos/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/estilos.css" />
+    <script>
+      try {
+        const tema = localStorage.getItem("tema");
+        if (tema) document.documentElement.dataset.theme = tema;
+      } catch {}
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+    <script src="../js/sitio.js" defer></script>
+  </head>
+  <body data-base="../">
+    <header class="topbar">
+      <button class="btn-icono btn-menu" id="btn-menu" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="sidebar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" /></svg>
+      </button>
+      <a class="marca" href="../index.html"><span class="marca-logo">JS</span><span class="marca-texto">Curso de JavaScript</span></a>
+      <span class="espacio"></span>
+      <button class="btn-icono" id="btn-tema" type="button" aria-label="Cambiar entre modo claro y oscuro">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor" /></svg>
+      </button>
+    </header>
+
+    <div class="layout">
+      <aside class="sidebar" id="sidebar"><nav id="nav" aria-label="Unidades del curso"></nav></aside>
+
+      <main class="contenido">
+        <article class="articulo">
+          <header>
+            <p class="etiqueta">Unidad 8 · Semana 7</p>
+            <h1>Asincronía y APIs</h1>
+            <p class="bajada">
+              Traer datos reales de internet —clima, cotizaciones, personajes, libros— y mostrarlos
+              en tu página.
+            </p>
+            <div class="objetivos">
+              <h2>Al terminar esta unidad vas a poder</h2>
+              <ul>
+                <li>Explicar qué es el código asíncrono y qué es una promesa.</li>
+                <li>Pedir datos a una API con <code>fetch</code>.</li>
+                <li>Usar <code>async</code>/<code>await</code> con <code>try/catch</code>.</li>
+                <li>Mostrar estados de carga y de error en la interfaz.</li>
+              </ul>
+            </div>
+          </header>
+
+          <section id="asincronia">
+            <h2>Código que no espera</h2>
+            <p>
+              Hasta ahora todo se ejecutaba línea por línea, en orden. Pero algunas tareas tardan:
+              pedir datos a un servidor puede demorar un segundo o más. Si JavaScript se quedara
+              esperando, la página entera se congelaría. En lugar de eso,
+              <strong>deja la tarea en marcha y sigue con lo demás</strong>; cuando la tarea
+              termina, ejecuta lo que le dijimos.
+            </p>
+            <pre><code>console.log("1. Pido una pizza");
+
+setTimeout(() =&gt; {
+  console.log("3. Llegó la pizza 🍕");
+}, 2000);
+
+console.log("2. Mientras tanto, pongo la mesa");</code></pre>
+            <div class="consola">1. Pido una pizza
+2. Mientras tanto, pongo la mesa
+3. Llegó la pizza 🍕</div>
+            <p>
+              A esto se le llama <strong>asincronía</strong>: el resultado llega
+              <em>después</em>, no en la línea donde lo pediste.
+            </p>
+          </section>
+
+          <section id="promesas">
+            <h2>Promesas</h2>
+            <p>
+              Una <strong>promesa</strong> es un objeto que representa un resultado que todavía no
+              está. Es como el ticket que te dan al pedir en un local de comidas: todavía no tenés la
+              comida, pero tenés la promesa de que va a llegar (o de que te avisen si se acabó).
+            </p>
+            <p>Una promesa puede estar en uno de tres estados:</p>
+            <div class="tabla">
+              <table>
+                <thead>
+                  <tr><th>Estado</th><th>Significa</th><th>Se maneja con</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td><em>pending</em> (pendiente)</td><td>todavía no terminó</td><td>—</td></tr>
+                  <tr><td><em>fulfilled</em> (cumplida)</td><td>terminó bien y tiene un valor</td><td><code>.then()</code></td></tr>
+                  <tr><td><em>rejected</em> (rechazada)</td><td>falló y tiene un error</td><td><code>.catch()</code></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>
+              No vas a crear promesas a mano casi nunca. Lo que vas a hacer es
+              <strong>usar</strong> las que te devuelven funciones como <code>fetch</code>.
+            </p>
+          </section>
+
+          <section id="fetch">
+            <h2>Pedir datos con <code>fetch</code></h2>
+            <p>
+              Una <strong>API web</strong> es una dirección (URL) que, en lugar de devolver una
+              página para ver, devuelve <strong>datos en formato JSON</strong> para que los use un
+              programa. Probá abrir esta en el navegador:
+              <a href="https://pokeapi.co/api/v2/pokemon/pikachu" target="_blank" rel="noopener">https://pokeapi.co/api/v2/pokemon/pikachu</a>.
+            </p>
+            <p>Desde JavaScript la pedimos con <code>fetch</code>, que devuelve una promesa:</p>
+            <pre><code>fetch("https://pokeapi.co/api/v2/pokemon/pikachu")
+  .then((respuesta) =&gt; respuesta.json()) // 1. convertimos la respuesta de JSON a objeto
+  .then((pokemon) =&gt; {
+    console.log(pokemon.name);           // 2. usamos los datos
+    console.log(pokemon.weight);
+  })
+  .catch((error) =&gt; {
+    console.error("Algo falló:", error); // si no hay internet, por ejemplo
+  });</code></pre>
+            <p>
+              Son dos pasos porque <code>respuesta.json()</code> <strong>también</strong> es
+              asíncrono: primero llegan los encabezados de la respuesta y después el contenido.
+            </p>
+            <div class="callout tip">
+              <p>
+                En DevTools, la pestaña <strong>Network</strong> (Red) muestra cada pedido que hace
+                tu página. Hacé clic en uno y mirá la pestaña <strong>Preview</strong> para explorar
+                el JSON que llegó y encontrar las propiedades que necesitás.
+              </p>
+            </div>
+          </section>
+
+          <section id="async-await">
+            <h2><code>async</code> / <code>await</code></h2>
+            <p>
+              Encadenar <code>.then()</code> se vuelve difícil de leer. <code>async</code>/<code>await</code>
+              permite escribir lo mismo <strong>como si fuera código normal, línea por línea</strong>:
+            </p>
+            <pre><code>async function mostrarPokemon() {
+  try {
+    const respuesta = await fetch("https://pokeapi.co/api/v2/pokemon/pikachu");
+    const pokemon = await respuesta.json();
+    console.log(pokemon.name);
+  } catch (error) {
+    console.error("Algo falló:", error);
+  }
+}
+
+mostrarPokemon();</code></pre>
+            <ul>
+              <li><code>await</code> “espera” a que la promesa se cumpla y te da su valor.</li>
+              <li>Solo se puede usar <code>await</code> dentro de una función marcada con <code>async</code>.</li>
+              <li>Los errores se manejan con el <code>try/catch</code> que vimos en la Unidad 7.</li>
+            </ul>
+
+            <h3>Chequear <code>respuesta.ok</code></h3>
+            <p>
+              <code>fetch</code> solo falla (va al <code>catch</code>) si <strong>no hubo
+              conexión</strong>. Si el servidor responde “no encontrado” (error 404), para
+              <code>fetch</code> eso es una respuesta válida. Por eso hay que revisarlo:
+            </p>
+            <pre><code>async function buscarPokemon(nombre) {
+  const respuesta = await fetch(`https://pokeapi.co/api/v2/pokemon/${nombre}`);
+
+  if (!respuesta.ok) {
+    // respuesta.status tiene el código: 404 = no existe, 500 = error del servidor…
+    throw new Error(`No se encontró "${nombre}" (error ${respuesta.status})`);
+  }
+
+  return respuesta.json();
+}</code></pre>
+            <div class="callout cuidado">
+              <p>
+                Una función <code>async</code> <strong>siempre devuelve una promesa</strong>. Para
+                usar lo que devuelve <code>buscarPokemon()</code>, también tenés que usar
+                <code>await</code> (o <code>.then</code>): <code>const p = await buscarPokemon("ditto");</code>
+              </p>
+            </div>
+          </section>
+
+          <section id="ejemplo">
+            <h2>Ejemplo completo: buscador de Pokémon</h2>
+            <p>
+              Una interfaz real tiene que contemplar <strong>tres estados</strong>: cargando, error
+              y éxito. Mientras carga, conviene deshabilitar el botón para que no se hagan pedidos
+              repetidos.
+            </p>
+            <p class="archivo">index.html</p>
+            <pre><code class="language-html">&lt;form id="buscador"&gt;
+  &lt;label for="nombre"&gt;Nombre o número&lt;/label&gt;
+  &lt;input id="nombre" required placeholder="pikachu" /&gt;
+  &lt;button type="submit"&gt;Buscar&lt;/button&gt;
+&lt;/form&gt;
+
+&lt;div id="resultado"&gt;&lt;/div&gt;</code></pre>
+            <p class="archivo">script.js</p>
+            <pre><code>const form = document.querySelector("#buscador");
+const input = document.querySelector("#nombre");
+const boton = form.querySelector("button");
+const resultado = document.querySelector("#resultado");
+
+async function buscarPokemon(nombre) {
+  const respuesta = await fetch(`https://pokeapi.co/api/v2/pokemon/${nombre}`);
+  if (!respuesta.ok) {
+    throw new Error(respuesta.status === 404 ? "No existe ese Pokémon 🤔" : "Error del servidor");
+  }
+  return respuesta.json();
+}
+
+function mostrarPokemon(pokemon) {
+  resultado.innerHTML = "";
+
+  const titulo = document.createElement("h2");
+  titulo.textContent = `#${pokemon.id} ${pokemon.name}`;
+
+  const imagen = document.createElement("img");
+  imagen.src = pokemon.sprites.front_default;
+  imagen.alt = pokemon.name;
+
+  const tipos = document.createElement("p");
+  tipos.textContent = "Tipo: " + pokemon.types.map((t) =&gt; t.type.name).join(", ");
+
+  resultado.append(titulo, imagen, tipos);
+}
+
+form.addEventListener("submit", async (e) =&gt; {
+  e.preventDefault();
+  const nombre = input.value.trim().toLowerCase();
+
+  resultado.textContent = "Cargando…";
+  boton.disabled = true;
+
+  try {
+    const pokemon = await buscarPokemon(nombre);
+    mostrarPokemon(pokemon);
+  } catch (error) {
+    resultado.textContent = error.message;
+  } finally {
+    boton.disabled = false; // se ejecuta siempre, haya salido bien o mal
+  }
+});</code></pre>
+            <div class="callout dato">
+              <p>
+                Si no hay internet, <code>fetch</code> falla con el mensaje “Failed to fetch”. En
+                una app real convendría mostrar algo más amigable, como “Revisá tu conexión”.
+              </p>
+            </div>
+          </section>
+
+          <section id="apis">
+            <h2>APIs para practicar</h2>
+            <p>Todas son gratuitas y <strong>no requieren registrarse ni usar una clave</strong>:</p>
+            <div class="tabla">
+              <table>
+                <thead>
+                  <tr><th>API</th><th>Qué tiene</th><th>URL de ejemplo</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>PokeAPI</td><td>Pokémon, tipos, habilidades</td><td><code>https://pokeapi.co/api/v2/pokemon/ditto</code></td></tr>
+                  <tr><td>Rick and Morty</td><td>personajes, con paginación</td><td><code>https://rickandmortyapi.com/api/character</code></td></tr>
+                  <tr><td>JSONPlaceholder</td><td>usuarios, posts y tareas de prueba</td><td><code>https://jsonplaceholder.typicode.com/users</code></td></tr>
+                  <tr><td>Open Library</td><td>libros: autores, año, tapas</td><td><code>https://openlibrary.org/search.json?q=borges</code></td></tr>
+                  <tr><td>Open-Meteo</td><td>clima actual y pronóstico</td><td><code>https://api.open-meteo.com/v1/forecast?latitude=-31.25&amp;longitude=-61.49&amp;current=temperature_2m</code></td></tr>
+                  <tr><td>DolarAPI</td><td>cotizaciones del dólar en Argentina</td><td><code>https://dolarapi.com/v1/dolares</code></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="callout cuidado">
+              <p>
+                Muchas APIs limitan cuántos pedidos podés hacer por hora. La de GitHub, por ejemplo,
+                permite solo 60 por hora sin clave, <strong>contando a todas las computadoras que
+                comparten la misma conexión</strong>. En un aula se agota en minutos. No hagas
+                pedidos dentro de un evento <code>input</code> (uno por tecla): usá un botón o el
+                <code>submit</code>.
+              </p>
+            </div>
+            <div class="callout investigar">
+              <ul>
+                <li>Qué es <strong>CORS</strong> y por qué a veces el navegador bloquea un pedido a otra página.</li>
+                <li><code>Promise.all()</code>: hacer varios pedidos a la vez y esperar a todos.</li>
+                <li>Los métodos HTTP (<code>GET</code>, <code>POST</code>, <code>PUT</code>, <code>DELETE</code>) y cómo enviar datos con <code>fetch</code>.</li>
+                <li>Por qué nunca se debe poner una clave de API secreta en el código del navegador.</li>
+              </ul>
+            </div>
+          </section>
+
+          <section id="practica">
+            <h2>Práctica</h2>
+
+            <div class="ejercicio">
+              <h3>1 · Directorio de usuarios</h3>
+              <p>
+                Traé los usuarios de JSONPlaceholder y mostralos como tarjetas con nombre, email y
+                ciudad (<code>usuario.address.city</code>). Mientras carga, mostrá “Cargando…”.
+              </p>
+            </div>
+
+            <div class="ejercicio">
+              <h3>2 · Cotización del dólar</h3>
+              <p>
+                Con DolarAPI, mostrá una tabla con el nombre de cada cotización, su precio de compra
+                y de venta, formateados como moneda. Agregá un botón “Actualizar” y la hora de la
+                última actualización.
+              </p>
+            </div>
+
+            <div class="ejercicio">
+              <h3>3 · Galería de Rick and Morty</h3>
+              <p>
+                Mostrá los personajes de la primera página con su imagen, nombre y estado. Agregá
+                botones “Anterior” y “Siguiente” usando las URLs que vienen en
+                <code>datos.info.prev</code> y <code>datos.info.next</code>. Deshabilitá el botón
+                cuando no haya página anterior o siguiente.
+              </p>
+            </div>
+
+            <div class="ejercicio">
+              <h3>4 · ¿Qué tiempo hace?</h3>
+              <p>
+                Con Open-Meteo, mostrá la temperatura actual de tu ciudad. Buscá su latitud y
+                longitud en un mapa. Bonus: un <code>&lt;select&gt;</code> con 3 ciudades para
+                elegir.
+              </p>
+            </div>
+
+            <div class="ejercicio integrador">
+              <h3>5 · Pokédex con favoritos (integrador)</h3>
+              <p>A partir del buscador de ejemplo:</p>
+              <ul>
+                <li>Mostrá también altura, peso y la lista de habilidades.</li>
+                <li>Un botón “☆ Favorito” que guarde el Pokémon (solo nombre, id e imagen) en <code>localStorage</code>.</li>
+                <li>Una sección “Mis favoritos” que se vea al cargar la página. Al hacer clic en uno, se busca de nuevo.</li>
+                <li>No se puede agregar dos veces el mismo, y se puede quitar de favoritos.</li>
+              </ul>
+              <details>
+                <summary>Pista</summary>
+                <p>
+                  La API da la altura en decímetros y el peso en hectogramos: dividí ambos por 10
+                  para mostrarlos en metros y kilos.
+                </p>
+              </details>
+            </div>
+          </section>
+
+          <nav class="paginacion" id="paginacion" aria-label="Unidad anterior y siguiente"></nav>
+        </article>
+
+        <aside class="toc" id="toc" aria-label="En esta página"></aside>
+      </main>
+    </div>
+    <div class="velo"></div>
+
+    <footer class="pie">Curso de JavaScript · CapacitarTec · Sebastián Clement · 2026</footer>
+  </body>
+</html>

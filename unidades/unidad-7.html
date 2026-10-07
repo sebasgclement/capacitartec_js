@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Unidad 7 · Formularios y almacenamiento | Curso de JavaScript</title>
+    <link rel="icon" href="../recursos/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/estilos.css" />
+    <script>
+      try {
+        const tema = localStorage.getItem("tema");
+        if (tema) document.documentElement.dataset.theme = tema;
+      } catch {}
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+    <script src="../js/sitio.js" defer></script>
+  </head>
+  <body data-base="../">
+    <header class="topbar">
+      <button class="btn-icono btn-menu" id="btn-menu" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="sidebar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" /></svg>
+      </button>
+      <a class="marca" href="../index.html"><span class="marca-logo">JS</span><span class="marca-texto">Curso de JavaScript</span></a>
+      <span class="espacio"></span>
+      <button class="btn-icono" id="btn-tema" type="button" aria-label="Cambiar entre modo claro y oscuro">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor" /></svg>
+      </button>
+    </header>
+
+    <div class="layout">
+      <aside class="sidebar" id="sidebar"><nav id="nav" aria-label="Unidades del curso"></nav></aside>
+
+      <main class="contenido">
+        <article class="articulo">
+          <header>
+            <p class="etiqueta">Unidad 7 · Semana 6</p>
+            <h1>Formularios y almacenamiento</h1>
+            <p class="bajada">
+              Pedir datos de verdad (sin <code>prompt</code>), validarlos, y lograr que no se
+              pierdan al recargar la página.
+            </p>
+            <div class="objetivos">
+              <h2>Al terminar esta unidad vas a poder</h2>
+              <ul>
+                <li>Leer los valores de inputs, checkboxes y selects.</li>
+                <li>Manejar el envío de un formulario con <code>submit</code> y <code>preventDefault()</code>.</li>
+                <li>Validar datos y mostrar errores en la página.</li>
+                <li>Convertir datos a texto y de vuelta con <code>JSON</code>.</li>
+                <li>Guardar datos en el navegador con <code>localStorage</code>.</li>
+                <li>Manejar errores con <code>try/catch</code>.</li>
+              </ul>
+            </div>
+          </header>
+
+          <section id="valores">
+            <h2>Leer los datos de un formulario</h2>
+            <pre><code class="language-html">&lt;form id="form-registro"&gt;
+  &lt;label for="nombre"&gt;Nombre&lt;/label&gt;
+  &lt;input id="nombre" type="text" /&gt;
+
+  &lt;label for="edad"&gt;Edad&lt;/label&gt;
+  &lt;input id="edad" type="number" /&gt;
+
+  &lt;label for="curso"&gt;Curso&lt;/label&gt;
+  &lt;select id="curso"&gt;
+    &lt;option value="js"&gt;JavaScript&lt;/option&gt;
+    &lt;option value="py"&gt;Python&lt;/option&gt;
+  &lt;/select&gt;
+
+  &lt;label&gt;&lt;input id="novedades" type="checkbox" /&gt; Quiero recibir novedades&lt;/label&gt;
+
+  &lt;button type="submit"&gt;Enviar&lt;/button&gt;
+&lt;/form&gt;</code></pre>
+            <pre><code>const nombre = document.querySelector("#nombre").value;     // string
+const edad = Number(document.querySelector("#edad").value); // ¡convertir!
+const curso = document.querySelector("#curso").value;       // "js" o "py"
+const novedades = document.querySelector("#novedades").checked; // true o false</code></pre>
+            <div class="callout cuidado">
+              <p>
+                <code>.value</code> <strong>siempre es un string</strong>, aunque el input sea
+                <code>type="number"</code>. Es el mismo problema que con <code>prompt</code>:
+                convertí con <code>Number()</code> antes de hacer cuentas. En los checkboxes no se
+                usa <code>.value</code> sino <code>.checked</code>.
+              </p>
+            </div>
+          </section>
+
+          <section id="submit">
+            <h2>El evento <code>submit</code></h2>
+            <p>
+              Podrías escuchar el <code>click</code> del botón, pero es mejor escuchar el
+              <code>submit</code> del <strong>formulario</strong>: así también funciona al apretar
+              <kbd>Enter</kbd> en cualquier campo, y el navegador aplica las validaciones del HTML.
+            </p>
+            <pre><code>const form = document.querySelector("#form-registro");
+
+form.addEventListener("submit", (e) =&gt; {
+  e.preventDefault(); // evita que la página se recargue
+
+  const nombre = document.querySelector("#nombre").value.trim();
+  console.log(`Registrado: ${nombre}`);
+
+  form.reset(); // vacía todos los campos
+});</code></pre>
+            <div class="callout cuidado">
+              <p>
+                Si te olvidás de <code>e.preventDefault()</code>, el formulario hace lo que hacía en
+                HTML puro: envía los datos y <strong>recarga la página</strong>. Vas a ver tu
+                mensaje en la consola durante una fracción de segundo y después desaparece.
+              </p>
+            </div>
+          </section>
+
+          <section id="validar">
+            <h2>Validar</h2>
+            <h3>Primero, el HTML</h3>
+            <p>
+              Muchas validaciones las hace el navegador solo, con atributos que ya conocés. Si un
+              campo no cumple, el evento <code>submit</code> ni siquiera ocurre:
+            </p>
+            <pre><code class="language-html">&lt;input id="nombre" required minlength="2" /&gt;
+&lt;input id="edad" type="number" required min="16" max="99" /&gt;
+&lt;input id="email" type="email" required /&gt;</code></pre>
+
+            <h3>Después, JavaScript</h3>
+            <p>
+              Para reglas propias (que dos contraseñas coincidan, que una fecha sea futura…)
+              validamos en el <code>submit</code> y mostramos el error <strong>en la
+              página</strong>, al lado del campo, no con un <code>alert</code>:
+            </p>
+            <pre><code class="language-html">&lt;input id="clave" type="password" required /&gt;
+&lt;input id="clave2" type="password" required /&gt;
+&lt;p id="error" class="error"&gt;&lt;/p&gt;</code></pre>
+            <pre><code>form.addEventListener("submit", (e) =&gt; {
+  e.preventDefault();
+
+  const clave = document.querySelector("#clave").value;
+  const clave2 = document.querySelector("#clave2").value;
+  const error = document.querySelector("#error");
+
+  if (clave.length &lt; 8) {
+    error.textContent = "La contraseña debe tener al menos 8 caracteres";
+    return; // cortamos acá: no seguimos con el registro
+  }
+  if (clave !== clave2) {
+    error.textContent = "Las contraseñas no coinciden";
+    return;
+  }
+
+  error.textContent = "";
+  console.log("¡Registro exitoso!");
+});</code></pre>
+            <div class="callout dato">
+              <p>
+                Validar en el navegador mejora la experiencia, pero no es seguridad: cualquiera
+                puede saltearse tu JavaScript. En un sistema real, el servidor vuelve a validar todo.
+              </p>
+            </div>
+          </section>
+
+          <section id="json">
+            <h2>JSON</h2>
+            <p>
+              <strong>JSON</strong> (<em>JavaScript Object Notation</em>) es un formato de texto
+              para guardar y enviar datos. Se parece muchísimo a un objeto de JavaScript, pero es
+              <strong>un string</strong>. Es el idioma en el que se comunican casi todas las
+              aplicaciones web (lo vamos a volver a ver en la Unidad 8).
+            </p>
+            <pre><code>const alumno = { nombre: "Ana", edad: 25, cursos: ["HTML", "JS"] };
+
+// Objeto → texto JSON
+const texto = JSON.stringify(alumno);
+console.log(texto);        // '{"nombre":"Ana","edad":25,"cursos":["HTML","JS"]}'
+console.log(typeof texto); // "string"
+
+// Texto JSON → objeto
+const deVuelta = JSON.parse(texto);
+console.log(deVuelta.cursos[1]); // "JS"</code></pre>
+            <p>Reglas del formato JSON:</p>
+            <ul>
+              <li>Las propiedades van <strong>siempre entre comillas dobles</strong>.</li>
+              <li>Acepta strings, números, booleanos, <code>null</code>, arrays y objetos. No acepta funciones ni <code>undefined</code>.</li>
+              <li>No admite comas al final ni comentarios.</li>
+            </ul>
+          </section>
+
+          <section id="localstorage">
+            <h2><code>localStorage</code></h2>
+            <p>
+              Es un pequeño almacén del navegador donde tu página puede guardar datos que
+              <strong>sobreviven a recargar y a cerrar el navegador</strong>. Funciona con pares
+              clave → valor:
+            </p>
+            <pre><code>localStorage.setItem("nombre", "Ana");     // guardar
+localStorage.getItem("nombre");            // "Ana"
+localStorage.getItem("noExiste");          // null
+localStorage.removeItem("nombre");         // borrar una clave
+localStorage.clear();                      // borrar todo</code></pre>
+            <div class="callout cuidado">
+              <p>
+                <code>localStorage</code> <strong>solo guarda strings</strong>. Un número vuelve
+                como texto, y un array u objeto se arruina:
+              </p>
+              <pre><code>localStorage.setItem("compras", ["pan", "leche"]);
+localStorage.getItem("compras"); // "pan,leche" 😬 ya no es un array</code></pre>
+            </div>
+            <p>La solución es combinarlo con JSON:</p>
+            <pre><code>const compras = ["pan", "leche"];
+
+// Guardar: array → JSON
+localStorage.setItem("compras", JSON.stringify(compras));
+
+// Leer: JSON → array (si no había nada, usamos un array vacío)
+const guardadas = JSON.parse(localStorage.getItem("compras")) || [];</code></pre>
+            <div class="callout tip">
+              <p>
+                En DevTools, pestaña <strong>Application</strong> → <strong>Local Storage</strong>,
+                ves todo lo que guardó tu página y lo podés editar o borrar a mano.
+              </p>
+            </div>
+            <div class="callout dato">
+              <p>
+                Cada sitio tiene su propio <code>localStorage</code> (unos 5 MB) y solo existe en ese
+                navegador y esa computadora. No guardes contraseñas ni datos sensibles: cualquier
+                script de la página lo puede leer.
+              </p>
+            </div>
+          </section>
+
+          <section id="try-catch">
+            <h2>Manejar errores con <code>try/catch</code></h2>
+            <p>
+              Algunas operaciones pueden fallar aunque tu código esté bien. Por ejemplo,
+              <code>JSON.parse</code> lanza un error si el texto no es JSON válido (alguien lo editó
+              a mano, o lo guardó otra versión de tu app). Sin manejo, ese error frena todo el
+              script.
+            </p>
+            <pre><code>try {
+  // código que puede fallar
+  const datos = JSON.parse("{esto no es json}");
+  console.log(datos);
+} catch (error) {
+  // se ejecuta solo si algo falló dentro del try
+  console.error("No se pudieron leer los datos:", error.message);
+}
+
+console.log("El programa sigue funcionando 👍");</code></pre>
+            <p>También podés <strong>lanzar</strong> tus propios errores con <code>throw</code>:</p>
+            <pre><code>function dividir(a, b) {
+  if (b === 0) {
+    throw new Error("No se puede dividir por cero");
+  }
+  return a / b;
+}
+
+try {
+  dividir(10, 0);
+} catch (error) {
+  console.log(error.message); // "No se puede dividir por cero"
+}</code></pre>
+            <div class="callout investigar">
+              <ul>
+                <li><code>sessionStorage</code>: ¿en qué se diferencia de <code>localStorage</code>? ¿Y las cookies?</li>
+                <li><code>FormData</code>: leer todos los campos de un formulario de una vez.</li>
+                <li>El bloque <code>finally</code> en un <code>try/catch</code>.</li>
+                <li>Expresiones regulares para validar formatos (DNI, teléfono, código postal).</li>
+              </ul>
+            </div>
+          </section>
+
+          <section id="ejemplo">
+            <h2>Ejemplo completo: lista de tareas que se guarda</h2>
+            <p>
+              Juntamos todo con el patrón de la Unidad 6: los datos viven en un array, y cada vez
+              que cambian, <strong>los guardamos y volvemos a dibujar</strong>.
+            </p>
+            <p class="archivo">index.html</p>
+            <pre><code class="language-html">&lt;form id="form-tarea"&gt;
+  &lt;label for="texto"&gt;Nueva tarea&lt;/label&gt;
+  &lt;input id="texto" required maxlength="80" /&gt;
+  &lt;button type="submit"&gt;Agregar&lt;/button&gt;
+&lt;/form&gt;
+
+&lt;ul id="lista"&gt;&lt;/ul&gt;</code></pre>
+            <p class="archivo">style.css</p>
+            <pre><code class="language-css">.hecha span {
+  text-decoration: line-through;
+  opacity: 0.6;
+}</code></pre>
+            <p class="archivo">script.js</p>
+            <pre><code>const form = document.querySelector("#form-tarea");
+const input = document.querySelector("#texto");
+const lista = document.querySelector("#lista");
+
+let tareas = [];
+
+// ---------- Datos ----------
+function cargarTareas() {
+  try {
+    return JSON.parse(localStorage.getItem("tareas")) || [];
+  } catch {
+    // (sin "(error)": no necesitamos saber qué falló)
+    return []; // si lo guardado está roto, empezamos de cero
+  }
+}
+
+function guardarTareas() {
+  localStorage.setItem("tareas", JSON.stringify(tareas));
+}
+
+// ---------- Pantalla ----------
+function mostrarTareas() {
+  lista.innerHTML = "";
+
+  tareas.forEach((tarea) =&gt; {
+    const li = document.createElement("li");
+    li.dataset.id = tarea.id;
+    li.classList.toggle("hecha", tarea.hecha);
+
+    const texto = document.createElement("span");
+    texto.textContent = tarea.texto;
+
+    const btnHecha = document.createElement("button");
+    btnHecha.textContent = tarea.hecha ? "Deshacer" : "Hecha";
+    btnHecha.dataset.accion = "alternar";
+
+    const btnBorrar = document.createElement("button");
+    btnBorrar.textContent = "Borrar";
+    btnBorrar.dataset.accion = "borrar";
+
+    li.append(texto, btnHecha, btnBorrar);
+    lista.append(li);
+  });
+}
+
+// ---------- Eventos ----------
+form.addEventListener("submit", (e) =&gt; {
+  e.preventDefault();
+  const texto = input.value.trim();
+  if (texto === "") return;
+
+  tareas.push({ id: Date.now(), texto: texto, hecha: false });
+  guardarTareas();
+  mostrarTareas();
+
+  form.reset();
+  input.focus();
+});
+
+lista.addEventListener("click", (e) =&gt; {
+  const boton = e.target.closest("button");
+  if (!boton) return;
+
+  const id = Number(boton.closest("li").dataset.id);
+
+  if (boton.dataset.accion === "borrar") {
+    tareas = tareas.filter((t) =&gt; t.id !== id);
+  } else if (boton.dataset.accion === "alternar") {
+    const tarea = tareas.find((t) =&gt; t.id === id);
+    tarea.hecha = !tarea.hecha;
+  }
+
+  guardarTareas();
+  mostrarTareas();
+});
+
+// ---------- Inicio ----------
+tareas = cargarTareas();
+mostrarTareas();</code></pre>
+            <div class="callout dato">
+              <p>
+                <code>Date.now()</code> devuelve la cantidad de milisegundos desde 1970. Como nunca
+                se repite entre dos clics, es una forma simple de generar un <code>id</code> único.
+              </p>
+            </div>
+          </section>
+
+          <section id="practica">
+            <h2>Práctica</h2>
+
+            <div class="ejercicio">
+              <h3>1 · Formulario de inscripción</h3>
+              <p>
+                Nombre, email, edad (16 a 99), curso (select) y un checkbox de “acepto los
+                términos”. Validá con atributos HTML y, con JavaScript, que el checkbox esté marcado.
+                Al enviar, ocultá el formulario y mostrá un mensaje: “¡Gracias, Ana! Te inscribiste
+                en JavaScript”.
+              </p>
+            </div>
+
+            <div class="ejercicio">
+              <h3>2 · Recordar preferencias</h3>
+              <p>
+                Al ejercicio del modo oscuro de la Unidad 6, agregale que recuerde la elección del
+                usuario al recargar. Agregá también un input “¿Cómo te llamás?” y que, si ya lo
+                ingresó antes, la página lo salude por su nombre.
+              </p>
+            </div>
+
+            <div class="ejercicio">
+              <h3>3 · Mejorar la lista de tareas</h3>
+              <p>A partir del ejemplo completo:</p>
+              <ul>
+                <li>Mostrá “Te quedan 3 tareas pendientes” (o “¡No hay tareas pendientes! 🎉”).</li>
+                <li>Agregá botones de filtro: Todas / Pendientes / Hechas.</li>
+                <li>Agregá un botón “Borrar hechas”.</li>
+                <li>Si la lista está vacía, mostrá un mensaje en lugar de la lista.</li>
+              </ul>
+            </div>
+
+            <div class="ejercicio integrador">
+              <h3>4 · Control de gastos (integrador)</h3>
+              <p>Una app para anotar gastos personales:</p>
+              <ul>
+                <li>Formulario con descripción, monto (mayor a 0) y categoría (select: comida, transporte, ocio, servicios).</li>
+                <li>Listado de gastos con la fecha en que se cargó y un botón para borrar cada uno.</li>
+                <li>Total general y total por categoría, formateados como moneda.</li>
+                <li>Un filtro por categoría.</li>
+                <li>Todo se guarda en <code>localStorage</code>.</li>
+              </ul>
+              <details>
+                <summary>Pista</summary>
+                <p>
+                  Cada gasto puede ser un objeto
+                  <code>{ id, descripcion, monto, categoria, fecha }</code>. La fecha guardala como
+                  número con <code>Date.now()</code> (las fechas no se guardan bien en JSON) y
+                  convertila con <code>new Date(gasto.fecha)</code> al mostrarla.
+                </p>
+              </details>
+            </div>
+          </section>
+
+          <nav class="paginacion" id="paginacion" aria-label="Unidad anterior y siguiente"></nav>
+        </article>
+
+        <aside class="toc" id="toc" aria-label="En esta página"></aside>
+      </main>
+    </div>
+    <div class="velo"></div>
+
+    <footer class="pie">Curso de JavaScript · CapacitarTec · Sebastián Clement · 2026</footer>
+  </body>
+</html>

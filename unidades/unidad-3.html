@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Unidad 3 · Bucles y funciones | Curso de JavaScript</title>
+    <link rel="icon" href="../recursos/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/estilos.css" />
+    <script>
+      try {
+        const tema = localStorage.getItem("tema");
+        if (tema) document.documentElement.dataset.theme = tema;
+      } catch {}
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+    <script src="../js/sitio.js" defer></script>
+  </head>
+  <body data-base="../">
+    <header class="topbar">
+      <button class="btn-icono btn-menu" id="btn-menu" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="sidebar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" /></svg>
+      </button>
+      <a class="marca" href="../index.html"><span class="marca-logo">JS</span><span class="marca-texto">Curso de JavaScript</span></a>
+      <span class="espacio"></span>
+      <button class="btn-icono" id="btn-tema" type="button" aria-label="Cambiar entre modo claro y oscuro">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor" /></svg>
+      </button>
+    </header>
+
+    <div class="layout">
+      <aside class="sidebar" id="sidebar"><nav id="nav" aria-label="Unidades del curso"></nav></aside>
+
+      <main class="contenido">
+        <article class="articulo">
+          <header>
+            <p class="etiqueta">Unidad 3 · Semana 2</p>
+            <h1>Bucles y funciones</h1>
+            <p class="bajada">
+              Repetir tareas sin copiar y pegar código, y organizar el programa en piezas
+              reutilizables con nombre propio.
+            </p>
+            <div class="objetivos">
+              <h2>Al terminar esta unidad vas a poder</h2>
+              <ul>
+                <li>Repetir código con <code>while</code> y <code>for</code>, usando contadores y acumuladores.</li>
+                <li>Declarar funciones con parámetros, valores por defecto y <code>return</code>.</li>
+                <li>Escribir funciones flecha y pasar funciones como argumento.</li>
+                <li>Entender el alcance (<em>scope</em>) de las variables.</li>
+                <li>Leer mensajes de error y pausar el código con breakpoints.</li>
+              </ul>
+            </div>
+          </header>
+
+          <section id="while">
+            <h2>El bucle <code>while</code></h2>
+            <p>
+              <code>while</code> (“mientras”) repite un bloque <strong>mientras</strong> la
+              condición sea verdadera. Antes de cada vuelta vuelve a revisar la condición.
+            </p>
+            <pre><code>let contador = 1;
+
+while (contador &lt;= 3) {
+  console.log(`Vuelta ${contador}`);
+  contador++; // sin esta línea, el bucle no termina nunca
+}
+
+console.log("Fin");</code></pre>
+            <div class="consola">Vuelta 1
+Vuelta 2
+Vuelta 3
+Fin</div>
+            <p>
+              Es ideal cuando <strong>no sabés de antemano cuántas vueltas</strong> vas a dar. Por
+              ejemplo, insistir hasta que el usuario escriba un número válido:
+            </p>
+            <pre><code>let edad = Number(prompt("¿Cuántos años tenés?"));
+
+while (Number.isNaN(edad) || edad &lt;= 0) {
+  edad = Number(prompt("Eso no es válido. ¿Cuántos años tenés?"));
+}
+
+alert(`Perfecto, tenés ${edad} años`);</code></pre>
+            <div class="callout cuidado">
+              <p>
+                Si la condición nunca se vuelve falsa, tenés un <strong>bucle infinito</strong> y la
+                pestaña se congela. Cerrala y revisá que algo dentro del bucle haga cambiar la
+                condición.
+              </p>
+            </div>
+          </section>
+
+          <section id="for">
+            <h2>El bucle <code>for</code></h2>
+            <p>
+              Cuando sabés cuántas veces repetir, <code>for</code> junta en una sola línea las tres
+              partes de un contador:
+            </p>
+            <pre><code>//   inicio      condición   actualización
+for (let i = 1; i &lt;= 5;     i++) {
+  console.log(i);
+}
+// 1 2 3 4 5</code></pre>
+            <ol>
+              <li><strong>Inicio:</strong> se ejecuta una sola vez, antes de empezar.</li>
+              <li><strong>Condición:</strong> se revisa antes de cada vuelta. Si es falsa, el bucle termina.</li>
+              <li><strong>Actualización:</strong> se ejecuta al final de cada vuelta.</li>
+            </ol>
+            <p>
+              Por convención, el contador se llama <code>i</code>. Algunos ejemplos:
+            </p>
+            <pre><code>// Cuenta regresiva
+for (let i = 10; i &gt;= 1; i--) {
+  console.log(i);
+}
+
+// Solo los pares hasta 20
+for (let i = 0; i &lt;= 20; i += 2) {
+  console.log(i);
+}
+
+// Tabla del 7
+for (let i = 1; i &lt;= 10; i++) {
+  console.log(`7 × ${i} = ${7 * i}`);
+}</code></pre>
+
+            <h3>Acumuladores</h3>
+            <p>
+              Un patrón que vas a usar siempre: una variable que <strong>arranca en 0</strong> y en
+              cada vuelta suma algo.
+            </p>
+            <pre><code>let suma = 0;
+
+for (let i = 1; i &lt;= 100; i++) {
+  suma += i;
+}
+
+console.log(suma); // 5050</code></pre>
+          </section>
+
+          <section id="break-continue">
+            <h2><code>break</code> y <code>continue</code></h2>
+            <ul>
+              <li><code>break</code> corta el bucle por completo.</li>
+              <li><code>continue</code> saltea lo que queda de <strong>esta</strong> vuelta y pasa a la siguiente.</li>
+            </ul>
+            <pre><code>// Sumar números hasta que el usuario escriba 0
+let total = 0;
+
+while (true) {
+  const numero = Number(prompt("Ingresá un número (0 para terminar)"));
+
+  if (numero === 0) break;          // salimos del bucle
+  if (Number.isNaN(numero)) continue; // ignoramos lo inválido y volvemos a pedir
+
+  total += numero;
+}
+
+alert(`Total: ${total}`);</code></pre>
+          </section>
+
+          <section id="funciones">
+            <h2>Funciones</h2>
+            <p>
+              Una función es un <strong>bloque de código con nombre</strong> que podés ejecutar
+              todas las veces que quieras. Sirve para no repetir código y para dividir un problema
+              grande en partes chicas.
+            </p>
+            <pre><code>// 1. Declarar la función (todavía no se ejecuta nada)
+function saludar() {
+  console.log("¡Hola!");
+}
+
+// 2. Llamarla (ahora sí se ejecuta)
+saludar();
+saludar();</code></pre>
+
+            <h3>Parámetros y argumentos</h3>
+            <p>
+              Los <strong>parámetros</strong> son variables que la función recibe. Los valores que
+              le pasás al llamarla se llaman <strong>argumentos</strong>.
+            </p>
+            <pre><code>function saludar(nombre) {      // nombre es un parámetro
+  console.log(`¡Hola, ${nombre}!`);
+}
+
+saludar("Ana");   // "Ana" es el argumento → ¡Hola, Ana!
+saludar("Lucas"); // ¡Hola, Lucas!</code></pre>
+
+            <h3>Devolver un valor con <code>return</code></h3>
+            <p>
+              <code>return</code> devuelve un resultado a quien llamó la función, para que lo pueda
+              guardar o usar. Además, <strong>termina</strong> la función en ese momento.
+            </p>
+            <pre><code>function calcularIva(precio) {
+  return precio * 0.21;
+}
+
+const iva = calcularIva(1000);
+console.log(iva);                     // 210
+console.log(calcularIva(500) + 100);  // 205</code></pre>
+            <div class="callout cuidado">
+              <p>
+                <code>console.log</code> <strong>muestra</strong> un valor; <code>return</code> lo
+                <strong>devuelve</strong>. Son cosas distintas. Una función sin <code>return</code>
+                devuelve <code>undefined</code>, y es un error muy común:
+              </p>
+              <pre><code>function sumar(a, b) {
+  console.log(a + b); // lo muestra, pero no lo devuelve
+}
+const resultado = sumar(2, 3);
+console.log(resultado * 2); // NaN, porque resultado es undefined</code></pre>
+            </div>
+
+            <h3>Valores por defecto</h3>
+            <pre><code>function calcularPrecioFinal(precio, iva = 21) {
+  return precio + (precio * iva) / 100;
+}
+
+calcularPrecioFinal(1000);     // 1210 (usa iva = 21)
+calcularPrecioFinal(1000, 10.5); // 1105</code></pre>
+
+            <h3>Funciones que deciden</h3>
+            <p>
+              Una función que devuelve <code>true</code>/<code>false</code> hace que los
+              <code>if</code> se lean casi como una frase:
+            </p>
+            <pre><code>function esPar(numero) {
+  return numero % 2 === 0;
+}
+
+if (esPar(10)) {
+  console.log("Es par");
+}</code></pre>
+          </section>
+
+          <section id="flecha">
+            <h2>Expresiones de función y funciones flecha</h2>
+            <p>Una función también se puede guardar en una variable. Estas tres son equivalentes:</p>
+            <pre><code>// Declaración
+function doble(n) {
+  return n * 2;
+}
+
+// Expresión de función
+const doble2 = function (n) {
+  return n * 2;
+};
+
+// Función flecha (arrow function)
+const doble3 = (n) =&gt; {
+  return n * 2;
+};</code></pre>
+            <p>
+              Las funciones flecha tienen un atajo: si el cuerpo es <strong>una sola
+              expresión</strong>, podés sacar las llaves y el <code>return</code>, que queda
+              implícito.
+            </p>
+            <pre><code>const doble = (n) =&gt; n * 2;
+const sumar = (a, b) =&gt; a + b;
+const saludar = () =&gt; console.log("Hola"); // sin parámetros: paréntesis vacíos
+
+console.log(doble(4));    // 8
+console.log(sumar(2, 3)); // 5</code></pre>
+            <div class="callout tip">
+              <p>
+                Para funciones “importantes” del programa podés usar la declaración clásica con
+                <code>function</code>. Las flechas brillan en funciones cortas que se pasan como
+                argumento, que es lo que vamos a hacer muchísimo desde la Unidad 5.
+              </p>
+            </div>
+          </section>
+
+          <section id="scope">
+            <h2>Alcance de las variables (scope)</h2>
+            <p>
+              Una variable declarada con <code>let</code> o <code>const</code> solo existe
+              <strong>dentro del bloque <code>{ }</code></strong> donde se creó.
+            </p>
+            <pre><code>function calcular() {
+  const resultado = 42; // variable local de la función
+  console.log(resultado); // ✅ 42
+}
+
+calcular();
+console.log(resultado); // ❌ ReferenceError: resultado is not defined
+
+if (true) {
+  let mensaje = "hola";
+}
+console.log(mensaje); // ❌ tampoco existe fuera del if</code></pre>
+            <p>
+              Las variables declaradas fuera de todo bloque son <strong>globales</strong> y se
+              pueden usar en cualquier parte. Parece cómodo, pero conviene evitarlas: cualquier
+              función podría cambiarlas sin que te des cuenta.
+            </p>
+            <div class="callout tip">
+              <p>
+                Una buena función recibe todo lo que necesita por <strong>parámetros</strong> y
+                entrega su resultado con <strong>return</strong>, sin tocar variables de afuera.
+              </p>
+            </div>
+          </section>
+
+          <section id="callbacks">
+            <h2>Las funciones son valores</h2>
+            <p>
+              Así como pasás un número o un texto a una función, también le podés pasar
+              <strong>otra función</strong>. A la función que pasás se la llama
+              <em>callback</em>.
+            </p>
+            <pre><code>function saludar() {
+  console.log("¡Hola!");
+}
+
+// setTimeout ejecuta la función que le pasamos después de 2000 ms
+setTimeout(saludar, 2000);
+
+// También podemos escribir la función ahí mismo
+setTimeout(() =&gt; console.log("Pasaron 3 segundos"), 3000);</code></pre>
+            <div class="callout cuidado">
+              <p>
+                Fijate que escribimos <code>saludar</code> <strong>sin paréntesis</strong>. Con
+                paréntesis, <code>saludar()</code> la ejecutaría en ese mismo momento y le pasaría a
+                <code>setTimeout</code> el resultado (<code>undefined</code>), no la función.
+              </p>
+            </div>
+            <p>
+              Esta idea va a aparecer en todo el resto del curso: en los métodos de arrays
+              (Unidad 5) y en los eventos de la página (Unidad 6).
+            </p>
+            <div class="callout investigar">
+              <ul>
+                <li>El bucle <code>do...while</code>: ¿en qué se diferencia de <code>while</code>?</li>
+                <li>
+                  ¿Por qué podés llamar a una función declarada con <code>function</code> antes de
+                  la línea donde la escribiste, pero no a una función flecha? (Buscá
+                  <em>hoisting</em>).
+                </li>
+                <li>Qué es una función recursiva. Intentá escribir el factorial de un número de esa forma.</li>
+              </ul>
+            </div>
+          </section>
+
+          <section id="depurar">
+            <h2>Depurar: encontrar y corregir errores</h2>
+            <p>
+              Tu código va a fallar. Muchas veces. Es parte del trabajo, y saber leer los errores es
+              la habilidad que más tiempo te va a ahorrar.
+            </p>
+
+            <h3>Los tres errores más comunes</h3>
+            <div class="tabla">
+              <table>
+                <thead>
+                  <tr><th>Error</th><th>Qué significa</th><th>Causa típica</th></tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>SyntaxError</code></td>
+                    <td>El código está mal escrito y ni siquiera se puede ejecutar.</td>
+                    <td>Falta cerrar una llave, un paréntesis o una comilla.</td>
+                  </tr>
+                  <tr>
+                    <td><code>ReferenceError: x is not defined</code></td>
+                    <td>Usaste una variable que no existe (en ese lugar).</td>
+                    <td>Error de tipeo (<code>nombre</code> vs <code>nombr</code>), o la variable está en otro scope.</td>
+                  </tr>
+                  <tr>
+                    <td><code>TypeError: x is not a function</code></td>
+                    <td>Intentaste hacer algo que ese tipo de dato no permite.</td>
+                    <td>Llamar con <code>()</code> algo que no es una función, o usar una propiedad de <code>undefined</code>.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h3>Breakpoints: pausar el código</h3>
+            <p>
+              Cuando no hay error pero el resultado es incorrecto, conviene
+              <strong>ver el código ejecutarse paso a paso</strong>:
+            </p>
+            <ol>
+              <li>Abrí las DevTools y andá a la pestaña <strong>Sources</strong> (Fuentes).</li>
+              <li>Abrí tu <code>script.js</code> y hacé clic en el número de una línea: aparece un marcador azul (el <em>breakpoint</em>).</li>
+              <li>Recargá la página. La ejecución se detiene en esa línea.</li>
+              <li>Pasá el mouse sobre las variables para ver su valor, o miralas en el panel <strong>Scope</strong>.</li>
+              <li>Avanzá línea por línea con <kbd>F10</kbd> (<em>step over</em>) y seguí normalmente con <kbd>F8</kbd>.</li>
+            </ol>
+            <p>También podés escribir la palabra <code>debugger</code> en el código: con las DevTools abiertas, el programa se pausa ahí.</p>
+            <pre><code>let suma = 0;
+for (let i = 1; i &lt;= 5; i++) {
+  debugger; // pausa en cada vuelta: mirá cómo cambian i y suma
+  suma += i;
+}</code></pre>
+            <div class="callout tip">
+              <p>
+                Antes de pedir ayuda, hacete tres preguntas: ¿qué error dice la consola? ¿en qué
+                línea? ¿qué valor tiene cada variable justo antes de esa línea? La mitad de las veces
+                la respuesta aparece sola.
+              </p>
+            </div>
+          </section>
+
+          <section id="practica">
+            <h2>Práctica</h2>
+
+            <div class="ejercicio">
+              <h3>1 · Tabla de multiplicar</h3>
+              <p>Pedí un número y mostrá su tabla del 1 al 10 en la consola.</p>
+            </div>
+
+            <div class="ejercicio">
+              <h3>2 · Promedio de notas</h3>
+              <p>
+                Pedí notas una por una hasta que el usuario escriba <code>0</code>. Al final mostrá
+                cuántas notas ingresó, el promedio y la nota más alta.
+              </p>
+            </div>
+
+            <div class="ejercicio">
+              <h3>3 · Funciones de utilidad</h3>
+              <p>Escribí estas funciones y probalas con varios valores:</p>
+              <ul>
+                <li><code>esMayorDeEdad(edad)</code> → devuelve <code>true</code> o <code>false</code>.</li>
+                <li><code>aplicarDescuento(precio, porcentaje = 10)</code> → devuelve el precio con descuento.</li>
+                <li><code>contarVocales(texto)</code> → devuelve cuántas vocales tiene un texto.</li>
+              </ul>
+              <details>
+                <summary>Pista para <code>contarVocales</code></summary>
+                <p>
+                  Podés recorrer un string con un <code>for</code>, igual que un número:
+                  <code>texto[i]</code> es la letra en la posición <code>i</code> y
+                  <code>texto.length</code> es la cantidad de letras. Para saber si es vocal:
+                  <code>"aeiou".includes(letra)</code>.
+                </p>
+              </details>
+            </div>
+
+            <div class="ejercicio">
+              <h3>4 · Adiviná el número</h3>
+              <p>
+                El programa elige un número secreto del 1 al 100. El usuario tiene 7 intentos para
+                adivinarlo y en cada uno le decís “más alto” o “más bajo”.
+              </p>
+              <details>
+                <summary>Pista</summary>
+                <p>
+                  Para generar el número secreto usá esta línea (la explicamos en la Unidad 5):
+                  <code>const secreto = Math.floor(Math.random() * 100) + 1;</code>
+                </p>
+              </details>
+            </div>
+
+            <div class="ejercicio integrador">
+              <h3>5 · Cajero automático (integrador)</h3>
+              <p>Simulá un cajero con un saldo inicial de $10.000 y un menú que se repite hasta que el usuario elija salir:</p>
+              <pre><code class="language-plaintext">1) Consultar saldo
+2) Depositar
+3) Extraer
+4) Salir</code></pre>
+              <ul>
+                <li>Cada operación tiene que ser una función: <code>depositar(saldo, monto)</code> devuelve el saldo nuevo.</li>
+                <li>No se puede extraer más de lo que hay ni ingresar montos negativos o inválidos.</li>
+                <li>Al salir, mostrá cuántas operaciones se hicieron.</li>
+              </ul>
+              <details>
+                <summary>Pista</summary>
+                <p>Combiná un <code>while</code> para repetir el menú con un <code>switch</code> para elegir la operación.</p>
+              </details>
+            </div>
+          </section>
+
+          <nav class="paginacion" id="paginacion" aria-label="Unidad anterior y siguiente"></nav>
+        </article>
+
+        <aside class="toc" id="toc" aria-label="En esta página"></aside>
+      </main>
+    </div>
+    <div class="velo"></div>
+
+    <footer class="pie">Curso de JavaScript · CapacitarTec · Sebastián Clement · 2026</footer>
+  </body>
+</html>

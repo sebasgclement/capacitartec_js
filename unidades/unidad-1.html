@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Unidad 1 · Primeros pasos | Curso de JavaScript</title>
+    <link rel="icon" href="../recursos/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/estilos.css" />
+    <script>
+      try {
+        const tema = localStorage.getItem("tema");
+        if (tema) document.documentElement.dataset.theme = tema;
+      } catch {}
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+    <script src="../js/sitio.js" defer></script>
+  </head>
+  <body data-base="../">
+    <header class="topbar">
+      <button class="btn-icono btn-menu" id="btn-menu" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="sidebar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" /></svg>
+      </button>
+      <a class="marca" href="../index.html"><span class="marca-logo">JS</span><span class="marca-texto">Curso de JavaScript</span></a>
+      <span class="espacio"></span>
+      <button class="btn-icono" id="btn-tema" type="button" aria-label="Cambiar entre modo claro y oscuro">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor" /></svg>
+      </button>
+    </header>
+
+    <div class="layout">
+      <aside class="sidebar" id="sidebar"><nav id="nav" aria-label="Unidades del curso"></nav></aside>
+
+      <main class="contenido">
+        <article class="articulo">
+          <header>
+            <p class="etiqueta">Unidad 1 · Semana 1 · Martes</p>
+            <h1>Primeros pasos</h1>
+            <p class="bajada">
+              Qué es JavaScript, cómo conectarlo a una página, cómo usar la consola y cómo guardar
+              datos en variables.
+            </p>
+            <div class="objetivos">
+              <h2>Al terminar esta unidad vas a poder</h2>
+              <ul>
+                <li>Vincular un archivo <code>.js</code> a una página HTML.</li>
+                <li>Usar la consola del navegador para probar código y leer errores.</li>
+                <li>Declarar variables con <code>let</code> y <code>const</code>.</li>
+                <li>Reconocer los tipos de datos básicos y convertir texto a número.</li>
+              </ul>
+            </div>
+          </header>
+
+          <section id="que-es">
+            <h2>¿Qué es JavaScript?</h2>
+            <p>
+              JavaScript es un <strong>lenguaje de programación</strong> que corre dentro del
+              navegador. Ya conocés los otros dos lenguajes de la web, así que pensalo así:
+            </p>
+            <div class="tabla">
+              <table>
+                <thead>
+                  <tr><th>Lenguaje</th><th>Se ocupa de…</th><th>Ejemplo</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>HTML</td><td>la estructura y el contenido</td><td>un botón que dice “Comprar”</td></tr>
+                  <tr><td>CSS</td><td>la presentación</td><td>que el botón sea verde y redondeado</td></tr>
+                  <tr><td>JavaScript</td><td>el comportamiento</td><td>que al hacer clic se sume el producto al carrito</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>
+              Con JavaScript una página puede reaccionar a lo que hace el usuario, validar
+              formularios, mostrar u ocultar elementos, guardar datos en el navegador y traer
+              información de internet sin recargar.
+            </p>
+            <div class="callout dato">
+              <p>
+                El nombre oficial del estándar es <strong>ECMAScript</strong>. Cada año sale una
+                versión nueva (ES2015, ES2016…). Cuando leas “ES6” se refiere a la de 2015, que
+                trajo <code>let</code>, <code>const</code>, las funciones flecha y los template
+                strings, entre otras cosas.
+              </p>
+            </div>
+            <div class="callout investigar">
+              <p>
+                JavaScript también corre fuera del navegador gracias a <strong>Node.js</strong>.
+                Averiguá qué es y para qué se usa (servidores, herramientas de línea de comandos,
+                apps de escritorio).
+              </p>
+            </div>
+          </section>
+
+          <section id="entorno">
+            <h2>Preparar el entorno</h2>
+            <p>Para todo el curso vamos a trabajar con esta estructura mínima:</p>
+            <pre><code class="language-plaintext">mi-proyecto/
+├── index.html
+├── style.css
+└── script.js</code></pre>
+            <p>El archivo JavaScript se vincula desde el <code>&lt;head&gt;</code> del HTML:</p>
+            <p class="archivo">index.html</p>
+            <pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="es"&gt;
+  &lt;head&gt;
+    &lt;meta charset="UTF-8" /&gt;
+    &lt;title&gt;Mi primer script&lt;/title&gt;
+    &lt;link rel="stylesheet" href="style.css" /&gt;
+    &lt;script src="script.js" defer&gt;&lt;/script&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;h1&gt;Hola&lt;/h1&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+            <p class="archivo">script.js</p>
+            <pre><code>console.log("¡El script está conectado!");</code></pre>
+            <div class="callout cuidado">
+              <p>
+                No te olvides del atributo <code>defer</code>. Le indica al navegador que ejecute el
+                script <strong>después</strong> de leer todo el HTML. Sin él, cuando más adelante
+                quieras modificar un elemento de la página, JavaScript todavía no lo va a encontrar.
+              </p>
+            </div>
+            <p>
+              También se puede escribir JavaScript dentro de una etiqueta
+              <code>&lt;script&gt;</code> en el HTML o en atributos como <code>onclick</code>, pero
+              en el curso vamos a usar siempre un archivo externo: queda más ordenado y es lo que se
+              hace en proyectos reales.
+            </p>
+            <div class="callout tip">
+              <p>
+                En VS Code instalá la extensión <strong>Live Server</strong>: abre tu página en el
+                navegador y la recarga sola cada vez que guardás.
+              </p>
+            </div>
+          </section>
+
+          <section id="consola">
+            <h2>La consola del navegador</h2>
+            <p>
+              La consola es la herramienta que más vas a usar. Ahí aparecen los mensajes que
+              escribís con <code>console.log()</code> y, muy importante, <strong>los errores</strong>
+              de tu código.
+            </p>
+            <p>
+              Para abrirla: <kbd>F12</kbd> o <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>J</kbd>
+              (en Mac, <kbd>Cmd</kbd> + <kbd>Option</kbd> + <kbd>J</kbd>) y elegí la pestaña
+              <strong>Console</strong>.
+            </p>
+            <pre><code>console.log("Hola, mundo");
+console.log("Podés mostrar varios valores:", 42, true);
+
+console.warn("Esto es una advertencia");
+console.error("Esto es un error");</code></pre>
+            <div class="consola">Hola, mundo
+Podés mostrar varios valores: 42 true
+⚠ Esto es una advertencia
+✖ Esto es un error</div>
+            <p>
+              También podés <strong>escribir código directamente en la consola</strong> y apretar
+              <kbd>Enter</kbd>. Es ideal para probar algo rápido sin tocar tus archivos.
+            </p>
+            <div class="callout tip">
+              <p>
+                Si tu código no hace nada, lo primero es abrir la consola. Un error en rojo te dice
+                <strong>qué</strong> falló y <strong>en qué línea</strong>: hacé clic en el nombre del
+                archivo que aparece a la derecha del error y te lleva directo al lugar.
+              </p>
+            </div>
+          </section>
+
+          <section id="comentarios">
+            <h2>Comentarios</h2>
+            <p>
+              Los comentarios son texto que JavaScript ignora. Sirven para explicar el código a
+              otras personas (o a vos mismo dentro de un mes).
+            </p>
+            <pre><code>// Comentario de una línea
+
+/*
+  Comentario de
+  varias líneas
+*/
+
+console.log("Esto sí se ejecuta"); // también puede ir al final de una línea</code></pre>
+            <div class="callout tip">
+              <p>En VS Code, <kbd>Ctrl</kbd> + <kbd>/</kbd> comenta o descomenta la línea actual.</p>
+            </div>
+          </section>
+
+          <section id="variables">
+            <h2>Variables</h2>
+            <p>
+              Una variable es un <strong>nombre que guarda un valor</strong> para usarlo después. En
+              JavaScript moderno se declaran con <code>let</code> o <code>const</code>:
+            </p>
+            <pre><code>let edad = 17;        // let: el valor puede cambiar
+edad = 18;            // reasignamos, sin volver a escribir let
+
+const pais = "Argentina"; // const: el valor no se puede reasignar
+pais = "Chile";           // ❌ TypeError: Assignment to constant variable.</code></pre>
+            <div class="callout tip">
+              <p>
+                Regla práctica: usá <code>const</code> por defecto y cambiá a <code>let</code> solo
+                cuando sepas que el valor va a cambiar (un contador, un total que se acumula…).
+              </p>
+            </div>
+
+            <h3>Cómo nombrar variables</h3>
+            <ul>
+              <li>Pueden tener letras, números, <code>_</code> y <code>$</code>, pero <strong>no pueden empezar con un número</strong>.</li>
+              <li>No pueden tener espacios ni ser palabras reservadas (<code>let</code>, <code>if</code>, <code>function</code>…).</li>
+              <li>Distinguen mayúsculas: <code>nombre</code> y <code>Nombre</code> son dos variables distintas.</li>
+              <li>
+                Por convención se escriben en <strong>camelCase</strong>: la primera palabra en
+                minúscula y las siguientes con mayúscula inicial.
+              </li>
+            </ul>
+            <pre><code>const nombreCompleto = "Juan Pérez";   // ✅ camelCase, descriptivo
+const precioConIva = 1210;             // ✅
+const x = 1210;                        // 😐 válido, pero ¿qué es x?
+const 2doApellido = "Gómez";           // ❌ empieza con número</code></pre>
+            <div class="callout investigar">
+              <p>
+                Vas a encontrar mucho código viejo que usa <code>var</code>. Investigá qué
+                diferencias tiene con <code>let</code> (alcance de bloque y <em>hoisting</em>) y por
+                qué hoy se recomienda no usarlo.
+              </p>
+            </div>
+          </section>
+
+          <section id="tipos">
+            <h2>Tipos de datos</h2>
+            <p>Cada valor tiene un tipo. Los que vamos a usar todo el tiempo son:</p>
+            <div class="tabla">
+              <table>
+                <thead>
+                  <tr><th>Tipo</th><th>Qué representa</th><th>Ejemplos</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td><code>string</code></td><td>texto, entre comillas</td><td><code>"Hola"</code>, <code>'Rafaela'</code>, <code>`JS`</code></td></tr>
+                  <tr><td><code>number</code></td><td>números enteros y decimales</td><td><code>42</code>, <code>-3</code>, <code>3.14</code></td></tr>
+                  <tr><td><code>boolean</code></td><td>verdadero o falso</td><td><code>true</code>, <code>false</code></td></tr>
+                  <tr><td><code>undefined</code></td><td>una variable que todavía no tiene valor</td><td><code>let x;</code></td></tr>
+                  <tr><td><code>null</code></td><td>“vacío” a propósito</td><td><code>let ganador = null;</code></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>Con <code>typeof</code> podés preguntar de qué tipo es un valor:</p>
+            <pre><code>console.log(typeof "Hola");   // "string"
+console.log(typeof 42);       // "number"
+console.log(typeof 3.5);      // "number" (no hay un tipo aparte para decimales)
+console.log(typeof true);     // "boolean"
+console.log(typeof "42");     // "string" ← ¡ojo! está entre comillas
+
+let sinValor;
+console.log(typeof sinValor); // "undefined"</code></pre>
+            <div class="callout cuidado">
+              <p>
+                Los decimales se escriben con <strong>punto</strong>, no con coma:
+                <code>3.5</code> es un número, <code>3,5</code> no.
+              </p>
+            </div>
+            <div class="callout dato">
+              <p>
+                <code>typeof null</code> devuelve <code>"object"</code>. Es un error histórico del
+                lenguaje que nunca se corrigió para no romper sitios existentes.
+              </p>
+            </div>
+            <div class="callout investigar">
+              <p>
+                Existen otros dos tipos primitivos que casi no vamos a usar: <code>bigint</code> y
+                <code>symbol</code>. Buscá para qué sirven.
+              </p>
+            </div>
+          </section>
+
+          <section id="template-strings">
+            <h2>Unir textos: concatenación y template strings</h2>
+            <p>Hay dos formas de armar un texto con variables adentro:</p>
+            <pre><code>const nombre = "Ana";
+const edad = 25;
+
+// 1. Concatenación con +
+console.log("Hola, soy " + nombre + " y tengo " + edad + " años.");
+
+// 2. Template string: comillas invertidas (backticks) y ${ }
+console.log(`Hola, soy ${nombre} y tengo ${edad} años.`);</code></pre>
+            <p>
+              Las dos dan el mismo resultado, pero el template string es mucho más fácil de leer y
+              de escribir. Además, dentro de <code>${ }</code> podés poner cualquier expresión:
+            </p>
+            <pre><code>const precio = 1000;
+console.log(`Con IVA: $${precio * 1.21}`); // Con IVA: $1210</code></pre>
+            <div class="callout tip">
+              <p>
+                Las comillas invertidas <code>`</code> en teclado latinoamericano suelen estar en
+                <kbd>Alt Gr</kbd> + <kbd>}</kbd>, o en la tecla al lado del <kbd>Enter</kbd>
+                (apretala y después la barra espaciadora).
+              </p>
+            </div>
+          </section>
+
+          <section id="prompt">
+            <h2>Pedir datos: <code>prompt</code> y <code>alert</code></h2>
+            <p>
+              Para practicar las primeras semanas vamos a usar dos funciones del navegador que
+              muestran ventanitas:
+            </p>
+            <pre><code>const nombre = prompt("¿Cómo te llamás?");
+alert(`¡Bienvenido/a, ${nombre}!`);</code></pre>
+            <ul>
+              <li><code>prompt()</code> muestra un cuadro para escribir y <strong>devuelve lo que escribió el usuario como string</strong>. Si apretó “Cancelar”, devuelve <code>null</code>.</li>
+              <li><code>alert()</code> muestra un mensaje y espera a que el usuario apriete “Aceptar”.</li>
+            </ul>
+            <div class="callout dato">
+              <p>
+                En sitios reales casi no se usan porque bloquean la página y no se pueden diseñar.
+                En la Unidad 7 los vamos a reemplazar por formularios HTML.
+              </p>
+            </div>
+          </section>
+
+          <section id="conversion">
+            <h2>Convertir texto a número</h2>
+            <p>Este es el error más común de las primeras clases. Probalo:</p>
+            <pre><code>const a = prompt("Primer número");  // el usuario escribe 2
+const b = prompt("Segundo número"); // el usuario escribe 3
+console.log(a + b);</code></pre>
+            <div class="consola">23</div>
+            <p>
+              ¿23? Como <code>prompt()</code> siempre devuelve texto, <code>a</code> vale
+              <code>"2"</code> y <code>b</code> vale <code>"3"</code>. Y el <code>+</code> entre dos
+              strings <strong>los une</strong> en lugar de sumarlos. La solución es convertirlos a
+              número antes de operar:
+            </p>
+            <pre><code>const a = Number(prompt("Primer número"));
+const b = Number(prompt("Segundo número"));
+console.log(a + b); // 5 ✅</code></pre>
+
+            <h3>Funciones de conversión</h3>
+            <pre><code>Number("42");       // 42
+Number("3.5");      // 3.5
+Number("3,5");      // NaN  ← la coma no sirve
+Number("hola");     // NaN
+Number("");         // 0    ← cuidado: un campo vacío da 0
+
+parseInt("12px");   // 12   (lee el entero del principio y corta)
+parseFloat("1.5kg");// 1.5
+
+String(42);         // "42"</code></pre>
+            <p>
+              <code>NaN</code> significa <em>Not a Number</em>: es el resultado de una conversión
+              que falló. Curiosamente, <code>typeof NaN</code> es <code>"number"</code>. En la
+              próxima unidad vamos a ver cómo detectarlo para avisarle al usuario que escribió algo
+              inválido.
+            </p>
+            <div class="callout cuidado">
+              <p>
+                El <code>+</code> con un string adentro siempre concatena:
+                <code>"5" + 1</code> da <code>"51"</code>. En cambio <code>-</code>, <code>*</code>
+                y <code>/</code> convierten a número: <code>"5" - 1</code> da <code>4</code>. No
+                dependas de eso; convertí explícitamente con <code>Number()</code>.
+              </p>
+            </div>
+          </section>
+
+          <section id="practica">
+            <h2>Práctica</h2>
+
+            <div class="ejercicio">
+              <h3>1 · Presentación</h3>
+              <p>
+                Guardá en constantes tu nombre, tu edad y tu ciudad. Mostrá en la consola una frase
+                usando un template string: <code>Soy Ana, tengo 25 años y vivo en Rafaela.</code>
+              </p>
+            </div>
+
+            <div class="ejercicio">
+              <h3>2 · Detective de tipos</h3>
+              <p>
+                Antes de ejecutarlo, escribí en un papel qué va a mostrar cada línea. Después
+                comprobalo en la consola.
+              </p>
+              <pre><code>console.log(typeof 10);
+console.log(typeof "10");
+console.log(typeof (10 + "10"));
+console.log(10 + "10");
+console.log("10" * 2);
+console.log(Number("diez"));</code></pre>
+            </div>
+
+            <div class="ejercicio">
+              <h3>3 · Sumadora</h3>
+              <p>
+                Pedile al usuario dos números con <code>prompt()</code> y mostrá con
+                <code>alert()</code> su suma, resta, multiplicación y división.
+              </p>
+              <details>
+                <summary>Pista</summary>
+                <p>Si la suma te da algo como “23”, volvé a leer la sección de conversión.</p>
+              </details>
+            </div>
+
+            <div class="ejercicio">
+              <h3>4 · Conversor de temperatura</h3>
+              <p>
+                Pedí una temperatura en grados Celsius y mostrá su equivalente en Fahrenheit.
+                Fórmula: <code>F = C × 9 / 5 + 32</code>.
+              </p>
+            </div>
+
+            <div class="ejercicio integrador">
+              <h3>5 · Ticket de compra (integrador)</h3>
+              <p>
+                Pedí el nombre de un producto, su precio unitario y la cantidad. Mostrá un resumen
+                como este, incluyendo el total con IVA (21 %):
+              </p>
+              <pre><code class="language-plaintext">3 × Alfajor a $850 = $2550
+Total con IVA: $3085.5</code></pre>
+              <details>
+                <summary>Pista</summary>
+                <p>
+                  Necesitás convertir precio y cantidad con <code>Number()</code>. Para el salto de
+                  línea dentro de un template string podés escribir el texto en dos renglones o usar
+                  <code>\n</code>.
+                </p>
+              </details>
+            </div>
+          </section>
+
+          <nav class="paginacion" id="paginacion" aria-label="Unidad anterior y siguiente"></nav>
+        </article>
+
+        <aside class="toc" id="toc" aria-label="En esta página"></aside>
+      </main>
+    </div>
+    <div class="velo"></div>
+
+    <footer class="pie">Curso de JavaScript · CapacitarTec · Sebastián Clement · 2026</footer>
+  </body>
+</html>

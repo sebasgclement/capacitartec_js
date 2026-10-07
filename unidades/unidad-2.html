@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Unidad 2 · Operadores y decisiones | Curso de JavaScript</title>
+    <link rel="icon" href="../recursos/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/estilos.css" />
+    <script>
+      try {
+        const tema = localStorage.getItem("tema");
+        if (tema) document.documentElement.dataset.theme = tema;
+      } catch {}
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+    <script src="../js/sitio.js" defer></script>
+  </head>
+  <body data-base="../">
+    <header class="topbar">
+      <button class="btn-icono btn-menu" id="btn-menu" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="sidebar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" /></svg>
+      </button>
+      <a class="marca" href="../index.html"><span class="marca-logo">JS</span><span class="marca-texto">Curso de JavaScript</span></a>
+      <span class="espacio"></span>
+      <button class="btn-icono" id="btn-tema" type="button" aria-label="Cambiar entre modo claro y oscuro">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor" /></svg>
+      </button>
+    </header>
+
+    <div class="layout">
+      <aside class="sidebar" id="sidebar"><nav id="nav" aria-label="Unidades del curso"></nav></aside>
+
+      <main class="contenido">
+        <article class="articulo">
+          <header>
+            <p class="etiqueta">Unidad 2 · Semana 1 · Jueves</p>
+            <h1>Operadores y decisiones</h1>
+            <p class="bajada">
+              Hacer cuentas, comparar valores y lograr que el programa tome caminos distintos según
+              lo que pasa.
+            </p>
+            <div class="objetivos">
+              <h2>Al terminar esta unidad vas a poder</h2>
+              <ul>
+                <li>Usar operadores aritméticos, de asignación, de comparación y lógicos.</li>
+                <li>Explicar por qué se usa <code>===</code> y no <code>==</code>.</li>
+                <li>Escribir decisiones con <code>if</code>, el operador ternario y <code>switch</code>.</li>
+                <li>Validar que un dato ingresado por el usuario sea un número.</li>
+              </ul>
+            </div>
+          </header>
+
+          <section id="aritmeticos">
+            <h2>Operadores aritméticos</h2>
+            <div class="tabla">
+              <table>
+                <thead>
+                  <tr><th>Operador</th><th>Operación</th><th>Ejemplo</th><th>Resultado</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td><code>+</code></td><td>suma</td><td><code>7 + 2</code></td><td><code>9</code></td></tr>
+                  <tr><td><code>-</code></td><td>resta</td><td><code>7 - 2</code></td><td><code>5</code></td></tr>
+                  <tr><td><code>*</code></td><td>multiplicación</td><td><code>7 * 2</code></td><td><code>14</code></td></tr>
+                  <tr><td><code>/</code></td><td>división</td><td><code>7 / 2</code></td><td><code>3.5</code></td></tr>
+                  <tr><td><code>%</code></td><td>resto de la división</td><td><code>7 % 2</code></td><td><code>1</code></td></tr>
+                  <tr><td><code>**</code></td><td>potencia</td><td><code>7 ** 2</code></td><td><code>49</code></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>
+              Se respeta el orden matemático de siempre: primero <code>**</code>, después
+              <code>*</code> <code>/</code> <code>%</code> y al final <code>+</code> <code>-</code>.
+              Ante la duda, usá paréntesis:
+            </p>
+            <pre><code>console.log(2 + 3 * 4);   // 14
+console.log((2 + 3) * 4); // 20
+
+const promedio = (8 + 6 + 10) / 3;
+console.log(promedio);    // 8</code></pre>
+
+            <h3>El operador resto <code>%</code></h3>
+            <p>
+              Parece raro, pero se usa muchísimo. El caso más típico es saber si un número es par:
+              si el resto de dividirlo por 2 es 0, es par.
+            </p>
+            <pre><code>console.log(10 % 2); // 0 → par
+console.log(7 % 2);  // 1 → impar
+console.log(10 % 3); // 1</code></pre>
+            <div class="callout dato">
+              <p>
+                Probá <code>0.1 + 0.2</code> en la consola: da <code>0.30000000000000004</code>. No
+                es un bug de JavaScript, sino de cómo las computadoras guardan los decimales (pasa en
+                casi todos los lenguajes). Para mostrar resultados con dinero usá
+                <code>numero.toFixed(2)</code>, que lo vemos en la Unidad 5.
+              </p>
+            </div>
+          </section>
+
+          <section id="asignacion">
+            <h2>Operadores de asignación</h2>
+            <p>Son atajos para actualizar el valor de una variable a partir del valor que ya tenía:</p>
+            <pre><code>let puntos = 10;
+
+puntos += 5;  // es lo mismo que: puntos = puntos + 5  → 15
+puntos -= 3;  // puntos = puntos - 3                   → 12
+puntos *= 2;  // puntos = puntos * 2                   → 24
+puntos /= 4;  // puntos = puntos / 4                   → 6
+
+puntos++;     // suma 1 → 7
+puntos--;     // resta 1 → 6</code></pre>
+            <p>
+              <code>+=</code> también funciona con strings, para ir agregando texto:
+              <code>mensaje += " y algo más";</code>
+            </p>
+          </section>
+
+          <section id="comparacion">
+            <h2>Operadores de comparación</h2>
+            <p>
+              Comparan dos valores y siempre devuelven un <strong>booleano</strong>:
+              <code>true</code> o <code>false</code>.
+            </p>
+            <div class="tabla">
+              <table>
+                <thead>
+                  <tr><th>Operador</th><th>Significa</th><th>Ejemplo</th><th>Resultado</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td><code>===</code></td><td>igual (valor y tipo)</td><td><code>5 === 5</code></td><td><code>true</code></td></tr>
+                  <tr><td><code>!==</code></td><td>distinto</td><td><code>5 !== 3</code></td><td><code>true</code></td></tr>
+                  <tr><td><code>&gt;</code></td><td>mayor</td><td><code>5 &gt; 3</code></td><td><code>true</code></td></tr>
+                  <tr><td><code>&lt;</code></td><td>menor</td><td><code>5 &lt; 3</code></td><td><code>false</code></td></tr>
+                  <tr><td><code>&gt;=</code></td><td>mayor o igual</td><td><code>5 &gt;= 5</code></td><td><code>true</code></td></tr>
+                  <tr><td><code>&lt;=</code></td><td>menor o igual</td><td><code>4 &lt;= 3</code></td><td><code>false</code></td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h3>¿Por qué <code>===</code> y no <code>==</code>?</h3>
+            <p>
+              <code>==</code> (doble igual) convierte los tipos antes de comparar, y eso produce
+              resultados difíciles de predecir. <code>===</code> (triple igual) compara valor
+              <strong>y</strong> tipo, sin conversiones.
+            </p>
+            <pre><code>console.log(5 == "5");   // true  😬
+console.log(5 === "5");  // false ✅ uno es number y el otro string
+
+console.log(0 == "");    // true  😬
+console.log(0 === "");   // false ✅</code></pre>
+            <div class="callout tip">
+              <p>
+                Usá siempre <code>===</code> y <code>!==</code>. Si necesitás comparar un número con
+                un texto, convertí primero el texto con <code>Number()</code>.
+              </p>
+            </div>
+          </section>
+
+          <section id="logicos">
+            <h2>Operadores lógicos</h2>
+            <p>Sirven para combinar varias condiciones:</p>
+            <div class="tabla">
+              <table>
+                <thead>
+                  <tr><th>Operador</th><th>Nombre</th><th>Devuelve <code>true</code> cuando…</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td><code>&amp;&amp;</code></td><td>Y (AND)</td><td><strong>las dos</strong> condiciones son verdaderas</td></tr>
+                  <tr><td><code>||</code></td><td>O (OR)</td><td><strong>al menos una</strong> condición es verdadera</td></tr>
+                  <tr><td><code>!</code></td><td>NO (NOT)</td><td>la condición es falsa (invierte el valor)</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <pre><code>const edad = 20;
+const tieneEntrada = true;
+const esFeriado = false;
+
+console.log(edad &gt;= 18 &amp;&amp; tieneEntrada); // true: se cumplen las dos
+console.log(esFeriado || edad &gt; 65);     // false: no se cumple ninguna
+console.log(!esFeriado);                 // true
+
+// Un número entre 1 y 10 (inclusive)
+const n = 7;
+console.log(n &gt;= 1 &amp;&amp; n &lt;= 10);          // true</code></pre>
+            <div class="callout cuidado">
+              <p>
+                En matemática se escribe <code>1 ≤ n ≤ 10</code>, pero en JavaScript
+                <code>1 &lt;= n &lt;= 10</code> <strong>no</strong> funciona como esperás. Hay que
+                escribir las dos comparaciones unidas con <code>&amp;&amp;</code>.
+              </p>
+            </div>
+          </section>
+
+          <section id="if">
+            <h2>Condicionales: <code>if</code>, <code>else if</code>, <code>else</code></h2>
+            <p>
+              Un condicional ejecuta un bloque de código <strong>solo si</strong> se cumple una
+              condición:
+            </p>
+            <pre><code>const temperatura = 31;
+
+if (temperatura &gt; 30) {
+  console.log("Hace calor 🥵");
+}</code></pre>
+            <p>Con <code>else</code> definimos qué hacer cuando la condición no se cumple, y con <code>else if</code> agregamos más casos:</p>
+            <pre><code>const nota = Number(prompt("Ingresá tu nota (1 a 10)"));
+
+if (nota &gt;= 7) {
+  alert("Promocionaste 🎉");
+} else if (nota &gt;= 4) {
+  alert("Aprobaste, vas al final");
+} else {
+  alert("Recursás");
+}</code></pre>
+            <p>
+              Las condiciones se evalúan <strong>de arriba hacia abajo</strong> y se ejecuta solo el
+              primer bloque que cumpla. Si la nota es 8, entra en el primero y los demás se ignoran,
+              aunque <code>8 &gt;= 4</code> también sea verdadero.
+            </p>
+            <div class="callout tip">
+              <p>
+                Indentá (sangrá) siempre el código que está dentro de las llaves. JavaScript no lo
+                necesita, pero vos sí para leerlo. En VS Code, <kbd>Shift</kbd> + <kbd>Alt</kbd> +
+                <kbd>F</kbd> formatea el archivo entero.
+              </p>
+            </div>
+          </section>
+
+          <section id="validar">
+            <h2>Validar lo que ingresa el usuario</h2>
+            <p>
+              Si el usuario escribe “hola” donde esperábamos un número, <code>Number()</code> da
+              <code>NaN</code>. Lo podemos detectar con <code>Number.isNaN()</code>:
+            </p>
+            <pre><code>const edad = Number(prompt("¿Cuántos años tenés?"));
+
+if (Number.isNaN(edad)) {
+  alert("Eso no es un número 🤨");
+} else if (edad &gt;= 18) {
+  alert("Podés pasar");
+} else {
+  alert(`Te faltan ${18 - edad} años`);
+}</code></pre>
+            <div class="callout cuidado">
+              <p>
+                No se puede comparar <code>edad === NaN</code>: <code>NaN</code> es el único valor de
+                JavaScript que no es igual a sí mismo. Siempre usá <code>Number.isNaN()</code>.
+              </p>
+            </div>
+          </section>
+
+          <section id="truthy-falsy">
+            <h2>Truthy y falsy</h2>
+            <p>
+              Dentro de un <code>if</code> podés poner cualquier valor, no solo booleanos.
+              JavaScript lo convierte a <code>true</code> o <code>false</code> según esta regla:
+              hay exactamente <strong>seis valores falsy</strong> (que cuentan como falso) y todo lo
+              demás es <em>truthy</em>.
+            </p>
+            <div class="tabla">
+              <table>
+                <thead>
+                  <tr><th>Valores falsy</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td><code>false</code> · <code>0</code> · <code>""</code> (string vacío) · <code>null</code> · <code>undefined</code> · <code>NaN</code></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>Es muy útil para chequear si el usuario escribió algo:</p>
+            <pre><code>const nombre = prompt("¿Cómo te llamás?");
+
+// Si apretó Cancelar (null) o no escribió nada (""), es falsy
+if (nombre) {
+  alert(`Hola, ${nombre}`);
+} else {
+  alert("No ingresaste tu nombre");
+}</code></pre>
+          </section>
+
+          <section id="ternario">
+            <h2>Operador ternario</h2>
+            <p>Es una forma corta de escribir un <code>if/else</code> que elige entre dos valores:</p>
+            <pre><code>// condición ? valorSiEsVerdadera : valorSiEsFalsa
+const edad = 20;
+const mensaje = edad &gt;= 18 ? "Mayor de edad" : "Menor de edad";
+console.log(mensaje); // "Mayor de edad"
+
+const cantidad = 1;
+console.log(`Tenés ${cantidad} ${cantidad === 1 ? "mensaje" : "mensajes"}`);</code></pre>
+            <div class="callout tip">
+              <p>
+                Usalo solo para casos simples de “esto o aquello”. Si tenés que anidar un ternario
+                dentro de otro, volvé al <code>if</code>: se lee mucho mejor.
+              </p>
+            </div>
+          </section>
+
+          <section id="switch">
+            <h2><code>switch</code></h2>
+            <p>
+              Cuando comparás <strong>una misma variable</strong> contra muchos valores exactos,
+              <code>switch</code> queda más ordenado que una cadena de <code>else if</code>:
+            </p>
+            <pre><code>const opcion = prompt("Elegí: 1) Saldo  2) Depositar  3) Salir");
+
+switch (opcion) {
+  case "1":
+    alert("Tu saldo es $5000");
+    break;
+  case "2":
+    alert("Depósito realizado");
+    break;
+  case "3":
+    alert("¡Hasta luego!");
+    break;
+  default:
+    alert("Opción inválida");
+}</code></pre>
+            <ul>
+              <li><code>switch</code> compara con <code>===</code>: por eso los casos son <code>"1"</code> (string), porque <code>prompt</code> devuelve texto.</li>
+              <li><code>break</code> corta el <code>switch</code>. Si lo olvidás, sigue ejecutando el caso de abajo.</li>
+              <li><code>default</code> se ejecuta si no coincide ningún caso (como el <code>else</code>).</li>
+            </ul>
+            <p>Podés agrupar varios casos que hacen lo mismo:</p>
+            <pre><code>const dia = "sábado";
+
+switch (dia) {
+  case "sábado":
+  case "domingo":
+    console.log("Fin de semana");
+    break;
+  default:
+    console.log("Día de semana");
+}</code></pre>
+            <div class="callout investigar">
+              <ul>
+                <li>El operador <code>??</code> (<em>nullish coalescing</em>): ¿en qué se diferencia de <code>||</code>?</li>
+                <li>¿Qué pasa al comparar strings con <code>&gt;</code> o <code>&lt;</code>? Probá <code>"banana" &gt; "manzana"</code> y <code>"Zeta" &lt; "alfa"</code>.</li>
+                <li>Qué es el “cortocircuito” de <code>&amp;&amp;</code> y <code>||</code>.</li>
+              </ul>
+            </div>
+          </section>
+
+          <section id="practica">
+            <h2>Práctica</h2>
+
+            <div class="ejercicio">
+              <h3>1 · Par o impar</h3>
+              <p>Pedí un número y mostrá si es par o impar. Si no es un número, avisalo.</p>
+            </div>
+
+            <div class="ejercicio">
+              <h3>2 · El mayor de tres</h3>
+              <p>Pedí tres números y mostrá cuál es el mayor (sin usar <code>Math.max</code>).</p>
+              <details>
+                <summary>Pista</summary>
+                <p>El primero es el mayor si es mayor que el segundo <strong>y</strong> mayor que el tercero.</p>
+              </details>
+            </div>
+
+            <div class="ejercicio">
+              <h3>3 · Año bisiesto</h3>
+              <p>
+                Un año es bisiesto si es divisible por 4, excepto los divisibles por 100, salvo que
+                también sean divisibles por 400. Pedí un año e indicá si es bisiesto.
+                (2024 sí, 1900 no, 2000 sí).
+              </p>
+            </div>
+
+            <div class="ejercicio">
+              <h3>4 · Calculadora con <code>switch</code></h3>
+              <p>
+                Pedí dos números y una operación (<code>+</code>, <code>-</code>, <code>*</code>,
+                <code>/</code>). Mostrá el resultado. Si la operación es una división por cero o un
+                símbolo desconocido, mostrá un mensaje de error.
+              </p>
+            </div>
+
+            <div class="ejercicio integrador">
+              <h3>5 · Cotizador de envíos (integrador)</h3>
+              <p>Un correo cobra los envíos así:</p>
+              <ul>
+                <li>Hasta 1 kg: $3000. De 1 a 5 kg: $5500. Más de 5 kg: $5500 + $900 por cada kg extra.</li>
+                <li>Si el destino es <code>"local"</code> hay 20 % de descuento; si es <code>"nacional"</code>, precio normal.</li>
+                <li>Los envíos de más de 30 kg no se aceptan.</li>
+              </ul>
+              <p>Pedí el peso y el destino, validá los datos y mostrá el precio final.</p>
+              <details>
+                <summary>Pista</summary>
+                <p>
+                  Resolvelo en partes: primero validá, después calculá el precio base con
+                  <code>if/else if</code>, y recién al final aplicá el descuento.
+                </p>
+              </details>
+            </div>
+          </section>
+
+          <nav class="paginacion" id="paginacion" aria-label="Unidad anterior y siguiente"></nav>
+        </article>
+
+        <aside class="toc" id="toc" aria-label="En esta página"></aside>
+      </main>
+    </div>
+    <div class="velo"></div>
+
+    <footer class="pie">Curso de JavaScript · CapacitarTec · Sebastián Clement · 2026</footer>
+  </body>
+</html>

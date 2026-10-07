@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Desafíos y proyecto final | Curso de JavaScript</title>
+    <link rel="icon" href="../recursos/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/estilos.css" />
+    <script>
+      try {
+        const tema = localStorage.getItem("tema");
+        if (tema) document.documentElement.dataset.theme = tema;
+      } catch {}
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+    <script src="../js/sitio.js" defer></script>
+  </head>
+  <body data-base="../">
+    <header class="topbar">
+      <button class="btn-icono btn-menu" id="btn-menu" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="sidebar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" /></svg>
+      </button>
+      <a class="marca" href="../index.html"><span class="marca-logo">JS</span><span class="marca-texto">Curso de JavaScript</span></a>
+      <span class="espacio"></span>
+      <button class="btn-icono" id="btn-tema" type="button" aria-label="Cambiar entre modo claro y oscuro">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor" /></svg>
+      </button>
+    </header>
+
+    <div class="layout">
+      <aside class="sidebar" id="sidebar"><nav id="nav" aria-label="Unidades del curso"></nav></aside>
+
+      <main class="contenido">
+        <article class="articulo">
+          <header>
+            <p class="etiqueta">Extra</p>
+            <h1>Desafíos y proyecto final</h1>
+            <p class="bajada">
+              Proyectos más largos para seguir practicando por tu cuenta, y la consigna del trabajo
+              final del curso.
+            </p>
+          </header>
+
+          <section id="desafios">
+            <h2>Desafíos</h2>
+            <p>
+              Son opcionales y no tienen una única solución. Al lado de cada uno figura desde qué
+              unidad lo podés encarar.
+            </p>
+
+            <div class="ejercicio">
+              <h3>Piedra, papel o tijera · desde la Unidad 6</h3>
+              <p>
+                Tres botones para elegir, la computadora elige al azar y se muestra quién ganó la
+                ronda. Marcador de puntos y “al mejor de 5”, con un botón para reiniciar.
+              </p>
+            </div>
+
+            <div class="ejercicio">
+              <h3>Calculadora · desde la Unidad 6</h3>
+              <p>
+                Una calculadora con botones para los dígitos y las cuatro operaciones, una pantalla
+                que muestra lo que vas escribiendo y soporte para el teclado numérico.
+              </p>
+            </div>
+
+            <div class="ejercicio">
+              <h3>Memotest · desde la Unidad 6</h3>
+              <p>
+                Una grilla de 16 cartas boca abajo con 8 pares de emojis mezclados al azar. Se dan
+                vuelta de a dos: si son iguales quedan visibles, si no, se vuelven a tapar. Contá los
+                intentos y avisá cuando se gana.
+              </p>
+              <details>
+                <summary>Pista</summary>
+                <p>
+                  Para mezclar un array, investigá el algoritmo de <em>Fisher-Yates</em>. Para
+                  esperar un segundo antes de tapar las cartas, usá <code>setTimeout</code>.
+                </p>
+              </details>
+            </div>
+
+            <div class="ejercicio">
+              <h3>Trivia con récord · desde la Unidad 7</h3>
+              <p>
+                Un juego de 10 preguntas de opción múltiple guardadas en un array de objetos. Se
+                muestra una pregunta por vez, se marca si la respuesta fue correcta y al final el
+                puntaje. El mejor puntaje histórico se guarda en <code>localStorage</code>.
+              </p>
+            </div>
+
+            <div class="ejercicio">
+              <h3>Pomodoro · desde la Unidad 7</h3>
+              <p>
+                Un temporizador de 25 minutos de trabajo y 5 de descanso, con botones de iniciar,
+                pausar y reiniciar. Cuenta cuántos pomodoros completaste hoy y lo recuerda al
+                recargar.
+              </p>
+              <details>
+                <summary>Pista</summary>
+                <p>Investigá <code>setInterval</code> y <code>clearInterval</code>.</p>
+              </details>
+            </div>
+
+            <div class="ejercicio">
+              <h3>Conversor de monedas · desde la Unidad 8</h3>
+              <p>
+                Con DolarAPI, un formulario para convertir pesos a dólares y al revés, eligiendo el
+                tipo de cotización (oficial, blue, MEP…). Mostrá cuándo se actualizó el valor.
+              </p>
+            </div>
+
+            <div class="ejercicio">
+              <h3>Buscador de libros · desde la Unidad 8</h3>
+              <p>
+                Con Open Library, buscá libros por título o autor y mostrá los resultados como
+                tarjetas con la tapa, el título, el autor y el año de la primera edición. Agregá un
+                botón “Ver más” que traiga la siguiente tanda de resultados.
+              </p>
+              <details>
+                <summary>Pista</summary>
+                <p>
+                  La tapa se arma con el número que viene en <code>cover_i</code>:
+                  <code>https://covers.openlibrary.org/b/id/${libro.cover_i}-M.jpg</code>. No todos
+                  los libros lo tienen. Para paginar, mirá el parámetro <code>page</code> en la
+                  documentación de la API.
+                </p>
+              </details>
+            </div>
+          </section>
+
+          <section id="proyecto">
+            <h2>Proyecto final</h2>
+            <p>
+              Construí una <strong>aplicación web de tema libre</strong> que integre lo que vimos en
+              el curso. Puede ser individual o en pareja. Se presenta en la última clase.
+            </p>
+
+            <h3>Requisitos mínimos</h3>
+            <ul>
+              <li>HTML semántico y CSS propio, que se vea bien en el celular.</li>
+              <li>Datos organizados en arrays de objetos (o clases) y dibujados en la página con el DOM. Nada de <code>prompt</code> ni <code>alert</code>.</li>
+              <li>Al menos un formulario con validación y mensajes de error en la página.</li>
+              <li>Algún dato que se conserve al recargar, con <code>localStorage</code>.</li>
+              <li>Consumo de al menos una API, con estados de carga y de error.</li>
+              <li>Código ordenado en funciones con nombres claros y sin errores en la consola.</li>
+            </ul>
+
+            <h3>Ideas</h3>
+            <div class="tabla">
+              <table>
+                <thead>
+                  <tr><th>Proyecto</th><th>API sugerida</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>Biblioteca personal: buscar libros y organizarlos en “leídos”, “leyendo” y “por leer”</td><td>Open Library</td></tr>
+                  <tr><td>Billetera personal: gastos e ingresos, con el total convertido a dólares</td><td>DolarAPI</td></tr>
+                  <tr><td>Agenda de actividades al aire libre que muestra el pronóstico de cada día</td><td>Open-Meteo</td></tr>
+                  <tr><td>Arma tu equipo Pokémon: buscar, armar un equipo de 6 y ver sus estadísticas</td><td>PokeAPI</td></tr>
+                  <tr><td>Catálogo de un emprendimiento con carrito de compras y pedido por WhatsApp</td><td>— (datos propios en un archivo JSON)</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h3>Qué se evalúa</h3>
+            <ul>
+              <li><strong>Funcionamiento:</strong> cumple los requisitos y no se rompe con datos inesperados (campos vacíos, API caída).</li>
+              <li><strong>Código:</strong> legible, sin repeticiones innecesarias, con nombres que expliquen qué hace cada cosa.</li>
+              <li><strong>Interfaz:</strong> clara, prolija y usable en el celular.</li>
+              <li><strong>Presentación:</strong> poder explicar cómo funciona cualquier parte del código.</li>
+            </ul>
+            <div class="callout tip">
+              <p>
+                Empezá por lo más chico que funcione (por ejemplo: un formulario que agrega a una
+                lista) y sumá funciones de a una. Un proyecto simple y terminado vale mucho más que
+                uno ambicioso a medio hacer.
+              </p>
+            </div>
+          </section>
+
+          <nav class="paginacion" id="paginacion" aria-label="Página anterior"></nav>
+        </article>
+
+        <aside class="toc" id="toc" aria-label="En esta página"></aside>
+      </main>
+    </div>
+    <div class="velo"></div>
+
+    <footer class="pie">Curso de JavaScript · CapacitarTec · Sebastián Clement · 2026</footer>
+  </body>
+</html>

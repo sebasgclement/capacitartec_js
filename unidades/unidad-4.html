@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Unidad 4 · Arrays, objetos y strings | Curso de JavaScript</title>
+    <link rel="icon" href="../recursos/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/estilos.css" />
+    <script>
+      try {
+        const tema = localStorage.getItem("tema");
+        if (tema) document.documentElement.dataset.theme = tema;
+      } catch {}
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+    <script src="../js/sitio.js" defer></script>
+  </head>
+  <body data-base="../">
+    <header class="topbar">
+      <button class="btn-icono btn-menu" id="btn-menu" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="sidebar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" /></svg>
+      </button>
+      <a class="marca" href="../index.html"><span class="marca-logo">JS</span><span class="marca-texto">Curso de JavaScript</span></a>
+      <span class="espacio"></span>
+      <button class="btn-icono" id="btn-tema" type="button" aria-label="Cambiar entre modo claro y oscuro">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor" /></svg>
+      </button>
+    </header>
+
+    <div class="layout">
+      <aside class="sidebar" id="sidebar"><nav id="nav" aria-label="Unidades del curso"></nav></aside>
+
+      <main class="contenido">
+        <article class="articulo">
+          <header>
+            <p class="etiqueta">Unidad 4 · Semana 3</p>
+            <h1>Arrays, objetos y strings</h1>
+            <p class="bajada">
+              Hasta ahora cada variable guardaba un solo dato. Ahora vamos a guardar listas
+              (arrays) y fichas con varios datos (objetos), y a trabajar con texto en serio.
+            </p>
+            <div class="objetivos">
+              <h2>Al terminar esta unidad vas a poder</h2>
+              <ul>
+                <li>Crear arrays, acceder a sus elementos, agregar y quitar.</li>
+                <li>Recorrer un array con <code>for</code> y <code>for...of</code>.</li>
+                <li>Representar datos con objetos y combinarlos en arrays de objetos.</li>
+                <li>Usar los métodos de string más comunes.</li>
+              </ul>
+            </div>
+          </header>
+
+          <section id="arrays">
+            <h2>Arrays</h2>
+            <p>
+              Un <strong>array</strong> es una lista ordenada de valores guardada en una sola
+              variable. Se escribe entre corchetes y los elementos se separan con comas.
+            </p>
+            <pre><code>const frutas = ["manzana", "banana", "naranja"];
+const notas = [8, 6, 10, 7];
+const vacio = [];</code></pre>
+
+            <h3>Acceder por índice</h3>
+            <p>
+              Cada elemento tiene una posición llamada <strong>índice</strong>, que
+              <strong>empieza en 0</strong>.
+            </p>
+            <pre><code>const frutas = ["manzana", "banana", "naranja"];
+//                 0         1          2
+
+console.log(frutas[0]);      // "manzana"
+console.log(frutas[2]);      // "naranja"
+console.log(frutas[5]);      // undefined (no existe)
+console.log(frutas.length);  // 3
+
+// El último elemento siempre está en length - 1
+console.log(frutas[frutas.length - 1]); // "naranja"
+
+// Cambiar un elemento
+frutas[1] = "pera";
+console.log(frutas); // ["manzana", "pera", "naranja"]</code></pre>
+
+            <h3>Agregar y quitar</h3>
+            <div class="tabla">
+              <table>
+                <thead>
+                  <tr><th>Método</th><th>Qué hace</th><th>Devuelve</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td><code>push(x)</code></td><td>agrega al final</td><td>la nueva longitud</td></tr>
+                  <tr><td><code>pop()</code></td><td>quita el último</td><td>el elemento quitado</td></tr>
+                  <tr><td><code>unshift(x)</code></td><td>agrega al principio</td><td>la nueva longitud</td></tr>
+                  <tr><td><code>shift()</code></td><td>quita el primero</td><td>el elemento quitado</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <pre><code>const fila = ["Ana", "Luis"];
+
+fila.push("Sofía");          // ["Ana", "Luis", "Sofía"]
+const atendido = fila.shift(); // atendido = "Ana", fila = ["Luis", "Sofía"]
+fila.unshift("Pedro");       // ["Pedro", "Luis", "Sofía"]
+fila.pop();                  // ["Pedro", "Luis"]</code></pre>
+
+            <h3>Buscar y unir</h3>
+            <pre><code>const colores = ["rojo", "verde", "azul"];
+
+colores.includes("verde");  // true
+colores.indexOf("azul");    // 2
+colores.indexOf("negro");   // -1 → no está
+colores.join(", ");         // "rojo, verde, azul"</code></pre>
+          </section>
+
+          <section id="recorrer">
+            <h2>Recorrer un array</h2>
+            <p>Con un <code>for</code> clásico, usando el índice:</p>
+            <pre><code>const notas = [8, 6, 10, 7];
+
+for (let i = 0; i &lt; notas.length; i++) {
+  console.log(`Nota ${i + 1}: ${notas[i]}`);
+}</code></pre>
+            <p>
+              Si no necesitás el índice, <code>for...of</code> es más simple: en cada vuelta te da
+              directamente el elemento.
+            </p>
+            <pre><code>let suma = 0;
+
+for (const nota of notas) {
+  suma += nota;
+}
+
+console.log(`Promedio: ${suma / notas.length}`); // Promedio: 7.75</code></pre>
+            <div class="callout cuidado">
+              <p>
+                Fijate que la condición es <code>i &lt; notas.length</code> y no
+                <code>&lt;=</code>. Si el array tiene 4 elementos, los índices van de 0 a 3. Usar
+                <code>&lt;=</code> te da una vuelta de más con <code>undefined</code>.
+              </p>
+            </div>
+          </section>
+
+          <section id="const">
+            <h2><code>const</code> no significa “no se puede modificar”</h2>
+            <p>
+              Un array declarado con <code>const</code> <strong>sí se puede modificar</strong>
+              (agregar, quitar, cambiar elementos). Lo que no se puede es
+              <strong>reasignar</strong> la variable a otro array.
+            </p>
+            <pre><code>const lista = [1, 2, 3];
+
+lista.push(4);    // ✅ modificar el contenido está permitido
+lista[0] = 100;   // ✅
+
+lista = [5, 6];   // ❌ TypeError: Assignment to constant variable.</code></pre>
+            <p>Lo mismo pasa con los objetos. Por eso casi siempre se declaran con <code>const</code>.</p>
+            <div class="callout dato">
+              <p>
+                <code>const copia = lista;</code> <strong>no copia</strong> el array: las dos
+                variables apuntan al mismo array, y si modificás una, “se modifica la otra”. Para
+                hacer una copia real se usa <code>[...lista]</code> (ver el recuadro de abajo).
+              </p>
+            </div>
+          </section>
+
+          <section id="objetos">
+            <h2>Objetos</h2>
+            <p>
+              Un <strong>objeto</strong> agrupa datos relacionados en pares
+              <code>propiedad: valor</code>. Mientras un array es una lista, un objeto es como una
+              <strong>ficha</strong>.
+            </p>
+            <pre><code>const alumno = {
+  nombre: "Lucía",
+  edad: 19,
+  ciudad: "Rafaela",
+  activo: true,
+  materias: ["HTML", "CSS", "JavaScript"],
+};</code></pre>
+
+            <h3>Leer y modificar propiedades</h3>
+            <pre><code>// Notación de punto (la más común)
+console.log(alumno.nombre);        // "Lucía"
+console.log(alumno.materias[2]);   // "JavaScript"
+
+// Notación de corchetes: útil cuando el nombre está en una variable
+const campo = "ciudad";
+console.log(alumno[campo]);        // "Rafaela"
+
+// Modificar y agregar
+alumno.edad = 20;
+alumno.email = "lucia@mail.com";   // si no existía, se crea
+
+// Eliminar
+delete alumno.activo;
+
+// Una propiedad inexistente da undefined, no error
+console.log(alumno.telefono);      // undefined</code></pre>
+            <div class="callout tip">
+              <p>
+                Para ver un objeto o un array de objetos de forma prolija en la consola usá
+                <code>console.table(alumno)</code>.
+              </p>
+            </div>
+
+            <h3>¿Array u objeto?</h3>
+            <div class="tabla">
+              <table>
+                <thead>
+                  <tr><th>Usá un array cuando…</th><th>Usá un objeto cuando…</th></tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>tenés <strong>muchos elementos del mismo tipo</strong>: una lista de nombres, de precios, de tareas.</td>
+                    <td>tenés <strong>varios datos de una misma cosa</strong>: el nombre, precio y stock de <em>un</em> producto.</td>
+                  </tr>
+                  <tr>
+                    <td>importa el orden y accedés por posición.</td>
+                    <td>accedés a cada dato por su nombre.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section id="arrays-de-objetos">
+            <h2>Arrays de objetos</h2>
+            <p>
+              La combinación más usada en la vida real: <strong>una lista de fichas</strong>.
+              Productos de una tienda, alumnos de un curso, resultados de una búsqueda. Cuando en la
+              Unidad 8 traigamos datos de internet, van a llegar con esta forma.
+            </p>
+            <pre><code>const productos = [
+  { id: 1, nombre: "Teclado", precio: 25000, stock: 4 },
+  { id: 2, nombre: "Mouse", precio: 12000, stock: 0 },
+  { id: 3, nombre: "Monitor", precio: 180000, stock: 2 },
+];
+
+console.log(productos[1].nombre); // "Mouse"
+
+// Recorrer y mostrar los que tienen stock
+for (const producto of productos) {
+  if (producto.stock &gt; 0) {
+    console.log(`${producto.nombre}: $${producto.precio}`);
+  }
+}
+
+// Calcular el valor total del inventario
+let total = 0;
+for (const producto of productos) {
+  total += producto.precio * producto.stock;
+}
+console.log(`Inventario: $${total}`); // Inventario: $460000</code></pre>
+            <div class="callout investigar">
+              <ul>
+                <li>El operador <em>spread</em> <code>...</code>: cómo copiar o combinar arrays y objetos.</li>
+                <li><em>Desestructuración</em>: <code>const { nombre, precio } = producto;</code></li>
+                <li><code>Object.keys()</code>, <code>Object.values()</code> y el bucle <code>for...in</code> para recorrer las propiedades de un objeto.</li>
+                <li><code>splice()</code> y <code>slice()</code> en arrays: nombres parecidos, comportamientos muy distintos.</li>
+              </ul>
+            </div>
+          </section>
+
+          <section id="strings">
+            <h2>Métodos de strings</h2>
+            <p>
+              Un string se comporta parecido a un array de letras: tiene <code>length</code> y se
+              puede acceder a cada carácter por índice. Además trae muchos métodos útiles.
+            </p>
+            <pre><code>const texto = "  JavaScript es genial  ";
+
+texto.length;               // 24 (los espacios cuentan)
+texto.trim();               // "JavaScript es genial" → saca espacios de los extremos
+texto.trim().toUpperCase(); // "JAVASCRIPT ES GENIAL"
+texto.toLowerCase();        // "  javascript es genial  "</code></pre>
+
+            <h3>Buscar</h3>
+            <pre><code>const frase = "Aprender JavaScript es divertido";
+
+frase.includes("Script");      // true (distingue mayúsculas)
+frase.startsWith("Aprender");  // true
+frase.endsWith(".");           // false
+frase.indexOf("Java");         // 9
+frase[0];                      // "A"</code></pre>
+
+            <h3>Extraer y reemplazar</h3>
+            <pre><code>const fecha = "2026-10-07";
+
+fecha.slice(0, 4);   // "2026"  (desde el índice 0 hasta el 4, sin incluirlo)
+fecha.slice(5, 7);   // "10"
+fecha.slice(-2);     // "07"    (índices negativos cuentan desde el final)
+
+"Hola mundo".replace("mundo", "clase");  // "Hola clase"
+"a-b-c".replaceAll("-", "/");            // "a/b/c"
+"ja".repeat(3);                          // "jajaja"
+"7".padStart(3, "0");                    // "007"</code></pre>
+
+            <h3>Pasar de string a array y viceversa</h3>
+            <p>
+              <code>split()</code> corta un string en un array usando un separador, y
+              <code>join()</code> hace lo contrario. Es la forma de procesar listas que escribe el
+              usuario:
+            </p>
+            <pre><code>const entrada = "Ana, Luis ,  Sofía";
+const nombres = entrada.split(",");
+console.log(nombres); // ["Ana", " Luis ", "  Sofía"] ← quedaron espacios
+
+// Limpiamos cada nombre
+for (let i = 0; i &lt; nombres.length; i++) {
+  nombres[i] = nombres[i].trim();
+}
+console.log(nombres);           // ["Ana", "Luis", "Sofía"]
+console.log(nombres.join(" | ")); // "Ana | Luis | Sofía"
+
+// Dar vuelta una palabra
+"hola".split("").reverse().join(""); // "aloh"</code></pre>
+            <div class="callout cuidado">
+              <p>
+                Los strings son <strong>inmutables</strong>: ningún método cambia el string
+                original, siempre devuelven uno nuevo. Si querés conservar el resultado, guardalo:
+                <code>nombre = nombre.trim();</code>
+              </p>
+            </div>
+            <div class="callout tip">
+              <p>
+                Para comparar lo que escribe el usuario sin que importen mayúsculas ni espacios,
+                normalizá primero: <code>respuesta.trim().toLowerCase() === "si"</code>.
+              </p>
+            </div>
+          </section>
+
+          <section id="practica">
+            <h2>Práctica</h2>
+
+            <div class="ejercicio">
+              <h3>1 · Lista de compras</h3>
+              <p>
+                Pedí productos uno por uno y guardalos en un array hasta que el usuario escriba
+                “fin”. No agregues productos repetidos (avisá si ya estaba). Al final, mostrá la
+                lista numerada y la cantidad total.
+              </p>
+            </div>
+
+            <div class="ejercicio">
+              <h3>2 · Estadísticas de notas</h3>
+              <p>
+                Dado el array <code>const notas = [7, 4, 9, 10, 6, 3, 8];</code>, calculá con
+                bucles: el promedio, la nota más alta, la más baja y cuántos aprobaron (nota ≥ 6).
+              </p>
+            </div>
+
+            <div class="ejercicio">
+              <h3>3 · Palíndromos</h3>
+              <p>
+                Escribí una función <code>esPalindromo(texto)</code> que devuelva si un texto se lee
+                igual al derecho y al revés, ignorando mayúsculas y espacios.
+                <code>"Anita lava la tina"</code> → <code>true</code>.
+              </p>
+              <details>
+                <summary>Pista</summary>
+                <p>Pasá todo a minúsculas, sacá los espacios con <code>replaceAll(" ", "")</code> y compará con el texto dado vuelta.</p>
+              </details>
+            </div>
+
+            <div class="ejercicio">
+              <h3>4 · Agenda de contactos</h3>
+              <p>
+                Creá un array con 4 contactos (objetos con <code>nombre</code>,
+                <code>telefono</code> y <code>ciudad</code>). Escribí una función
+                <code>buscarPorCiudad(contactos, ciudad)</code> que devuelva un array nuevo con los
+                contactos de esa ciudad. Mostrá el resultado con <code>console.table()</code>.
+              </p>
+            </div>
+
+            <div class="ejercicio integrador">
+              <h3>5 · Carrito de compras (integrador)</h3>
+              <p>Partí de este catálogo:</p>
+              <pre><code>const catalogo = [
+  { id: 1, nombre: "Remera", precio: 15000 },
+  { id: 2, nombre: "Pantalón", precio: 32000 },
+  { id: 3, nombre: "Zapatillas", precio: 85000 },
+  { id: 4, nombre: "Gorra", precio: 9000 },
+];</code></pre>
+              <ul>
+                <li>Mostrá el catálogo y pedí el <code>id</code> del producto a agregar, una y otra vez, hasta que el usuario escriba <code>0</code>.</li>
+                <li>Por cada producto pedí la cantidad y guardá en un array <code>carrito</code> objetos como <code>{ nombre, precio, cantidad }</code>.</li>
+                <li>Al terminar, mostrá el detalle de la compra y el total. Si el total supera $100.000, aplicá un 10 % de descuento.</li>
+              </ul>
+              <details>
+                <summary>Pista</summary>
+                <p>
+                  Para encontrar un producto por id, recorré el catálogo con <code>for...of</code> y
+                  compará <code>producto.id === idElegido</code>. (En la próxima unidad vas a
+                  aprender a hacerlo en una línea con <code>find()</code>).
+                </p>
+              </details>
+            </div>
+          </section>
+
+          <nav class="paginacion" id="paginacion" aria-label="Unidad anterior y siguiente"></nav>
+        </article>
+
+        <aside class="toc" id="toc" aria-label="En esta página"></aside>
+      </main>
+    </div>
+    <div class="velo"></div>
+
+    <footer class="pie">Curso de JavaScript · CapacitarTec · Sebastián Clement · 2026</footer>
+  </body>
+</html>

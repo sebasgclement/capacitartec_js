@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Unidad 6 · DOM y eventos | Curso de JavaScript</title>
+    <link rel="icon" href="../recursos/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/estilos.css" />
+    <script>
+      try {
+        const tema = localStorage.getItem("tema");
+        if (tema) document.documentElement.dataset.theme = tema;
+      } catch {}
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+    <script src="../js/sitio.js" defer></script>
+  </head>
+  <body data-base="../">
+    <header class="topbar">
+      <button class="btn-icono btn-menu" id="btn-menu" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="sidebar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" /></svg>
+      </button>
+      <a class="marca" href="../index.html"><span class="marca-logo">JS</span><span class="marca-texto">Curso de JavaScript</span></a>
+      <span class="espacio"></span>
+      <button class="btn-icono" id="btn-tema" type="button" aria-label="Cambiar entre modo claro y oscuro">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor" /></svg>
+      </button>
+    </header>
+
+    <div class="layout">
+      <aside class="sidebar" id="sidebar"><nav id="nav" aria-label="Unidades del curso"></nav></aside>
+
+      <main class="contenido">
+        <article class="articulo">
+          <header>
+            <p class="etiqueta">Unidad 6 · Semana 5</p>
+            <h1>DOM y eventos</h1>
+            <p class="bajada">
+              Dejamos atrás <code>prompt</code> y <code>alert</code>: desde ahora JavaScript lee y
+              modifica la página, y reacciona a lo que hace el usuario.
+            </p>
+            <div class="objetivos">
+              <h2>Al terminar esta unidad vas a poder</h2>
+              <ul>
+                <li>Explicar qué es el DOM y seleccionar elementos con <code>querySelector</code>.</li>
+                <li>Cambiar textos, atributos, clases y estilos desde JavaScript.</li>
+                <li>Crear y eliminar elementos, y dibujar una lista a partir de un array.</li>
+                <li>Responder a clics, teclas y escritura con <code>addEventListener</code>.</li>
+                <li>Usar delegación de eventos y atributos <code>data-*</code>.</li>
+              </ul>
+            </div>
+          </header>
+
+          <section id="que-es">
+            <h2>¿Qué es el DOM?</h2>
+            <p>
+              Cuando el navegador lee tu HTML, arma en memoria un <strong>árbol de objetos</strong>:
+              cada etiqueta se convierte en un objeto (un <em>nodo</em>) con propiedades y métodos.
+              Ese árbol se llama <strong>DOM</strong> (<em>Document Object Model</em>), y JavaScript
+              lo puede leer y modificar. Cada cambio en el DOM se ve al instante en la pantalla.
+            </p>
+            <p>Este HTML…</p>
+            <pre><code class="language-html">&lt;body&gt;
+  &lt;h1&gt;Mi lista&lt;/h1&gt;
+  &lt;ul id="lista"&gt;
+    &lt;li&gt;Pan&lt;/li&gt;
+    &lt;li class="urgente"&gt;Leche&lt;/li&gt;
+  &lt;/ul&gt;
+  &lt;button&gt;Agregar&lt;/button&gt;
+&lt;/body&gt;</code></pre>
+            <p>…se convierte en este árbol:</p>
+            <figure>
+              <div class="arbol">
+                <ul>
+                  <li>
+                    <span class="nodo raiz">document</span>
+                    <ul>
+                      <li>
+                        <span class="nodo">body</span>
+                        <ul>
+                          <li>
+                            <span class="nodo">h1</span>
+                            <ul><li><span class="nodo texto">"Mi lista"</span></li></ul>
+                          </li>
+                          <li>
+                            <span class="nodo">ul#lista</span>
+                            <ul>
+                              <li>
+                                <span class="nodo">li</span>
+                                <ul><li><span class="nodo texto">"Pan"</span></li></ul>
+                              </li>
+                              <li>
+                                <span class="nodo">li.urgente</span>
+                                <ul><li><span class="nodo texto">"Leche"</span></li></ul>
+                              </li>
+                            </ul>
+                          </li>
+                          <li>
+                            <span class="nodo">button</span>
+                            <ul><li><span class="nodo texto">"Agregar"</span></li></ul>
+                          </li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+              <figcaption>
+                Cada etiqueta es un nodo; los textos (en línea punteada) son nodos hijos. Los nodos
+                que están dentro de otro son sus <em>hijos</em>, y el de afuera es su <em>padre</em>.
+              </figcaption>
+            </figure>
+            <div class="callout tip">
+              <p>
+                En DevTools, la pestaña <strong>Elements</strong> muestra el DOM en vivo. Si
+                JavaScript agrega o cambia algo, lo vas a ver ahí (y no en el código fuente del
+                HTML).
+              </p>
+            </div>
+          </section>
+
+          <section id="seleccionar">
+            <h2>Seleccionar elementos</h2>
+            <p>
+              Para modificar un elemento primero hay que “agarrarlo”. La forma moderna es con
+              <strong>selectores de CSS</strong>, los mismos que ya conocés:
+            </p>
+            <pre><code>// El PRIMER elemento que coincide con el selector (o null si no hay ninguno)
+const titulo = document.querySelector("h1");
+const lista = document.querySelector("#lista");
+const urgente = document.querySelector(".urgente");
+const primerItem = document.querySelector("#lista li");
+
+// TODOS los que coinciden (una NodeList, parecida a un array)
+const items = document.querySelectorAll("li");
+console.log(items.length); // 2
+
+items.forEach((item) =&gt; console.log(item.textContent));</code></pre>
+            <p>
+              También existe <code>document.getElementById("lista")</code> (sin el
+              <code>#</code>), que vas a ver mucho en código existente.
+            </p>
+            <div class="callout cuidado">
+              <p>
+                Si ves <code>TypeError: Cannot read properties of null</code>, el
+                <code>querySelector</code> no encontró nada. Revisá: ¿está bien escrito el selector?
+                ¿Te olvidaste el <code>#</code> o el <code>.</code>? ¿El <code>&lt;script&gt;</code>
+                tiene <code>defer</code>?
+              </p>
+            </div>
+          </section>
+
+          <section id="modificar">
+            <h2>Leer y modificar contenido</h2>
+            <pre><code>const titulo = document.querySelector("h1");
+
+// Leer y cambiar el texto
+console.log(titulo.textContent); // "Mi lista"
+titulo.textContent = "Lista del súper";
+
+// Atributos: muchos se usan directamente como propiedades
+const foto = document.querySelector("img");
+foto.src = "img/gato.jpg";
+foto.alt = "Un gato durmiendo";
+
+const enlace = document.querySelector("a");
+enlace.href = "https://developer.mozilla.org";
+
+// Ocultar y mostrar
+titulo.hidden = true;
+titulo.hidden = false;</code></pre>
+
+            <h3><code>textContent</code> vs <code>innerHTML</code></h3>
+            <pre><code>const caja = document.querySelector(".caja");
+
+caja.textContent = "&lt;strong&gt;Hola&lt;/strong&gt;"; // muestra literalmente: &lt;strong&gt;Hola&lt;/strong&gt;
+caja.innerHTML = "&lt;strong&gt;Hola&lt;/strong&gt;";   // muestra: Hola (en negrita)</code></pre>
+            <div class="callout cuidado">
+              <p>
+                <strong>Nunca uses <code>innerHTML</code> con texto que escribió el usuario</strong>
+                o que vino de internet. Si alguien escribe
+                <code>&lt;img src=x onerror="..."&gt;</code>, el navegador ejecuta ese código. Para
+                mostrar texto, usá siempre <code>textContent</code>.
+              </p>
+            </div>
+          </section>
+
+          <section id="clases">
+            <h2>Clases y estilos</h2>
+            <p>
+              La mejor forma de cambiar el aspecto de un elemento es
+              <strong>agregar o quitar clases</strong> y dejar que el CSS haga el resto:
+            </p>
+            <p class="archivo">style.css</p>
+            <pre><code class="language-css">.oculto {
+  display: none;
+}
+.activo {
+  background: gold;
+  font-weight: bold;
+}</code></pre>
+            <p class="archivo">script.js</p>
+            <pre><code>const boton = document.querySelector("button");
+
+boton.classList.add("activo");       // agrega la clase
+boton.classList.remove("activo");    // la quita
+boton.classList.toggle("activo");    // si la tiene la quita, si no la agrega
+boton.classList.contains("activo");  // true o false</code></pre>
+            <p>
+              También podés cambiar estilos directamente con <code>style</code>. Las propiedades se
+              escriben en camelCase (<code>background-color</code> → <code>backgroundColor</code>):
+            </p>
+            <pre><code>boton.style.backgroundColor = "tomato";
+boton.style.fontSize = "20px";</code></pre>
+            <div class="callout tip">
+              <p>
+                Usá <code>style</code> solo para valores que se calculan en el momento (una posición,
+                un color al azar). Para todo lo demás, clases: el diseño queda en el CSS y es más
+                fácil de cambiar.
+              </p>
+            </div>
+          </section>
+
+          <section id="crear">
+            <h2>Crear y eliminar elementos</h2>
+            <pre><code>const lista = document.querySelector("#lista");
+
+// 1. Crear el elemento (todavía no está en la página)
+const item = document.createElement("li");
+
+// 2. Configurarlo
+item.textContent = "Manteca";
+item.classList.add("nuevo");
+
+// 3. Insertarlo
+lista.append(item);   // al final de la lista
+// lista.prepend(item); // o al principio
+
+// Eliminar un elemento
+item.remove();</code></pre>
+
+            <h3>Dibujar una lista a partir de un array</h3>
+            <p>
+              Este es <strong>el patrón más importante de la unidad</strong>: los datos viven en un
+              array y una función los “dibuja” en la página. Cada vez que los datos cambian, se
+              vuelve a llamar a la función.
+            </p>
+            <pre><code>const compras = ["Pan", "Leche", "Yerba"];
+const lista = document.querySelector("#lista");
+
+function mostrarCompras() {
+  lista.innerHTML = ""; // vaciamos lo que había
+
+  compras.forEach((producto) =&gt; {
+    const li = document.createElement("li");
+    li.textContent = producto;
+    lista.append(li);
+  });
+}
+
+mostrarCompras();
+
+// Más tarde, cuando cambian los datos:
+compras.push("Café");
+mostrarCompras();</code></pre>
+            <div class="callout dato">
+              <p>
+                Usamos <code>innerHTML = ""</code> solo para vaciar el contenedor: no hay riesgo
+                porque no insertamos texto de nadie.
+              </p>
+            </div>
+          </section>
+
+          <section id="eventos">
+            <h2>Eventos</h2>
+            <p>
+              Un <strong>evento</strong> es algo que pasa en la página: un clic, una tecla, el
+              usuario escribiendo. Con <code>addEventListener</code> le decimos al navegador
+              “cuando pase <em>esto</em> en <em>este elemento</em>, ejecutá <em>esta
+              función</em>”.
+            </p>
+            <pre><code>const boton = document.querySelector("#saludar");
+
+boton.addEventListener("click", () =&gt; {
+  console.log("¡Hiciste clic!");
+});</code></pre>
+            <p>
+              ¿Te suena? Es otra vez un callback: la función no se ejecuta ahora, sino cada vez que
+              ocurra el clic.
+            </p>
+
+            <h3>Eventos más usados</h3>
+            <div class="tabla">
+              <table>
+                <thead>
+                  <tr><th>Evento</th><th>Ocurre cuando…</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td><code>click</code></td><td>se hace clic (o se toca en el celular)</td></tr>
+                  <tr><td><code>input</code></td><td>cambia el contenido de un campo, con cada tecla</td></tr>
+                  <tr><td><code>change</code></td><td>se confirma un cambio en un campo, select o checkbox</td></tr>
+                  <tr><td><code>keydown</code></td><td>se aprieta una tecla</td></tr>
+                  <tr><td><code>mouseenter</code> / <code>mouseleave</code></td><td>el mouse entra o sale de un elemento</td></tr>
+                  <tr><td><code>submit</code></td><td>se envía un formulario (Unidad 7)</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h3>El objeto evento</h3>
+            <p>
+              El callback recibe un parámetro (por convención <code>e</code> o
+              <code>evento</code>) con información de lo que pasó:
+            </p>
+            <pre><code>// e.target: el elemento donde ocurrió el evento
+const campo = document.querySelector("#nombre");
+const saludo = document.querySelector("#saludo");
+
+campo.addEventListener("input", (e) =&gt; {
+  saludo.textContent = `Hola, ${e.target.value}`; // se actualiza mientras escribís
+});
+
+// e.key: qué tecla se apretó
+document.addEventListener("keydown", (e) =&gt; {
+  if (e.key === "Escape") {
+    console.log("Apretaste Escape");
+  }
+});</code></pre>
+
+            <h3>Ejemplo completo: un contador</h3>
+            <p class="archivo">index.html</p>
+            <pre><code class="language-html">&lt;p id="valor"&gt;0&lt;/p&gt;
+&lt;button id="restar"&gt;−&lt;/button&gt;
+&lt;button id="sumar"&gt;+&lt;/button&gt;
+&lt;button id="reiniciar"&gt;Reiniciar&lt;/button&gt;</code></pre>
+            <p class="archivo">script.js</p>
+            <pre><code>const valor = document.querySelector("#valor");
+let contador = 0;
+
+function actualizar() {
+  valor.textContent = contador;
+  valor.classList.toggle("negativo", contador &lt; 0); // agrega la clase solo si es negativo
+}
+
+document.querySelector("#sumar").addEventListener("click", () =&gt; {
+  contador++;
+  actualizar();
+});
+
+document.querySelector("#restar").addEventListener("click", () =&gt; {
+  contador--;
+  actualizar();
+});
+
+document.querySelector("#reiniciar").addEventListener("click", () =&gt; {
+  contador = 0;
+  actualizar();
+});</code></pre>
+            <div class="callout cuidado">
+              <p>
+                Vas a encontrar código con <code>onclick="..."</code> dentro del HTML. Funciona, pero
+                mezcla estructura con comportamiento. En el curso usamos siempre
+                <code>addEventListener</code>.
+              </p>
+            </div>
+          </section>
+
+          <section id="delegacion">
+            <h2>Delegación de eventos y <code>data-*</code></h2>
+            <p>
+              Si una lista tiene 50 botones de “eliminar” creados dinámicamente, no hace falta
+              ponerle un listener a cada uno. Le ponemos <strong>uno solo al contenedor</strong> y
+              preguntamos dónde se hizo clic. Esto funciona porque los eventos “suben” desde el
+              elemento clickeado hacia sus padres.
+            </p>
+            <p>
+              Para saber <em>qué</em> elemento eliminar, guardamos un dato en el HTML con un
+              atributo <code>data-*</code> y lo leemos con <code>dataset</code>:
+            </p>
+            <pre><code>let compras = ["Pan", "Leche", "Yerba"];
+const lista = document.querySelector("#lista");
+
+function mostrarCompras() {
+  lista.innerHTML = "";
+  compras.forEach((producto, indice) =&gt; {
+    const li = document.createElement("li");
+    li.textContent = producto;
+
+    const boton = document.createElement("button");
+    boton.textContent = "✕";
+    boton.dataset.indice = indice; // genera &lt;button data-indice="0"&gt;
+
+    li.append(boton);
+    lista.append(li);
+  });
+}
+
+// UN solo listener para toda la lista
+lista.addEventListener("click", (e) =&gt; {
+  const boton = e.target.closest("button"); // ¿se hizo clic en un botón (o dentro de uno)?
+  if (!boton) return;                       // clic en otro lado: no hacemos nada
+
+  const indice = Number(boton.dataset.indice);
+  // filter también recibe el índice; "_" es el elemento, que acá no usamos
+  compras = compras.filter((_, i) =&gt; i !== indice);
+  mostrarCompras();
+});
+
+mostrarCompras();</code></pre>
+            <div class="callout dato">
+              <p>
+                <code>dataset</code> traduce los nombres: <code>data-id</code> →
+                <code>dataset.id</code>, <code>data-precio-final</code> →
+                <code>dataset.precioFinal</code>. Los valores siempre son strings.
+              </p>
+            </div>
+            <div class="callout investigar">
+              <ul>
+                <li>Qué son las fases de <em>captura</em> y <em>burbujeo</em> (<em>bubbling</em>), y para qué sirve <code>e.stopPropagation()</code>.</li>
+                <li><code>removeEventListener</code>: cómo dejar de escuchar un evento.</li>
+                <li>La etiqueta <code>&lt;template&gt;</code> para crear elementos complejos sin tantas líneas de <code>createElement</code>.</li>
+                <li>Recorrer el árbol: <code>parentElement</code>, <code>children</code>, <code>nextElementSibling</code>.</li>
+              </ul>
+            </div>
+          </section>
+
+          <section id="practica">
+            <h2>Práctica</h2>
+
+            <div class="ejercicio">
+              <h3>1 · Contador con límites</h3>
+              <p>
+                Partiendo del contador de ejemplo: que no pueda bajar de 0 ni pasar de 10, que el
+                botón correspondiente se deshabilite al llegar al límite
+                (<code>boton.disabled = true</code>) y que el número se ponga rojo al llegar a 10.
+              </p>
+            </div>
+
+            <div class="ejercicio">
+              <h3>2 · Modo oscuro</h3>
+              <p>
+                Un botón que alterna la clase <code>oscuro</code> en el <code>&lt;body&gt;</code>.
+                En el CSS, definí los colores con variables y cambiá sus valores dentro de
+                <code>body.oscuro</code>. El texto del botón tiene que cambiar entre “🌙 Oscuro” y
+                “☀️ Claro”.
+              </p>
+              <details>
+                <summary>Pista para el CSS</summary>
+                <pre><code class="language-css">:root { --fondo: #fff; --texto: #222; }
+body.oscuro { --fondo: #1e1e1e; --texto: #eee; }
+body { background: var(--fondo); color: var(--texto); }</code></pre>
+              </details>
+            </div>
+
+            <div class="ejercicio">
+              <h3>3 · Preguntas frecuentes</h3>
+              <p>
+                Armá en HTML una lista de 4 preguntas con sus respuestas ocultas. Al hacer clic en
+                una pregunta se muestra su respuesta, y si había otra abierta, se cierra.
+              </p>
+            </div>
+
+            <div class="ejercicio">
+              <h3>4 · Buscador en vivo</h3>
+              <p>
+                Dado un array de 15 nombres de países, mostralos en una lista. Agregá un
+                <code>&lt;input&gt;</code> que, mientras escribís, filtre la lista para mostrar solo
+                los que contienen ese texto (sin importar mayúsculas). Si no hay resultados, mostrá
+                “Sin coincidencias”.
+              </p>
+            </div>
+
+            <div class="ejercicio integrador">
+              <h3>5 · Catálogo de productos (integrador)</h3>
+              <p>
+                Usando el array de <code>productos</code> de la Unidad 5 (agregale un
+                <code>id</code> a cada uno):
+              </p>
+              <ul>
+                <li>Mostrá cada producto como una tarjeta con nombre, precio formateado y un botón “Agregar”.</li>
+                <li>Arriba, botones para filtrar por categoría (“Todos”, “Periféricos”, “Audio”, “Pantallas”). El filtro activo se tiene que notar.</li>
+                <li>Los productos sin stock se muestran grises y con el botón deshabilitado.</li>
+                <li>Un contador en el encabezado: “🛒 3 productos — $67.000”.</li>
+              </ul>
+              <details>
+                <summary>Pista</summary>
+                <p>
+                  Escribí una función <code>mostrarProductos(lista)</code> que dibuje cualquier array
+                  de productos. Los botones de categoría solo llaman a esa función con el array
+                  filtrado. Para los botones “Agregar”, usá delegación con
+                  <code>data-id</code>.
+                </p>
+              </details>
+            </div>
+          </section>
+
+          <nav class="paginacion" id="paginacion" aria-label="Unidad anterior y siguiente"></nav>
+        </article>
+
+        <aside class="toc" id="toc" aria-label="En esta página"></aside>
+      </main>
+    </div>
+    <div class="velo"></div>
+
+    <footer class="pie">Curso de JavaScript · CapacitarTec · Sebastián Clement · 2026</footer>
+  </body>
+</html>

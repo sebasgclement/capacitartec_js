@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Unidad 5 · Métodos de array, Math y Date | Curso de JavaScript</title>
+    <link rel="icon" href="../recursos/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/estilos.css" />
+    <script>
+      try {
+        const tema = localStorage.getItem("tema");
+        if (tema) document.documentElement.dataset.theme = tema;
+      } catch {}
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+    <script src="../js/sitio.js" defer></script>
+  </head>
+  <body data-base="../">
+    <header class="topbar">
+      <button class="btn-icono btn-menu" id="btn-menu" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="sidebar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" /></svg>
+      </button>
+      <a class="marca" href="../index.html"><span class="marca-logo">JS</span><span class="marca-texto">Curso de JavaScript</span></a>
+      <span class="espacio"></span>
+      <button class="btn-icono" id="btn-tema" type="button" aria-label="Cambiar entre modo claro y oscuro">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor" /></svg>
+      </button>
+    </header>
+
+    <div class="layout">
+      <aside class="sidebar" id="sidebar"><nav id="nav" aria-label="Unidades del curso"></nav></aside>
+
+      <main class="contenido">
+        <article class="articulo">
+          <header>
+            <p class="etiqueta">Unidad 5 · Semana 4</p>
+            <h1>Métodos de array, Math y Date</h1>
+            <p class="bajada">
+              Las herramientas que trae JavaScript para transformar listas sin escribir bucles a
+              mano, hacer cálculos y trabajar con fechas.
+            </p>
+            <div class="objetivos">
+              <h2>Al terminar esta unidad vas a poder</h2>
+              <ul>
+                <li>Usar <code>forEach</code>, <code>map</code>, <code>filter</code>, <code>find</code>, <code>some</code>, <code>every</code> y <code>reduce</code>.</li>
+                <li>Ordenar arrays de números, textos y objetos con <code>sort</code>.</li>
+                <li>Redondear, generar números al azar y formatear precios.</li>
+                <li>Crear fechas, leer sus partes y calcular diferencias.</li>
+              </ul>
+            </div>
+          </header>
+
+          <section id="idea">
+            <h2>La idea: métodos que reciben funciones</h2>
+            <p>
+              En la Unidad 3 vimos que una función se puede pasar como argumento (un
+              <em>callback</em>). Los arrays tienen métodos que reciben un callback y
+              <strong>lo ejecutan una vez por cada elemento</strong>. Así, en lugar de escribir el
+              bucle vos, solo decís <em>qué hacer</em> con cada elemento.
+            </p>
+            <p>Para todos los ejemplos vamos a usar estos datos:</p>
+            <pre><code>const productos = [
+  { nombre: "Teclado", precio: 25000, categoria: "perifericos", stock: 4 },
+  { nombre: "Mouse", precio: 12000, categoria: "perifericos", stock: 0 },
+  { nombre: "Monitor", precio: 180000, categoria: "pantallas", stock: 2 },
+  { nombre: "Auriculares", precio: 30000, categoria: "audio", stock: 7 },
+  { nombre: "Parlante", precio: 45000, categoria: "audio", stock: 1 },
+];</code></pre>
+          </section>
+
+          <section id="foreach">
+            <h2><code>forEach</code>: hacer algo con cada elemento</h2>
+            <pre><code>productos.forEach((producto) =&gt; {
+  console.log(`${producto.nombre}: $${producto.precio}`);
+});
+
+// El callback también puede recibir el índice como segundo parámetro
+productos.forEach((producto, i) =&gt; {
+  console.log(`${i + 1}. ${producto.nombre}`);
+});</code></pre>
+            <p>
+              Es equivalente a un <code>for...of</code>. No devuelve nada: se usa para
+              <em>hacer</em> algo (mostrar, guardar, crear elementos en la página).
+            </p>
+          </section>
+
+          <section id="map">
+            <h2><code>map</code>: transformar cada elemento</h2>
+            <p>
+              Devuelve un <strong>array nuevo, del mismo largo</strong>, con lo que retorne el
+              callback para cada elemento. El array original no cambia.
+            </p>
+            <pre><code>const nombres = productos.map((p) =&gt; p.nombre);
+// ["Teclado", "Mouse", "Monitor", "Auriculares", "Parlante"]
+
+const preciosConIva = productos.map((p) =&gt; p.precio * 1.21);
+// [30250, 14520, 217800, 36300, 54450]
+
+const numeros = [1, 2, 3];
+const dobles = numeros.map((n) =&gt; n * 2); // [2, 4, 6]</code></pre>
+            <div class="callout cuidado">
+              <p>
+                Si usás llaves en la flecha, tenés que escribir <code>return</code>. Sin
+                <code>return</code>, <code>map</code> te devuelve un array lleno de
+                <code>undefined</code>:
+              </p>
+              <pre><code>numeros.map((n) =&gt; { n * 2 });        // [undefined, undefined, undefined]
+numeros.map((n) =&gt; { return n * 2 }); // [2, 4, 6] ✅</code></pre>
+            </div>
+          </section>
+
+          <section id="filter">
+            <h2><code>filter</code>: quedarse con algunos</h2>
+            <p>
+              Devuelve un <strong>array nuevo</strong> solo con los elementos para los que el
+              callback devuelve <code>true</code>.
+            </p>
+            <pre><code>const conStock = productos.filter((p) =&gt; p.stock &gt; 0);
+// Teclado, Monitor, Auriculares, Parlante
+
+const audio = productos.filter((p) =&gt; p.categoria === "audio");
+// Auriculares, Parlante
+
+const baratos = productos.filter((p) =&gt; p.precio &lt; 30000);
+// Teclado, Mouse
+
+// Si ninguno cumple, devuelve un array vacío []
+const carisimos = productos.filter((p) =&gt; p.precio &gt; 1000000); // []</code></pre>
+            <div class="callout tip">
+              <p>
+                <code>filter</code> también es la forma más simple de <strong>eliminar</strong> un
+                elemento: te quedás con todos los que <em>no</em> son ese.
+                <code>tareas = tareas.filter((t) =&gt; t.id !== idABorrar);</code>
+              </p>
+            </div>
+          </section>
+
+          <section id="find">
+            <h2><code>find</code> y <code>findIndex</code>: buscar uno</h2>
+            <pre><code>const monitor = productos.find((p) =&gt; p.nombre === "Monitor");
+// { nombre: "Monitor", precio: 180000, ... }
+
+const tablet = productos.find((p) =&gt; p.nombre === "Tablet");
+// undefined → no lo encontró
+
+const posicion = productos.findIndex((p) =&gt; p.nombre === "Mouse");
+// 1 (si no lo encuentra, -1)</code></pre>
+            <p>
+              A diferencia de <code>filter</code>, <code>find</code> devuelve
+              <strong>el primer elemento</strong> que cumple (no un array), o
+              <code>undefined</code>. Siempre chequeá que lo haya encontrado antes de usarlo:
+            </p>
+            <pre><code>const buscado = productos.find((p) =&gt; p.nombre === "Tablet");
+
+if (buscado) {
+  console.log(buscado.precio);
+} else {
+  console.log("No existe ese producto");
+}</code></pre>
+          </section>
+
+          <section id="some-every">
+            <h2><code>some</code> y <code>every</code>: preguntar</h2>
+            <pre><code>// ¿Hay ALGÚN producto sin stock?
+productos.some((p) =&gt; p.stock === 0);   // true
+
+// ¿TODOS cuestan más de $10.000?
+productos.every((p) =&gt; p.precio &gt; 10000); // true</code></pre>
+          </section>
+
+          <section id="reduce">
+            <h2><code>reduce</code>: reducir a un solo valor</h2>
+            <p>
+              Recorre el array <strong>acumulando</strong> un resultado. Es el patrón del acumulador
+              de la Unidad 3, pero en una línea. El callback recibe el acumulado hasta ahora y el
+              elemento actual; el segundo argumento de <code>reduce</code> es el valor inicial.
+            </p>
+            <pre><code>const numeros = [10, 20, 30];
+
+const suma = numeros.reduce((acumulado, n) =&gt; acumulado + n, 0);
+// vuelta 1: 0 + 10 = 10
+// vuelta 2: 10 + 20 = 30
+// vuelta 3: 30 + 30 = 60
+console.log(suma); // 60
+
+// Valor total del inventario
+const inventario = productos.reduce((total, p) =&gt; total + p.precio * p.stock, 0);
+console.log(inventario); // 715000</code></pre>
+            <div class="callout tip">
+              <p>
+                Si <code>reduce</code> te resulta difícil de leer, no pasa nada: un
+                <code>for...of</code> con acumulador hace exactamente lo mismo. Usá el que entiendas.
+              </p>
+            </div>
+          </section>
+
+          <section id="sort">
+            <h2><code>sort</code>: ordenar</h2>
+            <div class="callout cuidado">
+              <p>
+                A diferencia de <code>map</code> y <code>filter</code>, <code>sort</code>
+                <strong>modifica el array original</strong>. Si querés conservarlo, ordená una
+                copia: <code>[...array].sort(...)</code>.
+              </p>
+            </div>
+            <p>
+              Sin argumentos, <code>sort</code> ordena <strong>como texto</strong>, lo cual da
+              resultados raros con números:
+            </p>
+            <pre><code>[10, 1, 5, 100].sort();  // [1, 10, 100, 5] 😬 los compara como "1", "10", "100", "5"</code></pre>
+            <p>Para ordenar bien, se le pasa una función que compara dos elementos <code>a</code> y <code>b</code>:</p>
+            <pre><code>const numeros = [10, 1, 5, 100];
+
+numeros.sort((a, b) =&gt; a - b); // [1, 5, 10, 100]   menor a mayor
+numeros.sort((a, b) =&gt; b - a); // [100, 10, 5, 1]   mayor a menor
+
+// Textos (respeta acentos y ñ)
+const nombres = ["Óscar", "ana", "Bruno"];
+nombres.sort((a, b) =&gt; a.localeCompare(b)); // ["ana", "Bruno", "Óscar"]
+
+// Objetos por una propiedad
+const porPrecio = [...productos].sort((a, b) =&gt; a.precio - b.precio);</code></pre>
+            <div class="callout dato">
+              <p>
+                ¿Por qué <code>a - b</code>? Si el resultado es negativo, <code>a</code> va antes;
+                si es positivo, va después; si es 0, quedan igual.
+              </p>
+            </div>
+          </section>
+
+          <section id="encadenar">
+            <h2>Encadenar métodos</h2>
+            <p>
+              Como <code>filter</code> y <code>map</code> devuelven arrays, podés encadenarlos.
+              Leelo de arriba hacia abajo como una receta:
+            </p>
+            <pre><code>const listado = productos
+  .filter((p) =&gt; p.stock &gt; 0)            // 1. solo los que tienen stock
+  .sort((a, b) =&gt; a.precio - b.precio)   // 2. ordenados por precio
+  .map((p) =&gt; `${p.nombre} ($${p.precio})`) // 3. convertidos a texto
+  .join("\n");                           // 4. unidos en un solo string
+
+console.log(listado);</code></pre>
+            <div class="consola">Teclado ($25000)
+Auriculares ($30000)
+Parlante ($45000)
+Monitor ($180000)</div>
+
+            <h3>Resumen</h3>
+            <div class="tabla">
+              <table>
+                <thead>
+                  <tr><th>Método</th><th>Para qué</th><th>Devuelve</th><th>¿Modifica el original?</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td><code>forEach</code></td><td>hacer algo con cada uno</td><td><code>undefined</code></td><td>No</td></tr>
+                  <tr><td><code>map</code></td><td>transformar cada uno</td><td>array del mismo largo</td><td>No</td></tr>
+                  <tr><td><code>filter</code></td><td>quedarse con algunos</td><td>array (puede ser vacío)</td><td>No</td></tr>
+                  <tr><td><code>find</code></td><td>buscar el primero que cumple</td><td>el elemento o <code>undefined</code></td><td>No</td></tr>
+                  <tr><td><code>findIndex</code></td><td>buscar su posición</td><td>índice o <code>-1</code></td><td>No</td></tr>
+                  <tr><td><code>some</code> / <code>every</code></td><td>preguntar si alguno / todos cumplen</td><td><code>true</code> / <code>false</code></td><td>No</td></tr>
+                  <tr><td><code>reduce</code></td><td>acumular un resultado</td><td>un valor</td><td>No</td></tr>
+                  <tr><td><code>sort</code></td><td>ordenar</td><td>el mismo array</td><td><strong>Sí</strong></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="callout investigar">
+              <ul>
+                <li><code>toSorted()</code>, <code>toReversed()</code> y <code>with()</code>: las versiones modernas que no modifican el original.</li>
+                <li><code>flat()</code>, <code>flatMap()</code> e <code>includes()</code> vs <code>some()</code>.</li>
+              </ul>
+            </div>
+          </section>
+
+          <section id="math">
+            <h2>El objeto <code>Math</code></h2>
+            <p>Agrupa funciones matemáticas listas para usar:</p>
+            <pre><code>Math.round(4.5);   // 5   redondea al más cercano
+Math.floor(4.9);   // 4   redondea hacia abajo
+Math.ceil(4.1);    // 5   redondea hacia arriba
+Math.trunc(-4.7);  // -4  corta los decimales
+
+Math.max(3, 9, 2); // 9
+Math.min(3, 9, 2); // 2
+Math.abs(-7);      // 7
+Math.sqrt(16);     // 4
+Math.PI;           // 3.141592653589793</code></pre>
+
+            <h3>Números al azar</h3>
+            <p>
+              <code>Math.random()</code> devuelve un decimal entre 0 (incluido) y 1 (sin incluir).
+              Para obtener un entero en un rango, se combina con <code>Math.floor</code>:
+            </p>
+            <pre><code>// Entero entre min y max (ambos incluidos)
+function enteroAlAzar(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+enteroAlAzar(1, 6);   // un dado
+enteroAlAzar(1, 100); // 1 a 100
+
+// Elegir un elemento al azar de un array
+const premios = ["auto", "bici", "nada"];
+const premio = premios[enteroAlAzar(0, premios.length - 1)];</code></pre>
+
+            <h3>Mostrar números prolijos</h3>
+            <pre><code>const precio = 1234.5678;
+
+precio.toFixed(2);  // "1234.57" ← ojo: devuelve un string
+
+precio.toLocaleString("es-AR");  // "1.234,568"
+
+precio.toLocaleString("es-AR", { style: "currency", currency: "ARS" });
+// "$ 1.234,57"</code></pre>
+            <div class="callout tip">
+              <p>
+                Hacé las cuentas con números y formateá <strong>solo al final</strong>, cuando lo
+                vas a mostrar. Si formateás antes, vas a terminar sumando strings.
+              </p>
+            </div>
+          </section>
+
+          <section id="date">
+            <h2>Fechas con <code>Date</code></h2>
+            <pre><code>const ahora = new Date();         // fecha y hora actual
+
+ahora.getFullYear();  // 2026
+ahora.getMonth();     // 0 a 11 ← ¡enero es 0!
+ahora.getDate();      // día del mes, 1 a 31
+ahora.getDay();       // día de la semana, 0 (domingo) a 6 (sábado)
+ahora.getHours();     // 0 a 23
+ahora.getMinutes();   // 0 a 59</code></pre>
+            <div class="callout cuidado">
+              <p>
+                Los meses empiezan en <strong>0</strong>: enero es 0 y diciembre es 11. Es una de
+                las trampas más famosas de JavaScript. Para mostrar el número “humano”, sumá 1.
+              </p>
+            </div>
+
+            <h3>Crear una fecha determinada</h3>
+            <pre><code>// año, mes (0-11), día, hora, minutos
+const navidad = new Date(2026, 11, 25);       // 25 de diciembre de 2026
+const turno = new Date(2026, 9, 15, 14, 30);  // 15 de octubre, 14:30</code></pre>
+
+            <h3>Mostrar fechas en castellano</h3>
+            <pre><code>const fecha = new Date(2026, 9, 7);
+
+fecha.toLocaleDateString("es-AR"); // "7/10/2026"
+
+fecha.toLocaleDateString("es-AR", {
+  weekday: "long",
+  day: "numeric",
+  month: "long",
+}); // "miércoles, 7 de octubre"</code></pre>
+
+            <h3>Diferencia entre fechas</h3>
+            <p>
+              Si restás dos fechas, obtenés la diferencia en <strong>milisegundos</strong>. Para
+              pasarla a días, dividís por la cantidad de milisegundos de un día:
+            </p>
+            <pre><code>const MS_POR_DIA = 1000 * 60 * 60 * 24;
+
+const hoy = new Date();
+const finDeAnio = new Date(hoy.getFullYear(), 11, 31);
+
+const faltan = Math.ceil((finDeAnio - hoy) / MS_POR_DIA);
+console.log(`Faltan ${faltan} días para fin de año`);</code></pre>
+            <div class="callout cuidado">
+              <p>
+                <code>new Date("2026-10-07")</code> (con guiones) se interpreta en hora de Londres
+                (UTC). En Argentina eso es el 6 de octubre a las 21 h, y al mostrarla vas a ver
+                <strong>un día menos</strong>. Preferí <code>new Date(2026, 9, 7)</code>.
+              </p>
+            </div>
+            <div class="callout investigar">
+              <p>
+                Trabajar con fechas es tan complicado que existen librerías dedicadas, como
+                <strong>date-fns</strong> o <strong>Day.js</strong>, y una API nueva del lenguaje
+                llamada <strong>Temporal</strong>. Averiguá qué problemas resuelven.
+              </p>
+            </div>
+          </section>
+
+          <section id="practica">
+            <h2>Práctica</h2>
+            <p>Resolvé todos los ejercicios <strong>sin usar <code>for</code> ni <code>while</code></strong>: solo métodos de array.</p>
+
+            <div class="ejercicio">
+              <h3>1 · Notas del curso</h3>
+              <pre><code>const alumnos = [
+  { nombre: "Ana", nota: 9 },
+  { nombre: "Luis", nota: 4 },
+  { nombre: "Sofía", nota: 7 },
+  { nombre: "Pedro", nota: 5 },
+  { nombre: "Carla", nota: 10 },
+];</code></pre>
+              <ul>
+                <li>Un array con los nombres de los aprobados (nota ≥ 6).</li>
+                <li>El promedio del curso.</li>
+                <li>¿Alguien sacó 10? ¿Todos aprobaron?</li>
+                <li>El listado ordenado de mayor a menor nota.</li>
+              </ul>
+            </div>
+
+            <div class="ejercicio">
+              <h3>2 · Sorteo</h3>
+              <p>
+                Pedí una lista de participantes separados por comas. Limpiá los espacios, descartá
+                los vacíos y elegí un ganador al azar.
+              </p>
+              <details>
+                <summary>Pista</summary>
+                <p><code>split(",")</code>, después <code>map</code> con <code>trim()</code> y <code>filter</code> para sacar los <code>""</code>.</p>
+              </details>
+            </div>
+
+            <div class="ejercicio">
+              <h3>3 · Tirar dados</h3>
+              <p>
+                Simulá 1000 tiradas de un dado y contá cuántas veces salió cada número. ¿Se reparten
+                parecido?
+              </p>
+              <details>
+                <summary>Pista</summary>
+                <p>
+                  Acá sí podés usar un <code>for</code> para las 1000 tiradas. Guardá los conteos en
+                  un array de 6 posiciones: <code>[0, 0, 0, 0, 0, 0]</code>.
+                </p>
+              </details>
+            </div>
+
+            <div class="ejercicio">
+              <h3>4 · ¿Qué día cae?</h3>
+              <p>
+                Pedí una fecha de cumpleaños (día y mes) y mostrá qué día de la semana cae este año
+                y cuántos días faltan.
+              </p>
+            </div>
+
+            <div class="ejercicio integrador">
+              <h3>5 · Reporte de ventas (integrador)</h3>
+              <pre><code>const ventas = [
+  { producto: "Café", categoria: "bebidas", precio: 2500, cantidad: 30 },
+  { producto: "Medialuna", categoria: "panaderia", precio: 900, cantidad: 80 },
+  { producto: "Jugo", categoria: "bebidas", precio: 3200, cantidad: 12 },
+  { producto: "Tostado", categoria: "comidas", precio: 5500, cantidad: 18 },
+  { producto: "Té", categoria: "bebidas", precio: 2000, cantidad: 9 },
+  { producto: "Budín", categoria: "panaderia", precio: 4000, cantidad: 6 },
+];</code></pre>
+              <p>Generá en la consola un reporte que muestre:</p>
+              <ul>
+                <li>La recaudación total, formateada como moneda argentina.</li>
+                <li>El producto que más recaudó.</li>
+                <li>La recaudación solo de bebidas.</li>
+                <li>Los productos que vendieron menos de 10 unidades (“revisar”).</li>
+                <li>La fecha del reporte en formato largo: “miércoles, 7 de octubre de 2026”.</li>
+              </ul>
+            </div>
+          </section>
+
+          <nav class="paginacion" id="paginacion" aria-label="Unidad anterior y siguiente"></nav>
+        </article>
+
+        <aside class="toc" id="toc" aria-label="En esta página"></aside>
+      </main>
+    </div>
+    <div class="velo"></div>
+
+    <footer class="pie">Curso de JavaScript · CapacitarTec · Sebastián Clement · 2026</footer>
+  </body>
+</html>

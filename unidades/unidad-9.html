@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Unidad 9 · Programación orientada a objetos | Curso de JavaScript</title>
+    <link rel="icon" href="../recursos/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../css/estilos.css" />
+    <script>
+      try {
+        const tema = localStorage.getItem("tema");
+        if (tema) document.documentElement.dataset.theme = tema;
+      } catch {}
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+    <script src="../js/sitio.js" defer></script>
+  </head>
+  <body data-base="../">
+    <header class="topbar">
+      <button class="btn-icono btn-menu" id="btn-menu" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="sidebar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" /></svg>
+      </button>
+      <a class="marca" href="../index.html"><span class="marca-logo">JS</span><span class="marca-texto">Curso de JavaScript</span></a>
+      <span class="espacio"></span>
+      <button class="btn-icono" id="btn-tema" type="button" aria-label="Cambiar entre modo claro y oscuro">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor" /></svg>
+      </button>
+    </header>
+
+    <div class="layout">
+      <aside class="sidebar" id="sidebar"><nav id="nav" aria-label="Unidades del curso"></nav></aside>
+
+      <main class="contenido">
+        <article class="articulo">
+          <header>
+            <p class="etiqueta">Unidad 9 · Semana 8 · Martes</p>
+            <h1>Programación orientada a objetos</h1>
+            <p class="bajada">
+              Una forma de organizar programas más grandes: moldes (clases) que juntan los datos
+              con las funciones que trabajan sobre ellos.
+            </p>
+            <div class="objetivos">
+              <h2>Al terminar esta unidad vas a poder</h2>
+              <ul>
+                <li>Definir clases con constructor, propiedades y métodos.</li>
+                <li>Crear instancias con <code>new</code> y entender qué es <code>this</code>.</li>
+                <li>Reutilizar código con herencia (<code>extends</code> y <code>super</code>).</li>
+                <li>Aplicar polimorfismo y encapsulamiento con propiedades privadas.</li>
+                <li>Usar clases para organizar una aplicación con DOM.</li>
+              </ul>
+            </div>
+          </header>
+
+          <section id="por-que">
+            <h2>¿Por qué clases?</h2>
+            <p>
+              En la Unidad 4 representamos productos con objetos literales. Funciona bien hasta que
+              necesitás <strong>muchos</strong> objetos con la misma forma y
+              <strong>comportamiento</strong> (calcular su precio, vender, describirse). Ahí terminás
+              con funciones sueltas por todos lados y objetos que se escriben a mano, con el riesgo
+              de olvidarte una propiedad.
+            </p>
+            <p>
+              Una <strong>clase</strong> es un <strong>molde</strong>: define qué datos tiene cada
+              objeto y qué puede hacer. Cada objeto creado a partir de ese molde es una
+              <strong>instancia</strong>.
+            </p>
+            <div class="callout dato">
+              <p>
+                Ya venías usando clases sin saberlo: <code>new Date()</code> crea una instancia de la
+                clase <code>Date</code>, y <code>new Error("...")</code> una de <code>Error</code>.
+                Por eso las fechas tienen métodos como <code>getFullYear()</code>.
+              </p>
+            </div>
+          </section>
+
+          <section id="clases">
+            <h2>Clases, constructor e instancias</h2>
+            <pre><code>class Producto {
+  // El constructor se ejecuta automáticamente al hacer "new"
+  constructor(nombre, precio, stock) {
+    this.nombre = nombre; // propiedades (atributos)
+    this.precio = precio;
+    this.stock = stock;
+  }
+
+  // Métodos: funciones que pertenecen a la clase
+  hayStock() {
+    return this.stock &gt; 0;
+  }
+
+  vender(cantidad) {
+    if (cantidad &gt; this.stock) {
+      console.log(`No hay suficiente stock de ${this.nombre}`);
+      return false;
+    }
+    this.stock -= cantidad;
+    return true;
+  }
+}
+
+// Instanciación: crear objetos a partir del molde
+const teclado = new Producto("Teclado", 25000, 4);
+const mouse = new Producto("Mouse", 12000, 0);
+
+console.log(teclado.nombre);    // "Teclado"
+console.log(mouse.hayStock());  // false
+teclado.vender(3);
+console.log(teclado.stock);     // 1</code></pre>
+
+            <h3>¿Qué es <code>this</code>?</h3>
+            <p>
+              Dentro de una clase, <code>this</code> significa <strong>“el objeto con el que se está
+              trabajando”</strong>. Cuando llamás a <code>teclado.vender(3)</code>,
+              <code>this</code> es <code>teclado</code>; cuando llamás a
+              <code>mouse.vender(1)</code>, <code>this</code> es <code>mouse</code>. Así el mismo
+              método sirve para todas las instancias.
+            </p>
+            <div class="callout tip">
+              <p>
+                Por convención, los nombres de clases se escriben en <strong>PascalCase</strong>:
+                con mayúscula inicial (<code>Producto</code>, <code>CuentaBancaria</code>). Así se
+                distinguen a simple vista de las variables y funciones.
+              </p>
+            </div>
+          </section>
+
+          <section id="herencia">
+            <h2>Herencia</h2>
+            <p>
+              La <strong>herencia</strong> permite crear una clase nueva a partir de otra
+              existente: la clase hija recibe todas las propiedades y métodos de la clase padre, y
+              puede agregar los suyos o <strong>reemplazar</strong> (sobrescribir) los que necesite.
+            </p>
+            <pre><code>class Producto {
+  constructor(nombre, precio) {
+    this.nombre = nombre;
+    this.precio = precio;
+  }
+
+  precioFinal() {
+    return this.precio;
+  }
+
+  describir() {
+    return `${this.nombre}: $${this.precioFinal()}`;
+  }
+}
+
+class ProductoEnOferta extends Producto {
+  constructor(nombre, precio, descuento) {
+    super(nombre, precio);     // llama al constructor del padre
+    this.descuento = descuento; // y agrega lo propio
+  }
+
+  // Sobrescribe el método del padre
+  precioFinal() {
+    return this.precio * (1 - this.descuento / 100);
+  }
+
+  // Extiende el método del padre usando super.metodo()
+  describir() {
+    return `${super.describir()} 🔥 ${this.descuento}% OFF`;
+  }
+}
+
+const remera = new Producto("Remera", 15000);
+const gorra = new ProductoEnOferta("Gorra", 10000, 20);
+
+console.log(remera.describir()); // "Remera: $15000"
+console.log(gorra.describir());  // "Gorra: $8000 🔥 20% OFF"</code></pre>
+            <ul>
+              <li><code>extends</code> indica de qué clase hereda.</li>
+              <li>En el constructor de la hija, <code>super(...)</code> tiene que llamarse <strong>antes</strong> de usar <code>this</code>.</li>
+              <li><code>super.metodo()</code> llama a la versión del padre de un método.</li>
+            </ul>
+            <div class="callout tip">
+              <p>
+                Usá herencia solo cuando se pueda decir “<strong>es un</strong>”: un producto en
+                oferta <em>es un</em> producto; un círculo <em>es una</em> forma. Si no suena
+                natural, probablemente no corresponde.
+              </p>
+            </div>
+          </section>
+
+          <section id="polimorfismo">
+            <h2>Polimorfismo</h2>
+            <p>
+              <strong>Polimorfismo</strong> significa que objetos de clases distintas pueden
+              responder al <strong>mismo método</strong>, cada uno a su manera. Quien los usa no
+              necesita saber de qué clase es cada uno.
+            </p>
+            <figure>
+              <img src="../recursos/imagenes/diagramaPoo.png" alt="Diagrama de herencia: la clase padre Forma tiene tres clases hijas, Cuadrado, Círculo y Triángulo, y cada una tiene dos instancias." width="1289" height="547" />
+              <figcaption>
+                <code>Forma</code> es la clase padre; <code>Cuadrado</code>, <code>Circulo</code> y
+                <code>Triangulo</code> heredan de ella. Abajo, instancias de cada una.
+              </figcaption>
+            </figure>
+            <pre><code>class Forma {
+  constructor(nombre) {
+    this.nombre = nombre;
+  }
+
+  area() {
+    return 0; // cada hija lo va a sobrescribir
+  }
+
+  describir() {
+    return `${this.nombre} de área ${this.area().toFixed(2)}`;
+  }
+}
+
+class Cuadrado extends Forma {
+  constructor(lado) {
+    super("Cuadrado");
+    this.lado = lado;
+  }
+  area() {
+    return this.lado ** 2;
+  }
+}
+
+class Circulo extends Forma {
+  constructor(radio) {
+    super("Círculo");
+    this.radio = radio;
+  }
+  area() {
+    return Math.PI * this.radio ** 2;
+  }
+}
+
+class Triangulo extends Forma {
+  constructor(base, altura) {
+    super("Triángulo");
+    this.base = base;
+    this.altura = altura;
+  }
+  area() {
+    return (this.base * this.altura) / 2;
+  }
+}
+
+const formas = [new Cuadrado(4), new Circulo(3), new Triangulo(6, 2)];
+
+// No importa qué forma sea: todas saben responder a describir()
+formas.forEach((forma) =&gt; console.log(forma.describir()));</code></pre>
+            <div class="consola">Cuadrado de área 16.00
+Círculo de área 28.27
+Triángulo de área 6.00</div>
+            <p>
+              Fijate que <code>describir()</code> está escrito una sola vez, en
+              <code>Forma</code>, pero llama a <code>this.area()</code>, que es distinto en cada
+              clase hija. Si mañana agregás un <code>Rectangulo</code>, el resto del código sigue
+              funcionando sin cambios.
+            </p>
+            <p>Para preguntar si un objeto es de una clase (o de una hija suya) existe <code>instanceof</code>:</p>
+            <pre><code>formas[0] instanceof Cuadrado; // true
+formas[0] instanceof Forma;    // true (un cuadrado también es una forma)
+formas[0] instanceof Circulo;  // false</code></pre>
+          </section>
+
+          <section id="encapsulamiento">
+            <h2>Encapsulamiento</h2>
+            <p>
+              <strong>Encapsular</strong> es proteger los datos internos de un objeto para que solo
+              se puedan modificar a través de sus métodos, que se encargan de validar. En
+              JavaScript, las propiedades que empiezan con <code>#</code> son
+              <strong>privadas</strong>: solo existen dentro de la clase.
+            </p>
+            <pre><code>class CuentaBancaria {
+  #saldo = 0; // propiedad privada
+
+  constructor(titular) {
+    this.titular = titular;
+  }
+
+  // "get" permite leer el saldo como si fuera una propiedad, pero no modificarlo
+  get saldo() {
+    return this.#saldo;
+  }
+
+  depositar(monto) {
+    if (monto &lt;= 0) {
+      throw new Error("El monto debe ser positivo");
+    }
+    this.#saldo += monto;
+  }
+
+  extraer(monto) {
+    if (monto &gt; this.#saldo) {
+      throw new Error("Saldo insuficiente");
+    }
+    this.#saldo -= monto;
+  }
+}
+
+const cuenta = new CuentaBancaria("Ana");
+cuenta.depositar(5000);
+cuenta.extraer(2000);
+console.log(cuenta.saldo); // 3000
+
+try {
+  cuenta.extraer(10000);
+} catch (error) {
+  console.log(error.message); // "Saldo insuficiente"
+}
+
+// cuenta.#saldo = 1000000; ❌ SyntaxError: no se puede acceder desde afuera</code></pre>
+            <p>
+              Sin el <code>#</code>, cualquier parte del programa podría escribir
+              <code>cuenta.saldo = -500</code> y dejar la cuenta en un estado imposible. Con
+              encapsulamiento, la única forma de cambiar el saldo es pasando por las validaciones.
+            </p>
+          </section>
+
+          <section id="pilares">
+            <h2>Los cuatro pilares</h2>
+            <p>Estos son los conceptos que vas a encontrar en cualquier material de POO, en cualquier lenguaje:</p>
+            <div class="tabla">
+              <table>
+                <thead>
+                  <tr><th>Concepto</th><th>Idea</th><th>En esta unidad</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td><strong>Abstracción</strong></td><td>Modelar solo lo que importa para el problema.</td><td>Un <code>Producto</code> tiene nombre, precio y stock; no color favorito del fabricante.</td></tr>
+                  <tr><td><strong>Encapsulamiento</strong></td><td>Ocultar los datos internos y exponer métodos seguros.</td><td><code>#saldo</code> y los métodos <code>depositar</code> / <code>extraer</code>.</td></tr>
+                  <tr><td><strong>Herencia</strong></td><td>Crear clases a partir de otras, reutilizando código.</td><td><code>ProductoEnOferta extends Producto</code>.</td></tr>
+                  <tr><td><strong>Polimorfismo</strong></td><td>Mismo método, comportamiento distinto según la clase.</td><td><code>area()</code> en cada <code>Forma</code>.</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section id="clases-y-dom">
+            <h2>Clases + DOM: organizar una app</h2>
+            <p>
+              Donde más se nota la ventaja de las clases es al ordenar una aplicación: una clase se
+              ocupa de los <strong>datos y las reglas</strong>, y el resto del código solo se ocupa
+              de la <strong>pantalla y los eventos</strong>.
+            </p>
+            <pre><code>class Carrito {
+  #items = [];
+
+  agregar(producto) {
+    const item = this.#items.find((i) =&gt; i.producto.nombre === producto.nombre);
+    if (item) {
+      item.cantidad++;
+    } else {
+      this.#items.push({ producto: producto, cantidad: 1 });
+    }
+  }
+
+  cantidad() {
+    return this.#items.reduce((total, i) =&gt; total + i.cantidad, 0);
+  }
+
+  total() {
+    return this.#items.reduce((total, i) =&gt; total + i.producto.precioFinal() * i.cantidad, 0);
+  }
+}
+
+// ---- Interfaz: solo habla con el carrito a través de sus métodos ----
+const carrito = new Carrito();
+const resumen = document.querySelector("#resumen");
+
+function actualizarResumen() {
+  resumen.textContent = `🛒 ${carrito.cantidad()} productos — $${carrito.total()}`;
+}
+
+document.querySelector("#agregar-gorra").addEventListener("click", () =&gt; {
+  carrito.agregar(gorra); // la gorra en oferta de la sección de herencia
+  actualizarResumen();
+});</code></pre>
+            <div class="callout investigar">
+              <ul>
+                <li>
+                  En realidad JavaScript no usa clases “de verdad” por dentro, sino
+                  <strong>prototipos</strong>; <code>class</code> es una forma más cómoda de
+                  escribirlos. Buscá qué es la <em>cadena de prototipos</em>.
+                </li>
+                <li>Métodos y propiedades <code>static</code>: pertenecen a la clase, no a cada instancia.</li>
+                <li>Los <code>set</code> (setters), la pareja de los <code>get</code>.</li>
+                <li>“Composición sobre herencia”: ¿por qué muchos programadores prefieren evitar las jerarquías largas?</li>
+                <li>¿Qué pasa si hacés <code>JSON.stringify()</code> de una instancia? ¿Se guardan los métodos? ¿Y las propiedades privadas?</li>
+              </ul>
+            </div>
+          </section>
+
+          <section id="practica">
+            <h2>Práctica</h2>
+
+            <div class="ejercicio">
+              <h3>1 · Libro</h3>
+              <p>
+                Creá una clase <code>Libro</code> con título, autor, páginas y un estado
+                <code>leido</code> (arranca en <code>false</code>). Métodos:
+                <code>marcarLeido()</code> y <code>describir()</code>, que devuelva por ejemplo
+                <code>"Rayuela, de Julio Cortázar (600 págs.) ✓ leído"</code>. Creá un array con 3
+                libros y mostrá solo los que no leíste.
+              </p>
+            </div>
+
+            <div class="ejercicio">
+              <h3>2 · Rectángulo</h3>
+              <p>
+                Agregá una clase <code>Rectangulo</code> a la jerarquía de <code>Forma</code>. Después
+                hacé que <code>Cuadrado</code> herede de <code>Rectangulo</code> en lugar de
+                <code>Forma</code>. ¿Qué código te ahorrás?
+              </p>
+            </div>
+
+            <div class="ejercicio">
+              <h3>3 · Empleados</h3>
+              <p>
+                Una clase <code>Empleado</code> con nombre y sueldo base, y un método
+                <code>sueldoFinal()</code>. Dos clases hijas: <code>Vendedor</code> (suma un 5 % de
+                sus ventas del mes) y <code>Gerente</code> (suma un bono fijo). Con un array de
+                empleados mezclados, calculá el total a pagar usando <code>reduce</code> y
+                polimorfismo.
+              </p>
+            </div>
+
+            <div class="ejercicio">
+              <h3>4 · Cuenta con historial</h3>
+              <p>
+                Ampliá <code>CuentaBancaria</code> para que guarde un historial privado de
+                movimientos (<code>{ tipo, monto, fecha }</code>) y tenga un método
+                <code>ultimosMovimientos(n)</code>. Armale una interfaz con un formulario para
+                depositar y extraer, que muestre los errores en la página.
+              </p>
+            </div>
+
+            <div class="ejercicio integrador">
+              <h3>5 · Lista de tareas con clases (integrador)</h3>
+              <p>
+                Reescribí la lista de tareas de la Unidad 7 con una clase
+                <code>ListaDeTareas</code> que tenga las tareas en una propiedad privada y los
+                métodos <code>agregar(texto)</code>, <code>alternar(id)</code>,
+                <code>borrar(id)</code>, <code>pendientes()</code>, <code>todas()</code>,
+                <code>guardar()</code> y <code>cargar()</code>.
+              </p>
+              <p>
+                El código de la interfaz (eventos y <code>mostrarTareas</code>) no puede tocar el
+                array directamente ni usar <code>localStorage</code>: solo llama a métodos de la
+                clase.
+              </p>
+              <details>
+                <summary>Pista</summary>
+                <p>
+                  <code>JSON.stringify(this)</code> no incluye las propiedades privadas. En
+                  <code>guardar()</code> convertí directamente el array:
+                  <code>JSON.stringify(this.#tareas)</code>.
+                </p>
+              </details>
+            </div>
+          </section>
+
+          <nav class="paginacion" id="paginacion" aria-label="Unidad anterior y siguiente"></nav>
+        </article>
+
+        <aside class="toc" id="toc" aria-label="En esta página"></aside>
+      </main>
+    </div>
+    <div class="velo"></div>
+
+    <footer class="pie">Curso de JavaScript · CapacitarTec · Sebastián Clement · 2026</footer>
+  </body>
+</html>

@@ -4,56 +4,171 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Curso de JavaScript | CapacitarTec</title>
-    <link rel="stylesheet" href="style.css" />
-    <link rel="icon" href="recursos/imagenes/js-logo.png" />
+    <meta name="description" content="Material del curso de JavaScript desde cero de CapacitarTec." />
+    <link rel="icon" href="recursos/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Fira+Code&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
       rel="stylesheet"
     />
+    <link rel="stylesheet" href="css/estilos.css" />
+    <script>
+      try {
+        const tema = localStorage.getItem("tema");
+        if (tema) document.documentElement.dataset.theme = tema;
+      } catch {}
+    </script>
+    <script src="js/sitio.js" defer></script>
   </head>
-  <body>
-    <header>
-      <h1>Curso de <span>JavaScript</span></h1>
-      <button id="menu-btn">☰</button>
+  <body data-base="">
+    <header class="topbar">
+      <button class="btn-icono btn-menu" id="btn-menu" type="button" aria-label="Abrir menú" aria-expanded="false" aria-controls="sidebar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" /></svg>
+      </button>
+      <a class="marca" href="index.html"><span class="marca-logo">JS</span><span class="marca-texto">Curso de JavaScript</span></a>
+      <span class="espacio"></span>
+      <button class="btn-icono" id="btn-tema" type="button" aria-label="Cambiar entre modo claro y oscuro">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="9" /><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor" /></svg>
+      </button>
     </header>
 
-    <section class="hero" id="hero">
-      <div class="hero-content">
-        <h2>Domina el lenguaje del navegador</h2>
-        <p>
-          Aprendé JavaScript desde cero con ejemplos, ejercicios y proyectos
-          reales.
-        </p>
-        <button id="start-btn">Comenzar curso</button>
-      </div>
-    </section>
+    <div class="layout">
+      <aside class="sidebar" id="sidebar"><nav id="nav" aria-label="Unidades del curso"></nav></aside>
 
-    <div class="container">
-      <aside id="sidebar">
-        <nav id="menu"></nav>
-      </aside>
+      <main class="contenido">
+        <article class="articulo">
+          <header class="portada">
+            <p class="etiqueta">CapacitarTec · Módulo 3</p>
+            <h1>Curso de <span>JavaScript</span></h1>
+            <p class="bajada">
+              Ya sabés estructurar una página con HTML y darle estilo con CSS. En este módulo
+              aprendés a darle comportamiento: que reaccione, que recuerde y que se conecte con
+              datos reales.
+            </p>
+            <div class="acciones">
+              <a class="boton primario" href="unidades/unidad-1.html">Empezar por la Unidad 1 →</a>
+              <a class="boton" href="#cronograma">Ver cronograma</a>
+            </div>
+            <div class="datos">
+              <div class="dato-card"><strong>8 semanas</strong><span>martes y jueves, 16 a 18 h</span></div>
+              <div class="dato-card"><strong>9 unidades</strong><span>con práctica en cada una</span></div>
+              <div class="dato-card"><strong>1 proyecto</strong><span>final integrador</span></div>
+            </div>
+          </header>
 
-      <main id="content">
-        <h2>Bienvenido/a al Curso de JavaScript</h2>
-        <p>
-          Este curso forma parte del programa <strong>CapacitarTec</strong> y
-          tiene una duración de dos meses, con clases teórico-prácticas de 2
-          horas semanales.
-        </p>
-        <p>
-          En este sitio encontrarás todo el contenido dividido por unidades, con
-          ejemplos, recursos y prácticas.
-        </p>
-        <p>Seleccioná una unidad desde el menú lateral para comenzar.</p>
+          <section id="cronograma">
+            <h2>Cronograma</h2>
+            <p>
+              Dos clases por semana: <strong>martes y jueves de 16 a 18 h</strong>. El orden es
+              orientativo: si un tema necesita más tiempo, se lo damos.
+            </p>
+            <div class="tabla">
+              <table>
+                <thead>
+                  <tr><th>Semana</th><th>Unidad</th><th>Martes</th><th>Jueves</th></tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1</td>
+                    <td><a href="unidades/unidad-1.html">1 · Primeros pasos</a><br /><a href="unidades/unidad-2.html">2 · Operadores y decisiones</a></td>
+                    <td>Entorno, consola, variables, tipos, conversión</td>
+                    <td>Operadores, <code>if</code>, ternario, <code>switch</code></td>
+                  </tr>
+                  <tr>
+                    <td>2</td>
+                    <td><a href="unidades/unidad-3.html">3 · Bucles y funciones</a></td>
+                    <td><code>while</code>, <code>for</code>, funciones, <code>return</code></td>
+                    <td>Flechas, scope, callbacks, depuración</td>
+                  </tr>
+                  <tr>
+                    <td>3</td>
+                    <td><a href="unidades/unidad-4.html">4 · Arrays, objetos y strings</a></td>
+                    <td>Arrays, recorrerlos, objetos</td>
+                    <td>Arrays de objetos, métodos de strings</td>
+                  </tr>
+                  <tr>
+                    <td>4</td>
+                    <td><a href="unidades/unidad-5.html">5 · Métodos de array, Math y Date</a></td>
+                    <td><code>forEach</code>, <code>map</code>, <code>filter</code>, <code>find</code>, <code>some</code>/<code>every</code></td>
+                    <td><code>reduce</code>, <code>sort</code>, Math, fechas</td>
+                  </tr>
+                  <tr>
+                    <td>5</td>
+                    <td><a href="unidades/unidad-6.html">6 · DOM y eventos</a></td>
+                    <td>Seleccionar, modificar y crear elementos</td>
+                    <td>Eventos, delegación, atributos data</td>
+                  </tr>
+                  <tr>
+                    <td>6</td>
+                    <td><a href="unidades/unidad-7.html">7 · Formularios y almacenamiento</a></td>
+                    <td>Formularios, <code>submit</code>, validación</td>
+                    <td>JSON, <code>localStorage</code>, <code>try/catch</code></td>
+                  </tr>
+                  <tr>
+                    <td>7</td>
+                    <td><a href="unidades/unidad-8.html">8 · Asincronía y APIs</a></td>
+                    <td>Promesas, <code>fetch</code>, <code>async/await</code></td>
+                    <td>Estados de carga y error · arranque del proyecto final</td>
+                  </tr>
+                  <tr>
+                    <td>8</td>
+                    <td><a href="unidades/unidad-9.html">9 · Programación orientada a objetos</a><br /><a href="unidades/desafios.html">Proyecto final</a></td>
+                    <td>Clases, herencia, polimorfismo, encapsulamiento</td>
+                    <td>Presentación de proyectos</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section id="antes-de-empezar">
+            <h2>Antes de empezar</h2>
+            <p>Para trabajar en clase y en casa necesitás:</p>
+            <ul>
+              <li><strong>Visual Studio Code</strong> con la extensión <strong>Live Server</strong>.</li>
+              <li><strong>Google Chrome</strong>, Edge o Firefox actualizado. Vamos a usar mucho las herramientas para desarrolladores (<kbd>F12</kbd>).</li>
+              <li>Una carpeta por ejercicio o proyecto, con <code>index.html</code>, <code>style.css</code> y <code>script.js</code>.</li>
+            </ul>
+          </section>
+
+          <section id="como-usar">
+            <h2>Cómo usar este material</h2>
+            <p>
+              Cada unidad arranca con lo que vas a aprender, explica los temas con ejemplos que
+              podés copiar (pasá el mouse sobre el código y vas a ver el botón
+              <strong>Copiar</strong>) y termina con ejercicios. El último de cada unidad,
+              marcado en amarillo, integra todo lo visto.
+            </p>
+            <p>A lo largo del texto vas a encontrar estos recuadros:</p>
+            <div class="callout tip"><p>Consejos prácticos y atajos que te ahorran tiempo.</p></div>
+            <div class="callout cuidado"><p>Errores muy comunes. Leelos con atención: te van a pasar.</p></div>
+            <div class="callout dato"><p>Curiosidades y contexto. No es necesario memorizarlos.</p></div>
+            <div class="callout investigar">
+              <p>
+                Temas que no vemos en clase y quedan para que investigues por tu cuenta. La mejor
+                fuente es la documentación de MDN.
+              </p>
+            </div>
+          </section>
+
+          <section id="recursos">
+            <h2>Recursos recomendados</h2>
+            <ul>
+              <li><a href="https://developer.mozilla.org/es/docs/Web/JavaScript" target="_blank" rel="noopener">MDN Web Docs</a>: la referencia oficial de todo lo que es web. Si dudás de cómo funciona algo, buscalo ahí.</li>
+              <li><a href="https://es.javascript.info/" target="_blank" rel="noopener">javascript.info</a>: un tutorial muy completo, en castellano, para profundizar cualquier tema.</li>
+              <li><a href="https://developer.chrome.com/docs/devtools?hl=es-419" target="_blank" rel="noopener">Documentación de Chrome DevTools</a>: todo lo que se puede hacer con la consola y el depurador.</li>
+            </ul>
+          </section>
+
+          <nav class="paginacion" id="paginacion" aria-label="Siguiente"></nav>
+        </article>
+
+        <aside class="toc" id="toc" aria-label="En esta página"></aside>
       </main>
     </div>
+    <div class="velo"></div>
 
-    <footer>
-      <p>
-        Creado por <strong>Sebastián Clement</strong> · Curso JavaScript 2025
-      </p>
-    </footer>
-
-    <script src="script.js"></script>
+    <footer class="pie">Curso de JavaScript · CapacitarTec · Sebastián Clement · 2026</footer>
   </body>
 </html>
